@@ -34,13 +34,13 @@ class Relation():
         self.source = source
         self.target = target
 
-        if time_type in ["is_contained_in", "before", "contains"]:
+        if time_type in ["same_as", "overlap", "after", "is_contained_in", "before", "contains"]:
             self.time_type = time_type
         else:
             self.time_type = None
 
     def set_time_type(self, time_type):
-        if time_type in ["is_contained_in", "before", "contains"]:
+        if time_type in ["same_as", "overlap", "after", "is_contained_in", "before", "contains"]:
             self.time_type = time_type
         else:
             self.time_type = None
