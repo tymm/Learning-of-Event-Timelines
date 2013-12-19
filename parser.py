@@ -1,28 +1,19 @@
 from lxml import etree
 
 class Text():
-    id = None
-    name = None
-    relations_union_count = 0
-    relations_intersection_count = 0
-
     def __init__(self, id=None, name=None):
+        self.id = None
+        self.name = name
+        self.relations_union_count = 0
+        self.relations_intersection_count = 0
         self.annotator = []
         self.relations_union = []
         self.relations_intersection = []
-        self.id = id
-        self.name = name
 
     def set_annotator(self, annotator):
         self.annotator.append(annotator)
 
 class Event():
-    parent = None
-    id = None
-    content = None
-    begin = None
-    end = None
-
     def __init__(self, parent=None, id=None, content=None, begin=None, end=None):
         self.parent = parent
         self.id = id
@@ -31,16 +22,11 @@ class Event():
         self.end = end
 
 class Relation():
-    parent = None
-    source = None
-    target = None
-    time_type = None
-    identifier = None
-
     def __init__(self, parent=None, source=None, target=None, time_type=None):
         self.parent = parent
         self.source = source
         self.target = target
+        self.identifier = None
 
         if time_type in ["same_as", "overlap", "after", "is_contained_in", "before", "contains"]:
             self.time_type = time_type
@@ -57,11 +43,8 @@ class Relation():
         self.identifier = source_begin+source_end+target_begin+target_end
 
 class Annotator():
-    parent = None
-    id = None
-    xml_id = None
-
     def __init__(self, id=None, xml_id=None):
+        self.parent = None
         self.events = []
         self.relation = []
         self.id = id
