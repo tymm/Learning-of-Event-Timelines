@@ -129,6 +129,7 @@ def parseXML(filename):
         for j, ann in enumerate(txt.iterdescendants("annotator")):
             # Create an Annotator object
             annotator = Annotator(j, ann.get("id"))
+            annotator.parent = text
 
             # Create link from Text object
             text.set_annotator(annotator)
