@@ -9,9 +9,23 @@ class Text():
         self.annotator = []
         self.relations_union = []
         self.relations_intersection = []
+        self.events_intersection = []
+        self.events_union = []
 
     def set_annotator(self, annotator):
         self.annotator.append(annotator)
+
+    """Since different annotators annotate different events we might
+    be interested in the union of the events for a textfile"""
+    def compute_union_events(self):
+        del self.events_union[:]
+
+        all_in_one = []
+        for ann in self.annotator:
+            all_in_one = all_in_one + ann.events
+
+        # x if the word contained in x is not already in our list of words so far
+        self.events_union = [x for i, x in enumerate(all_in_one) if x.content not in [y.content for y in all_in_one[:i]]]
 
 class Event():
     def __init__(self, parent=None, id=None, content=None, begin=None, end=None):
@@ -115,8 +129,3 @@ def parseXML(filename):
         data.textfiles.append(text)
 
     return data
-
-a = parseXML("fables-100-temporal-dependency.xml")
-print a.textfiles[1].name
-print a.textfiles[1].annotator[0].events
-print a.textfiles[1].annotator[1].events
