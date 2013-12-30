@@ -77,8 +77,8 @@ class Event():
         self.parent = parent
         self.id = id
         self.content = content
-        self.begin = begin
-        self.end = end
+        self.begin = int(begin)
+        self.end = int(end)
 
 
 class Relation():
@@ -99,8 +99,14 @@ class Relation():
         else:
             self.time_type = None
 
-    def set_identifier(self, source_begin, source_end, target_begin, target_end):
-        self.identifier = source_begin+source_end+target_begin+target_end
+    def set_source(self, source):
+        self.source = source
+
+    def set_target(self, target):
+        self.target = target
+
+    def set_identifier(self):
+        self.identifier = str(self.source.begin)+str(self.source.end)+str(self.target.begin)+str(self.target.end)
 
 
 class Annotator():
@@ -150,15 +156,16 @@ def parseXML(filename):
                 # Create link from Annotator object
                 annotator.relations.append(relation)
 
-                # Lets figure out which events we have
+                # Connect corresponding event objects to this relation object
+                # Doing this by going through all possible events
                 source = tlink[1]
                 begin = source.get("begin")
                 end = source.get("end")
 
                 # Search through the events of this annotator
                 for event in annotator.events:
-                    if event.begin == begin and event.end == end:
-                        relation.source = event
+                    if event.begin == int(begin) and event.end == int(end):
+                        relation.set_source(event)
                         break
 
                 target = tlink[2]
@@ -166,12 +173,12 @@ def parseXML(filename):
                 end = target.get("end")
 
                 for event in annotator.events:
-                    if event.begin == begin and event.end == end:
-                        relation.target = event
+                    if event.begin == int(begin) and event.end == int(end):
+                        relation.set_target(event)
                         break
 
                 # Identifier, so we can identify two relations which are the same
-                relation.set_identifier(relation.source.begin, relation.source.end, relation.target.begin, relation.target.end)
+                relation.set_identifier()
 
         # Include text to data structure
         data.textfiles.append(text)
