@@ -1,0 +1,31 @@
+from parser import parseXML
+
+TEXTDIR = "McIntyreLapata09Resources/fables"
+
+class Feature:
+    def __init__(self, relation):
+        self.relation = relation
+
+    # Returns the number of characters between two events in a text
+    def get_distance(self):
+        # We want to compare different objects
+        if self.relation.source == self.relation.target:
+            return False
+        # The two events have to be in the same file
+        if self.relation.source.parent.parent != self.relation.target.parent.parent:
+            return False
+
+        # Distance is measured in characters between the end of the first word and the beginning of the second word
+        if self.relation.source.begin > self.relation.target.begin:
+            return (self.relation.source.begin - self.relation.target.end)
+        elif self.relation.source.begin < self.relation.target.begin:
+            return (self.relation.target.begin - self.relation.source.end)
+
+if __name__ == "__main__":
+    data = parseXML("training.xml")
+
+    for txt in data.textfiles:
+        txt.compute_union_relations()
+        for rel in txt.relations_union:
+            f = Feature(rel)
+            print f.get_distance(), f.relation.time_type
