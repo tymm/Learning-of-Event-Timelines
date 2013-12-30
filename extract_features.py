@@ -21,6 +21,13 @@ class Feature:
         elif self.relation.source.begin < self.relation.target.begin:
             return (self.relation.target.begin - self.relation.source.end)
 
+    # Returns 1 if the feature is in the category we want and 0 otherwise
+    def get_result(self, category):
+        if self.relation.time_type == category:
+            return 1
+        else:
+            return 0
+
 if __name__ == "__main__":
     data = parseXML("training.xml")
 
@@ -28,4 +35,4 @@ if __name__ == "__main__":
         txt.compute_union_relations()
         for rel in txt.relations_union:
             f = Feature(rel)
-            print f.get_distance(), f.relation.time_type
+            print f.get_distance(), f.get_result("before")
