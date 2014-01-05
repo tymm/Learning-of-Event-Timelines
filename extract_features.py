@@ -21,6 +21,26 @@ class Feature:
         elif self.relation.source.begin < self.relation.target.begin:
             return (self.relation.target.begin - self.relation.source.end)
 
+    # Returns number which represents the time relation type
+    def get_category(self):
+        # same_as: 0, overlap: 1, after: 2, is_contained_in: 3, before: 4, contains: 5, includes: 6, is_included: 7
+        if self.relation.time_type == "same_as":
+            return 0
+        elif self.relation.time_type == "overlap":
+            return 1
+        elif self.relation.time_type == "after":
+            return 2
+        elif self.relation.time_type == "is_contained_in":
+            return 3
+        elif self.relation.time_type == "before":
+            return 4
+        elif self.relation.time_type == "contains":
+            return 5
+        elif self.relation.time_type == "includes":
+            return 6
+        elif self.relation.time_type == "is_included":
+            return 7
+
     # Returns 1 if the feature is in the category we want and 0 otherwise
     def get_result(self, category):
         if self.relation.time_type == category:
@@ -35,4 +55,4 @@ if __name__ == "__main__":
         txt.compute_union_relations()
         for rel in txt.relations_union:
             f = Feature(rel)
-            print f.get_distance(), f.get_result("before")
+            print f.get_distance(), f.get_category()
