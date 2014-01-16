@@ -22,6 +22,9 @@ for txt in data.textfiles:
     txt.compute_union_relations()
     for rel in txt.relations_union:
         f = Feature(rel)
+        # If the time relation is not in (before, contains, is_contained_in), skip
+        if f.get_category() == -1:
+            continue
         X = np.append(X, [f.get_distance()])
         y = np.append(y, [f.get_category()])
 

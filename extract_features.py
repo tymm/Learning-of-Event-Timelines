@@ -23,23 +23,15 @@ class Feature:
 
     # Returns number which represents the time relation type
     def get_category(self):
-        # same_as: 0, overlap: 1, after: 2, is_contained_in: 3, before: 4, contains: 5, includes: 6, is_included: 7
-        if self.relation.time_type == "same_as":
+        # We only want before, contains and is_contained_in
+        if self.relation.time_type == "before":
             return 0
-        elif self.relation.time_type == "overlap":
-            return 1
-        elif self.relation.time_type == "after":
-            return 2
         elif self.relation.time_type == "is_contained_in":
-            return 3
-        elif self.relation.time_type == "before":
-            return 4
+            return 1
         elif self.relation.time_type == "contains":
-            return 5
-        elif self.relation.time_type == "includes":
-            return 6
-        elif self.relation.time_type == "is_included":
-            return 7
+            return 2
+        else:
+            return -1
 
     # Returns 1 if the feature is in the category we want and 0 otherwise
     def get_result(self, category):
