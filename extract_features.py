@@ -1,4 +1,5 @@
 from parser import parseXML
+from helper import get_wordnet_similarity
 
 TEXTDIR = "McIntyreLapata09Resources/fables"
 
@@ -20,6 +21,11 @@ class Feature:
             return (self.relation.source.begin - self.relation.target.end)
         elif self.relation.source.begin < self.relation.target.begin:
             return (self.relation.target.begin - self.relation.source.end)
+
+    # Returns the similarity of two words
+    def get_similarity_of_words(self):
+        # Returns float value
+        return get_wordnet_similarity(self.relation.source.content, self.relation.target.content)
 
     # Returns number which represents the time relation type
     def get_category(self):

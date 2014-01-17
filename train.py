@@ -14,7 +14,7 @@ def split(indices):
 # Create numpy array with samples and targets
 data = parseXML("fables-100-temporal-dependency.xml")
 
-X = np.array([])
+X = np.array([]).reshape(0,2)
 y = np.array([])
 
 for txt in data.textfiles:
@@ -25,13 +25,13 @@ for txt in data.textfiles:
         # If the time relation is not in (before, contains, is_contained_in), skip
         if f.get_category() == -1:
             continue
-        X = np.append(X, [f.get_distance()])
+        X = np.append(X, [[f.get_distance(), f.get_similarity_of_words()]], axis=0)
         y = np.append(y, [f.get_category()])
 
 print X.shape
 print y.shape
 
-df_samples = pd.DataFrame(X, columns=['distance between events'])
+df_samples = pd.DataFrame(X, columns=['distance between events', 'similarity between words'])
 
 # split dataset in training and test set
 len_train = len(df_samples)*80/100
