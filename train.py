@@ -14,8 +14,8 @@ def split(indices):
 # Create numpy array with samples and targets
 data = parseXML("fables-100-temporal-dependency.xml")
 
-X = np.array([]).reshape(0,2)
-y = np.array([])
+X = np.array([], dtype=float).reshape(0,2)
+y = np.array([], dtype=int)
 
 for txt in data.textfiles:
     # Use union relations
@@ -30,6 +30,8 @@ for txt in data.textfiles:
 
 print X.shape
 print y.shape
+np.set_printoptions(threshold=4000)
+print y
 
 df_samples = pd.DataFrame(X, columns=['distance between events', 'similarity between words'])
 
@@ -38,10 +40,9 @@ len_train = len(df_samples)*80/100
 df_train, df_test = df_samples[:len_train], df_samples[len_train:]
 y_train, y_test = y[:len_train], y[len_train:]
 
-
 # train classifier
 rf = RandomForestClassifier(n_estimators=1000)
-rf.fit(df_train, y)
+rf.fit(df_train, y_train)
 
 # print accuracy
-print rf.score(df_test, y)
+print rf.score(df_test, y_test)
