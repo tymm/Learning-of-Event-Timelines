@@ -32,9 +32,9 @@ class Feature:
         # We only want before, contains and is_contained_in
         if self.relation.time_type == "before":
             return 0
-        elif self.relation.time_type == "is_contained_in":
+        elif self.relation.time_type == "includes":
             return 1
-        elif self.relation.time_type == "contains":
+        elif self.relation.time_type == "is_included":
             return 2
         else:
             return -1
