@@ -2,7 +2,7 @@ from nltk.corpus import wordnet as wn
 
 # Get the similarity of two words
 # We get it by taking the maximal similarity we can get when looking at both synsets
-def getSimOfWords(word1, word2):
+def get_wordnet_similarity(word1, word2):
     synsets1 = wn.synsets(word1)
     synsets2 = wn.synsets(word2)
     maxSim = None
@@ -15,4 +15,8 @@ def getSimOfWords(word1, word2):
             sim = s1.lch_similarity(s2)
             if maxSim == None or maxSim < sim:
                 maxSim = sim
-    return maxSim
+
+    if maxSim:
+        return maxSim
+    else:
+        return 0
