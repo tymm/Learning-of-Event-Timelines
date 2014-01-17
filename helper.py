@@ -9,7 +9,7 @@ def get_wordnet_similarity(word1, word2):
     for s1 in synsets1:
         for s2 in synsets2:
             # Part of Speech has to be the same
-            if s1.pos != s2.pos:
+            if s1.pos() != s2.pos():
                 continue
 
             sim = s1.lch_similarity(s2)
