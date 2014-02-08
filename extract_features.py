@@ -1,9 +1,12 @@
 from parser import parseXML
 from helper import get_wordnet_similarity
+from nltk.stem.lancaster import LancasterStemmer as Stemmer
 
 TEXTDIR = "McIntyreLapata09Resources/fables"
 
 class Feature:
+    self.stemmer = Stemmer()
+
     def __init__(self, relation):
         self.relation = relation
 
@@ -26,6 +29,26 @@ class Feature:
     def get_similarity_of_words(self):
         # Returns float value
         return get_wordnet_similarity(self.relation.source.content, self.relation.target.content)
+
+    # Returns the word stems of the source event
+    def get_stem_source(self):
+        return self.stemmer.stem(self.relation.source.content)
+
+    # Returns the word stem of the target event
+    def get_stem_target(self):
+        return self.stemmer.stem(self.relation.target.content)
+
+    # Returns a number which represents the polarity in the relation
+    def get_polarity(self):
+        pass
+
+    # Returns a number which gives information about the frequency the event appears in the features time category
+    # word of bags
+    def get_event_category_source(self):
+        pass
+
+    def get_event_category_target(self):
+        pass
 
     # Returns number which represents the time relation type
     def get_category(self):
