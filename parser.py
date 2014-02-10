@@ -1,5 +1,6 @@
 from lxml import etree
 from copy import deepcopy
+from helper import get_surrounding
 
 class Text():
     def __init__(self, id=None, name=None):
@@ -73,10 +74,11 @@ class Text():
         self.relations_union_count = len(self.relations_union)
 
 class Event():
-    def __init__(self, parent=None, id=None, content=None, begin=None, end=None):
+    def __init__(self, parent=None, id=None, content=None, surrounding=None, begin=None, end=None):
         self.parent = parent
         self.id = id
         self.content = content
+        self.surrounding = surrounding
         self.begin = int(begin)
         self.end = int(end)
 
@@ -122,7 +124,8 @@ class Holder():
     textfiles = []
 
 
-def parseXML(filename):
+# filename of xml File and dirname to the directory where the corresponding texts are
+def parseXML(filename, dirname):
     tree = etree.parse(filename)
     root = tree.getroot()
 
@@ -141,8 +144,10 @@ def parseXML(filename):
             text.set_annotator(annotator)
 
             for k, ev in enumerate(ann.iterdescendants("event")):
+                # Get the surrounding text for this event
+                surrounding_text = get_surrounding(text.name, dirname, int(ev.get("begin")), int(ev.get("end")), 4, 4)
                 # Create an Event object
-                event = Event(annotator, k, ev.get("text"), ev.get("begin"), ev.get("end"))
+                event = Event(annotator, k, ev.get("text"), surrounding_text, ev.get("begin"), ev.get("end"))
                 # Create link from Annotator object
                 annotator.events.append(event)
 
