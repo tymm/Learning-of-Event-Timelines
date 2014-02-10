@@ -1,4 +1,5 @@
 from nltk.corpus import wordnet as wn
+import numpy
 
 # Get the similarity of two words
 # We get it by taking the maximal similarity we can get when looking at both synsets
@@ -73,3 +74,5 @@ def get_surrounding_words(file, direction, n_words):
         return text
 
 
+def get_stem_class(stems, stem):
+    return numpy.where(stems==stem)[0][0]
