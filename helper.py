@@ -22,11 +22,14 @@ def get_wordnet_similarity(word1, word2):
     else:
         return 0
 
-# Returns the surrounding text of an event
-def get_surrounding(textfile, dirname, event_begin, event_end, words_left, words_right):
+# Returns the surrounding text of an event (event included in text)
+def get_surrounding(event_text, textfile, dirname, event_begin, event_end, words_left, words_right):
     with open(dirname+"/"+textfile, "r") as f:
         f.seek(event_begin)
         left = get_surrounding_words(f, "left", words_left)
+        f.seek(event_end)
+        right = get_surrounding_words(f, "right", words_right)
+        return left + " " + event_text + " " + right
 
 def get_surrounding_words(file, direction, n_words):
     if direction == "left":
@@ -69,9 +72,8 @@ def get_surrounding_words(file, direction, n_words):
                     going_right = False
 
                 text = text + c
-            print "word"
 
-        return text
+        return text.strip()
 
 
 def get_stem_class(stems, stem):
