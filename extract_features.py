@@ -1,11 +1,12 @@
 from parser import parseXML
 from helper import get_wordnet_similarity
+from aspect import get_aspect
 from nltk.stem.lancaster import LancasterStemmer as Stemmer
 
 TEXTDIR = "McIntyreLapata09Resources/fables"
 
 class Feature:
-    self.stemmer = Stemmer()
+    stemmer = Stemmer()
 
     def __init__(self, relation):
         self.relation = relation
@@ -37,6 +38,26 @@ class Feature:
     # Returns the word stem of the target event
     def get_stem_target(self):
         return self.stemmer.stem(self.relation.target.content)
+
+    # Returns the aspect (simple, progressive, perfect) of the target event
+    def get_aspect_target(self):
+        r = get_aspect(self.relation.target.surrounding)
+        if r == "simple":
+            return 0
+        elif r == "perfect":
+            return 1
+        elif r == "progressive":
+            return 2
+
+    # Returns the aspect (simple, progressive, perfect) of the source event
+    def get_aspect_source(self):
+        r = get_aspect(self.relation.source.surrounding)
+        if r == "simple":
+            return 0
+        elif r == "perfect":
+            return 1
+        elif r == "progressive":
+            return 2
 
     # Returns a number which represents the polarity in the relation
     def get_polarity(self):

@@ -144,10 +144,11 @@ def parseXML(filename, dirname):
             text.set_annotator(annotator)
 
             for k, ev in enumerate(ann.iterdescendants("event")):
+                event_text = ev.get("text")
                 # Get the surrounding text for this event
-                surrounding_text = get_surrounding(text.name, dirname, int(ev.get("begin")), int(ev.get("end")), 4, 4)
+                surrounding_text = get_surrounding(event_text, text.name, dirname, int(ev.get("begin")), int(ev.get("end")), 3, 2)
                 # Create an Event object
-                event = Event(annotator, k, ev.get("text"), surrounding_text, ev.get("begin"), ev.get("end"))
+                event = Event(annotator, k, event_text, surrounding_text, ev.get("begin"), ev.get("end"))
                 # Create link from Annotator object
                 annotator.events.append(event)
 
