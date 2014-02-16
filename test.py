@@ -31,6 +31,18 @@ class TextProcessing(unittest.TestCase):
         r = get_surrounding("said", "ComplicatedSentence.txt", "test", 44, 4, 4)
         self.assertEqual(r, self.result_text)
 
+    def test_SemicolonSentence(self):
+        r = get_surrounding("try", "SemicolonSentence.txt", "test", 31, 4, 4)
+        self.assertEqual(r, "Wind had the first try and gathering up all")
+
+    def test_ApostropheInTheBeginning(self):
+        r = get_surrounding("came", "ApostropheBeginningSentence.txt", "test", 32, 4, 4)
+        self.assertEqual(r, "sure enough in he came and made a great")
+
+    def test_ConnectedWordsSentence(self):
+        r = get_surrounding("to-do", "ConnectedWordsSentence.txt", "test", 55, 4, 4)
+        self.assertEqual(r, "and made a great to-do about the way the")
+
 class FileProcessing(unittest.TestCase):
     def test_UnwantedCharacterStripping(self):
         text = """Holding it between his finger and thumb, he said--or rather shouted, so angry was he--"Who
