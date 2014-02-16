@@ -1,6 +1,7 @@
 import unittest
 from cStringIO import StringIO
-from helper import get_surrounding, preprocess_sentence 
+from helper import get_surrounding, preprocess_sentence
+from polarity import get_polarity
 
 class TextProcessing(unittest.TestCase):
     @classmethod
@@ -55,6 +56,36 @@ creature, that you make so free with , my person?"""
 
         new_text = preprocess_sentence(text)
         self.assertEqual(new_text, 'Holding it between his finger and thumb he said or rather shouted so angry was he Who are you pray you wretched little creature that you make so free with my person')
+
+class PolarityGuessing(unittest.TestCase):
+    def test_Dont(self):
+        text = "They don't like it at all"
+        self.assertEqual(get_polarity(text), 1)
+
+    def test_Dont_2(self):
+        text = "They dont like it at all"
+        self.assertEqual(get_polarity(text), 1)
+
+    def test_DoNot(self):
+        text = "They do not like it at all"
+        self.assertEqual(get_polarity(text), 1)
+
+    def test_Not(self):
+        text = "I have not gone"
+        self.assertEqual(get_polarity(text), 1)
+
+    def test_Not_2(self):
+        text = "He does not go"
+        self.assertEqual(get_polarity(text), 1)
+
+    def test_Affirmative(self):
+        text = "They like it very much"
+        self.assertEqual(get_polarity(text), 0)
+
+    def test_Affirmative_2(self):
+        text = "I see him"
+        self.assertEqual(get_polarity(text), 0)
+
 
 if __name__ == '__main__':
     unittest.main()
