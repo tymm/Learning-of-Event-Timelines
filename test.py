@@ -2,6 +2,7 @@ import unittest
 from cStringIO import StringIO
 from helper import get_surrounding, preprocess_sentence
 from polarity import get_polarity
+from modality import get_modality
 
 class TextProcessing(unittest.TestCase):
     @classmethod
@@ -85,6 +86,15 @@ class PolarityGuessing(unittest.TestCase):
     def test_Affirmative_2(self):
         text = "I see him"
         self.assertEqual(get_polarity(text), 0)
+
+class ModalityGuessing(unittest.TestCase):
+    def test_Would(self):
+        text = "were true, one would have seen it on CNN."
+        self.assertEqual(get_modality(text), 1)
+
+    def test_NoModal(self):
+        text = "I like it a lot"
+        self.assertEqual(get_modality(text), 0)
 
 
 if __name__ == '__main__':
