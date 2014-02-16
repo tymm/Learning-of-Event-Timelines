@@ -39,8 +39,7 @@ def preprocess_sentence(text):
         text_tmp = re.sub(r"(\w+)\W*[,\-\"']+\W*(\w+)", repl, text_tmp)
 
         # Removing sentences endings (?!.)
-        text_tmp = re.sub(r"[?!.]", "", text_tmp)
-
+        text_tmp = text_tmp.strip(".").strip("?").strip("!")
         return text_tmp
 
 
