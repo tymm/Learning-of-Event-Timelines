@@ -43,6 +43,10 @@ class TextProcessing(unittest.TestCase):
         r = get_surrounding("to-do", "ConnectedWordsSentence.txt", "test", 55, 4, 4)
         self.assertEqual(r, "and made a great to-do about the way the")
 
+    def test_LegitimateUseOfApostrophe(self):
+        r = get_surrounding("don't", "LegitimateUseOfApostrophe.txt", "test", 5, 4, 4)
+        self.assertEqual(r, "They don't want to be there")
+
 class FileProcessing(unittest.TestCase):
     def test_UnwantedCharacterStripping(self):
         text = """Holding it between his finger and thumb, he said--or rather shouted, so angry was he--"Who

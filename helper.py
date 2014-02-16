@@ -34,12 +34,16 @@ def preprocess_sentence(text):
         text_tmp = re.sub(r"$\n", "", text_tmp)
 
         # Removing everything between two words and replacing it by a space
-        text_tmp = re.sub(r"(\w+)\W*[,\"';:]+\W*(\w+)", repl, text_tmp)
+        text_tmp = re.sub(r"(\w+)\W*[,\";:]+\W*(\w+)", repl, text_tmp)
         # Run again because re.sub only matches non overlapping stuff. "you, pray," -> "you pray,"
-        text_tmp = re.sub(r"(\w+)\W*[,\"';:]+\W*(\w+)", repl, text_tmp)
+        text_tmp = re.sub(r"(\w+)\W*[,\";:]+\W*(\w+)", repl, text_tmp)
 
         # Removing "--" but not "-" between two words ("to-do")
         text_tmp = re.sub(r"(\w+)\W*--\W*(\w+)", repl, text_tmp)
+
+        # Replaceing "'" only when there is a space next to it. Not replacing "don't" by "don t"
+        text_tmp = re.sub(r"(\w+)\W+'+\W*(\w+)", repl, text_tmp)
+        text_tmp = re.sub(r"(\w+)\W*'+\W+(\w+)", repl, text_tmp)
 
         # Removing sentences endings (?!.)
         text_tmp = text_tmp.strip(".").strip("?").strip("!").strip(";").strip(":").strip('"').strip()
