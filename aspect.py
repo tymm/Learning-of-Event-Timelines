@@ -1,11 +1,33 @@
 import re
+from tense import get_tags
 # determines whether some text is either in the simple-, progressive- or perfect aspect
 def get_aspect(text):
-    if re.match('.*(was|were|is|are|will be|had been|has been|have been|will have been) \w+ing', text):
+    if re.match(r'.*(was|were|is|are|will be|had been|has been|have been|will have been) \w+ing', text):
         return "progressive"
-    elif re.match('.*(had|has|have|will have) \w+ed', text):
+    elif is_PerfectAspect(text):
         return "perfect"
     elif re.match('.*(will|shall)* \w+(s|ed)*', text):
         return "simple"
     else:
         return None
+
+def is_PerfectAspect(text):
+    tags = get_tags(text)
+
+    # has + gone
+    if 'VBZ' in tags and 'VBN' in tags:
+        return True
+
+    # have + gone
+    if 'VBD' in tags and 'VBN' in tags:
+        return True
+
+    # will + have + gone
+    if 'MD' in tags and 'VB' in tags and 'VBN' in tags:
+        return True
+
+    # will + have + gone
+    if 'MD' in tags and 'VBP' in tags and 'VBN' in tags:
+        return True
+    else:
+        return False

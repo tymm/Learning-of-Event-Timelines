@@ -240,6 +240,14 @@ class AspectGuessing(unittest.TestCase):
         text = "They clean the window"
         self.assertEqual(get_aspect(text), "simple")
 
+    def test_SimpleAspect_4(self):
+        text = "Shall we go?"
+        self.assertEqual(get_aspect(text), "simple")
+
+    def test_SimpleAspect_5(self):
+        text = "Will we go there?"
+        self.assertEqual(get_aspect(text), "simple")
+
     def test_PerfectAspect(self):
         text = "I had cleaned the whole kitchen"
         self.assertEqual(get_aspect(text), "perfect")
@@ -252,8 +260,12 @@ class AspectGuessing(unittest.TestCase):
         text = "Yesterday it has found"
         self.assertEqual(get_aspect(text), "perfect")
 
-    def test_PerfectAspect_3(self):
+    def test_PerfectAspect_4(self):
         text = "She has taken all her belongings"
+        self.assertEqual(get_aspect(text), "perfect")
+
+    def test_PerfectAspect_5(self):
+        text = "Will they have eaten?"
         self.assertEqual(get_aspect(text), "perfect")
 
     def test_ProgressiveAspect(self):
@@ -266,6 +278,10 @@ class AspectGuessing(unittest.TestCase):
 
     def test_ProgressiveAspect_3(self):
         text = "She had been flying to Vancouver"
+        self.assertEqual(get_aspect(text), "progressive")
+
+    def test_ProgressiveAspect_4(self):
+        text = "Will she have been singing?"
         self.assertEqual(get_aspect(text), "progressive")
 
 
