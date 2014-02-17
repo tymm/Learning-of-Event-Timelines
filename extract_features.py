@@ -41,7 +41,7 @@ class Feature:
 
     # Returns the aspect (simple, progressive, perfect) of the target event
     def get_aspect_target(self):
-        r = get_aspect(self.relation.target.surrounding)
+        r = get_aspect(self.relation.target.sentence)
         if r == "simple":
             return 0
         elif r == "perfect":
@@ -51,13 +51,36 @@ class Feature:
 
     # Returns the aspect (simple, progressive, perfect) of the source event
     def get_aspect_source(self):
-        r = get_aspect(self.relation.source.surrounding)
+        r = get_aspect(self.relation.source.sentence)
         if r == "simple":
             return 0
         elif r == "perfect":
             return 1
         elif r == "progressive":
             return 2
+
+    # Returns the combined aspect (9 different values)
+    def get_aspect_combined(self):
+        if self.get_aspect_source() == 0 and self.get_aspect_target() == 0:
+            return 0
+        elif self.get_aspect_source() == 0 and self.get_aspect_target() == 1:
+            return 1
+        elif self.get_aspect_source() == 0 and self.get_aspect_target() == 2:
+            return 2
+        elif self.get_aspect_source() == 1 and self.get_aspect_target() == 0:
+            return 3
+        elif self.get_aspect_source() == 1 and self.get_aspect_target() == 1:
+            return 4
+        elif self.get_aspect_source() == 1 and self.get_aspect_target() == 2:
+            return 5
+        elif self.get_aspect_source() == 2 and self.get_aspect_target() == 0:
+            return 6
+        elif self.get_aspect_source() == 2 and self.get_aspect_target() == 1:
+            return 7
+        elif self.get_aspect_source() == 2 and self.get_aspect_target() == 2:
+            return 8
+        else:
+            return None
 
     # Returns a number which represents the polarity in the relation
     def get_polarity(self):
