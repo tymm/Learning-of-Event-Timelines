@@ -4,6 +4,7 @@ from helper import get_surrounding, preprocess_sentence
 from polarity import get_polarity
 from modality import get_modality
 from tense import get_tense
+from aspect import get_aspect
 
 class TextProcessing(unittest.TestCase):
     @classmethod
@@ -225,6 +226,48 @@ class TenseGuessing(unittest.TestCase):
     def test_WillFuture_3(self):
         text = "Will he go?"
         self.assertEqual(get_tense(text), 8)
+
+class AspectGuessing(unittest.TestCase):
+    def test_SimpleAspect(self):
+        text = "I went"
+        self.assertEqual(get_aspect(text), "simple")
+
+    def test_SimpleAspect_2(self):
+        text = "I will go"
+        self.assertEqual(get_aspect(text), "simple")
+
+    def test_SimpleAspect_3(self):
+        text = "They clean the window"
+        self.assertEqual(get_aspect(text), "simple")
+
+    def test_PerfectAspect(self):
+        text = "I had cleaned the whole kitchen"
+        self.assertEqual(get_aspect(text), "perfect")
+
+    def test_PerfectAspect_2(self):
+        text = "They will have eaten"
+        self.assertEqual(get_aspect(text), "perfect")
+
+    def test_PerfectAspect_3(self):
+        text = "Yesterday it has found"
+        self.assertEqual(get_aspect(text), "perfect")
+
+    def test_PerfectAspect_3(self):
+        text = "She has taken all her belongings"
+        self.assertEqual(get_aspect(text), "perfect")
+
+    def test_ProgressiveAspect(self):
+        text = "She will have been singing"
+        self.assertEqual(get_aspect(text), "progressive")
+
+    def test_ProgressiveAspect_2(self):
+        text = "They have been fighting for the whole day."
+        self.assertEqual(get_aspect(text), "progressive")
+
+    def test_ProgressiveAspect_3(self):
+        text = "She had been flying to Vancouver"
+        self.assertEqual(get_aspect(text), "progressive")
+
 
 if __name__ == '__main__':
     unittest.main()
