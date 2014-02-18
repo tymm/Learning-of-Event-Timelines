@@ -3,6 +3,7 @@ from helper import get_wordnet_similarity
 from aspect import get_aspect
 from tense import get_tense
 from nltk.stem.lancaster import LancasterStemmer as Stemmer
+from nltk import pos_tag, word_tokenize
 
 TEXTDIR = "McIntyreLapata09Resources/fables"
 
@@ -123,13 +124,17 @@ class Feature:
         elif mod_source == 1 and mod_target == 1:
             return 3
 
-    # Returns a number which gives information about the frequency the event appears in the features time category
-    # word of bags
-    def get_event_category_source(self):
-        pass
+    def get_pos_source(self):
+        tags_tokens = pos_tag(word_tokenize(self.relation.source.pos_surrounding))
+        tags = [tag[1] for tag in tags_tokens]
 
-    def get_event_category_target(self):
-        pass
+        return tags
+
+    def get_pos_target(self):
+        tags_tokens = pos_tag(word_tokenize(self.relation.target.pos_surrounding))
+        tags = [tag[1] for tag in tags_tokens]
+
+        return tags
 
     # Returns number which represents the time relation type
     def get_category(self):
