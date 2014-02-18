@@ -97,11 +97,31 @@ class Feature:
 
     # Returns a number which represents the polarity in the relation
     def get_polarity(self):
-        pass
+        pol_source = self.relation.source.polarity
+        pol_target = self.relation.target.polarity
 
-    # Returns a numer which represents the modality in the relation
+        if pol_source == 0 and pol_target == 0:
+            return 0
+        elif pol_source == 1 and pol_target == 0:
+            return 1
+        elif pol_source == 0 and pol_target == 1:
+            return 2
+        elif pol_source == 1 and pol_target == 1:
+            return 3
+
+    # Returns a number which represents the modality in the relation
     def get_modality(self):
-        pass
+        mod_source = self.relation.source.modality
+        mod_target = self.relation.target.modality
+
+        if mod_source == 0 and mod_target == 0:
+            return 0
+        elif mod_source == 1 and mod_target == 0:
+            return 1
+        elif mod_source == 0 and mod_target == 1:
+            return 2
+        elif mod_source == 1 and mod_target == 1:
+            return 3
 
     # Returns a number which gives information about the frequency the event appears in the features time category
     # word of bags
