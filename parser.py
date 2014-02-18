@@ -1,6 +1,8 @@
 from lxml import etree
 from copy import deepcopy
-from helper import get_surrounding
+from helper import get_sentence, get_surrounding
+from polarity import get_polarity
+from modality import get_modality
 
 class Text():
     def __init__(self, id=None, name=None):
@@ -74,11 +76,20 @@ class Text():
         self.relations_union_count = len(self.relations_union)
 
 class Event():
-    def __init__(self, parent=None, id=None, content=None, surrounding=None, begin=None, end=None):
+    surrounding_words_left = 3
+    surrounding_words_right = 2
+    pos_surrounding_words_left = 2
+    pos_surrounding_words_right = 2
+
+    def __init__(self, parent=None, id=None, content=None, sentence=None, surrounding=None, pos_surrounding=None, polarity=None, modality=None, begin=None, end=None):
         self.parent = parent
         self.id = id
         self.content = content
+        self.sentence = sentence
         self.surrounding = surrounding
+        self.pos_surrounding = pos_surrounding
+        self.polarity = polarity
+        self.modality = modality
         self.begin = int(begin)
         self.end = int(end)
 
@@ -145,10 +156,20 @@ def parseXML(filename, dirname):
 
             for k, ev in enumerate(ann.iterdescendants("event")):
                 event_text = ev.get("text")
-                # Get the surrounding text for this event
-                surrounding_text = get_surrounding(event_text, text.name, dirname, int(ev.get("begin")), int(ev.get("end")), 3, 2)
+
+                # Get the surrounding text and sentence for this event
+                sentence = get_sentence(event_text, text.name, dirname, int(ev.get("begin")))[0]
+                surrounding = get_surrounding(event_text, text.name, dirname, int(ev.get("begin")), Event.surrounding_words_left, Event.surrounding_words_right)
+
+                pos_surrounding = get_surrounding(event_text, text.name, dirname, int(ev.get("begin")), Event.pos_surrounding_words_left, Event.pos_surrounding_words_right)
+                # Get the polarity of the event
+                polarity = get_polarity(surrounding)
+
+                # Get the modality of the event
+                modality = get_modality(surrounding)
+
                 # Create an Event object
-                event = Event(annotator, k, event_text, surrounding_text, ev.get("begin"), ev.get("end"))
+                event = Event(annotator, k, event_text, sentence, surrounding, pos_surrounding, polarity, modality, ev.get("begin"), ev.get("end"))
                 # Create link from Annotator object
                 annotator.events.append(event)
 
