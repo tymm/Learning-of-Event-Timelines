@@ -1,6 +1,7 @@
 from parser import parseXML
 from helper import get_wordnet_similarity
 from aspect import get_aspect
+from tense import get_tense
 from nltk.stem.lancaster import LancasterStemmer as Stemmer
 
 TEXTDIR = "McIntyreLapata09Resources/fables"
@@ -41,7 +42,7 @@ class Feature:
 
     # Returns the aspect (simple, progressive, perfect) of the target event
     def get_aspect_target(self):
-        r = get_aspect(self.relation.target.sentence)
+        r = get_aspect(self.relation.target.surrounding)
         if r == "simple":
             return 0
         elif r == "perfect":
@@ -51,7 +52,7 @@ class Feature:
 
     # Returns the aspect (simple, progressive, perfect) of the source event
     def get_aspect_source(self):
-        r = get_aspect(self.relation.source.sentence)
+        r = get_aspect(self.relation.source.surrounding)
         if r == "simple":
             return 0
         elif r == "perfect":
@@ -82,8 +83,24 @@ class Feature:
         else:
             return None
 
+    # Returns tense of source event
+    def get_tense_source(self):
+        r = get_tense(self.relation.source.surrounding)
+        return r
+
+    # Returns tense of target event
+    def get_tense_target(self):
+        r = get_tense(self.relation.target.surrounding)
+        return r
+
+    # Returns the combined tense 
+
     # Returns a number which represents the polarity in the relation
     def get_polarity(self):
+        pass
+
+    # Returns a numer which represents the modality in the relation
+    def get_modality(self):
         pass
 
     # Returns a number which gives information about the frequency the event appears in the features time category
