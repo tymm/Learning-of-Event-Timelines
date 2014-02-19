@@ -7,7 +7,7 @@ from helper import get_stem_class
 from pos import Pos
 from stem import Stem
 import sys
-import pickle
+import cPickle as pickle
 import os.path
 
 # Create numpy array with samples and targets
