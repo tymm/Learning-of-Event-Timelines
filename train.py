@@ -5,27 +5,13 @@ from extract_features import Feature
 from parser import parseXML
 from helper import get_stem_class
 from pos import Pos
+from stem import Stem
 
 # Create numpy array with samples and targets
 data = parseXML("fables-100-temporal-dependency.xml", "McIntyreLapata09Resources/fables/")
 
-"""
-# Get all word stems and all POS tags
-stems = np.array([])
-for txt in data.textfiles:
-    # Use union relations
-    txt.compute_union_relations()
-    for rel in txt.relations_union:
-        f = Feature(rel)
-        if f.get_category() == -1:
-            continue
-        stems = np.append(stems, [f.get_stem_target()])
-        stems = np.append(stems, [f.get_stem_source()])
-
-stems = np.unique(stems)
-"""
-
 pos = Pos(data, 6)
+stem = Stem(data)
 
 X = []
 y = np.array([], dtype=int)
@@ -53,9 +39,14 @@ for txt in data.textfiles:
         pos_feature = pos.transform(f.get_pos_target(), f.get_pos_source())
         pos_feature = pos_feature.toarray()[0]
 
+        # Make Stem feature
+        stem_feature = stem.transform(f.get_stem_source(), f.get_stem_target())
+        stem_feature = stem_feature[0]
+
         # Building a row of all feature values
         feature = [f.get_distance(), f.get_similarity_of_words(), f.get_aspect_combined(), f.get_polarity(), f.get_modality()]
         feature = np.concatenate((feature, pos_feature))
+        feature = np.concatenate((feature, stem_feature))
 
         # Append feature to X
         X.append(feature)
