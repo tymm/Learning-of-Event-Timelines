@@ -6,18 +6,30 @@ from parser import parseXML
 from helper import get_stem_class
 from pos import Pos
 from stem import Stem
+import sys
+import pickle
+import os.path
 
 # Create numpy array with samples and targets
 data = parseXML("fables-100-temporal-dependency.xml", "McIntyreLapata09Resources/fables/")
 
-pos = Pos(data, 6)
-stem = Stem(data)
+# Since running Pos() and Stem() takes time, load it from a file if present
+# With --reload as an argument a new calculation of Pos() and Stem() can be enforced
+print "Loading Features"
+if (len(sys.argv) >= 2 and sys.argv[1] == "--reload") or not os.path.isfile("save.p"):
+    pos = Pos(data, 6)
+    stem = Stem(data)
+    pickle.dump((pos, stem), open("save.p", "wb"))
+else:
+    pos, stem = pickle.load(open("save.p", "rb"))
+
+print "Done loading Features"
+
 
 X = []
 y = np.array([], dtype=int)
 
 null = 0
-none = 0
 for txt in data.textfiles:
     # Use union relations
     txt.compute_union_relations()
@@ -28,10 +40,6 @@ for txt in data.textfiles:
             continue
         if f.get_category() == 0:
             null += 1
-            """
-        if not f.get_aspect_combined():
-            none += 1
-            """
         if null > 450:
             continue
 
