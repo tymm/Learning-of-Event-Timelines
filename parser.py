@@ -78,8 +78,8 @@ class Text():
 class Event():
     surrounding_words_left = 3
     surrounding_words_right = 2
-    pos_surrounding_words_left = 2
-    pos_surrounding_words_right = 2
+    pos_surrounding_words_left = 1
+    pos_surrounding_words_right = 1
 
     def __init__(self, parent=None, id=None, content=None, sentence=None, surrounding=None, pos_surrounding=None, polarity=None, modality=None, begin=None, end=None):
         self.parent = parent

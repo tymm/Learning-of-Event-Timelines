@@ -4,11 +4,13 @@ import numpy as np
 from extract_features import Feature
 from parser import parseXML
 from helper import get_stem_class
+from pos import Pos
 
 # Create numpy array with samples and targets
 data = parseXML("fables-100-temporal-dependency.xml", "McIntyreLapata09Resources/fables/")
 
-# Get all word stems
+"""
+# Get all word stems and all POS tags
 stems = np.array([])
 for txt in data.textfiles:
     # Use union relations
@@ -21,8 +23,11 @@ for txt in data.textfiles:
         stems = np.append(stems, [f.get_stem_source()])
 
 stems = np.unique(stems)
+"""
 
-X = np.array([], dtype=float).reshape(0,5)
+pos = Pos(data, 6)
+
+X = []
 y = np.array([], dtype=int)
 
 null = 0
@@ -43,8 +48,17 @@ for txt in data.textfiles:
             """
         if null > 450:
             continue
+
+        # Make POS feature
+        pos_feature = pos.transform(f.get_pos_target(), f.get_pos_source())
+        pos_feature = pos_feature.toarray()[0]
+
         # Building a row of all feature values
-        X = np.append(X, [[f.get_distance(), f.get_similarity_of_words(), f.get_aspect_combined(), f.get_polarity(), f.get_modality()]], axis=0)
+        feature = [f.get_distance(), f.get_similarity_of_words(), f.get_aspect_combined(), f.get_polarity(), f.get_modality()]
+        feature = np.concatenate((feature, pos_feature))
+
+        # Append feature to X
+        X.append(feature)
         y = np.append(y, [f.get_category()])
 
 

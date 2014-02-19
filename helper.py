@@ -91,11 +91,7 @@ def get_surrounding(event_text, textfile, dirname, event_begin, words_left, word
     sentence, same_words_before_event = get_sentence(event_text, textfile, dirname, event_begin)
 
     # Remove everything which is not a word
-    print
-    print event_text
-    print sentence
     sentence = preprocess_sentence(sentence)
-    print sentence
 
     # Turn sentence into a list of words
     words = sentence.split()
