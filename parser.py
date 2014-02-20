@@ -5,34 +5,7 @@ from polarity import get_polarity
 from modality import get_modality
 from event import Event
 from text import Text
-
-class Relation():
-    def __init__(self, parent=None, source=None, target=None, time_type=None):
-        self.parent = parent
-        self.source = source
-        self.target = target
-        self.identifier = None
-
-        if time_type in ["same_as", "overlap", "after", "is_contained_in", "before", "contains", "includes", "is_included", "no relations"]:
-            self.time_type = time_type
-        else:
-            self.time_type = None
-
-    def set_time_type(self, time_type):
-        if time_type in ["same_as", "overlap", "after", "is_contained_in", "before", "contains", "includes", "is_included", "no relations"]:
-            self.time_type = time_type
-        else:
-            self.time_type = None
-
-    def set_source(self, source):
-        self.source = source
-
-    def set_target(self, target):
-        self.target = target
-
-    def set_identifier(self):
-        self.identifier = str(self.source.begin)+str(self.source.end)+str(self.target.begin)+str(self.target.end)
-
+from relation import Relation
 
 class Annotator():
     def __init__(self, id=None, xml_id=None):
