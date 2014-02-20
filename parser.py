@@ -6,15 +6,7 @@ from modality import get_modality
 from event import Event
 from text import Text
 from relation import Relation
-
-class Annotator():
-    def __init__(self, id=None, xml_id=None):
-        self.parent = None
-        self.events = []
-        self.relations = []
-        self.id = id
-        self.xml_id = xml_id
-
+from annotator import Annotator
 
 class Holder():
     textfiles = []
@@ -33,8 +25,7 @@ def parseXML(filename, dirname):
 
         for j, ann in enumerate(txt.iterdescendants("annotator")):
             # Create an Annotator object
-            annotator = Annotator(j, ann.get("id"))
-            annotator.parent = text
+            annotator = Annotator(j, text, ann.get("id"))
 
             # Create link from Text object
             text.append_annotator(annotator)
