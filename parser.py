@@ -3,10 +3,10 @@ from copy import deepcopy
 from helper import get_sentence, get_surrounding
 from polarity import get_polarity
 from modality import get_modality
-from event import Event
-from text import Text
-from relation import Relation
-from annotator import Annotator
+from parsexml.event import Event
+from parsexml.text import Text
+from parsexml.relation import Relation
+from parsexml.annotator import Annotator
 
 class Holder():
     """Holds all text objects."""
