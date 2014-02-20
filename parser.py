@@ -4,77 +4,7 @@ from helper import get_sentence, get_surrounding
 from polarity import get_polarity
 from modality import get_modality
 from event import Event
-
-class Text():
-    def __init__(self, id=None, name=None):
-        self.id = None
-        self.name = name
-        self.relations_union_count = 0
-        self.relations_intersection_count = 0
-        self.annotator = []
-        self.relations_union = []
-        self.relations_intersection = []
-        self.events_union = []
-
-    def set_annotator(self, annotator):
-        self.annotator.append(annotator)
-
-    """Since different annotators annotate different events we might
-    be interested in the union of all events for a textfile"""
-    def compute_union_events(self):
-        del self.events_union[:]
-
-        all_in_one = []
-        for ann in self.annotator:
-            all_in_one = all_in_one + ann.events
-
-        # x if the word contained in x is not already in our list of words so far
-        self.events_union = [x for i, x in enumerate(all_in_one) if x.content not in [y.content for y in all_in_one[:i]]]
-
-    """Since different annotators annotate different relations we might
-    want to know which relations all annotators for a textfile have in common (intersection)"""
-    def compute_intersection_relations(self):
-        del self.relations_intersection[:]
-        self.relations_intersection_count = 0
-
-        relations = []
-        relations_tmp = []
-
-        for rel in self.annotator[0].relations:
-            relations_tmp.append(rel)
-
-        for ann in self.annotator[1:]:
-            # Add rel to list if we have rel already in relations_tmp[]
-            for rel in ann.relations:
-                if rel.identifier in [x.identifier for x in relations_tmp]:
-                    relations.append(rel)
-
-            del relations_tmp[:]
-            relations_tmp = deepcopy(relations)
-
-        self.relations_intersection = relations
-        self.relations_intersection_count = len(self.relations_intersection)
-
-    """Union over all relations annotated in a certain textfile"""
-    def compute_union_relations(self):
-        del self.relations_union[:]
-        self.relations_union= 0
-
-        # Put all relations from all annotators in one list
-        relations = []
-        for ann in self.annotator:
-            for rel in ann.relations:
-                relations.append({rel.identifier : rel})
-
-        # Go through all relations and add a relation to a list if
-        # the identifier of the relation is not already in the list
-        union = []
-        for r in relations:
-            if r.keys()[0] not in [x.keys()[0] for x in union]:
-                union.append(r)
-
-        self.relations_union = [x.values()[0] for x in union]
-        self.relations_union_count = len(self.relations_union)
+from text import Text
 
 class Relation():
     def __init__(self, parent=None, source=None, target=None, time_type=None):
@@ -134,7 +64,7 @@ def parseXML(filename, dirname):
             annotator.parent = text
 
             # Create link from Text object
-            text.set_annotator(annotator)
+            text.append_annotator(annotator)
 
             for k, ev in enumerate(ann.iterdescendants("event")):
                 event_text = ev.get("text")
