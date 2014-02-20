@@ -3,6 +3,7 @@ from copy import deepcopy
 from helper import get_sentence, get_surrounding
 from polarity import get_polarity
 from modality import get_modality
+from event import Event
 
 class Text():
     def __init__(self, id=None, name=None):
@@ -74,25 +75,6 @@ class Text():
 
         self.relations_union = [x.values()[0] for x in union]
         self.relations_union_count = len(self.relations_union)
-
-class Event():
-    surrounding_words_left = 3
-    surrounding_words_right = 2
-    pos_surrounding_words_left = 1
-    pos_surrounding_words_right = 1
-
-    def __init__(self, parent=None, id=None, content=None, sentence=None, surrounding=None, pos_surrounding=None, polarity=None, modality=None, begin=None, end=None):
-        self.parent = parent
-        self.id = id
-        self.content = content
-        self.sentence = sentence
-        self.surrounding = surrounding
-        self.pos_surrounding = pos_surrounding
-        self.polarity = polarity
-        self.modality = modality
-        self.begin = int(begin)
-        self.end = int(end)
-
 
 class Relation():
     def __init__(self, parent=None, source=None, target=None, time_type=None):
