@@ -2,7 +2,7 @@ from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
 import numpy as np
 from extract_features import Feature
-from parser import parseXML
+from parser import parse_XML
 from pos import Pos
 from stem import Stem
 import sys
@@ -10,7 +10,7 @@ import cPickle as pickle
 import os.path
 
 # Create numpy array with samples and targets
-data = parseXML("fables-100-temporal-dependency.xml", "McIntyreLapata09Resources/fables/")
+data = parse_XML("fables-100-temporal-dependency.xml", "McIntyreLapata09Resources/fables/")
 
 # Since running Pos() and Stem() takes time, load it from a file if present
 # With --reload as an argument a new calculation of Pos() and Stem() can be enforced

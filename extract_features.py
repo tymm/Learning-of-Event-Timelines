@@ -1,4 +1,3 @@
-from parser import parseXML
 from helper import get_wordnet_similarity
 from aspect import get_aspect
 from tense import get_tense
@@ -154,12 +153,3 @@ class Feature:
             return 1
         else:
             return 0
-
-if __name__ == "__main__":
-    data = parseXML("training.xml")
-
-    for txt in data.textfiles:
-        txt.compute_union_relations()
-        for rel in txt.relations_union:
-            f = Feature(rel)
-            print f.get_distance(), f.get_category()

@@ -9,11 +9,12 @@ from relation import Relation
 from annotator import Annotator
 
 class Holder():
+    """Holds all text objects."""
     textfiles = []
 
 
-# filename of xml File and dirname to the directory where the corresponding texts are
-def parseXML(filename, dirname):
+def parse_XML(filename, dirname):
+    """Takes xml filename and name of directory as arguments an returns all Text objects bundled in a Holder instance."""
     tree = etree.parse(filename)
     root = tree.getroot()
 
