@@ -3,7 +3,6 @@ import pandas as pd
 import numpy as np
 from extract_features import Feature
 from parser import parseXML
-from helper import get_stem_class
 from pos import Pos
 from stem import Stem
 import sys
@@ -52,7 +51,8 @@ for txt in data.textfiles:
         stem_feature = stem_feature[0]
 
         # Building a row of all feature values
-        feature = [f.get_distance(), f.get_similarity_of_words(), f.get_aspect_combined(), f.get_polarity(), f.get_modality()]
+        feature = [f.get_distance(), f.get_similarity_of_words(), f.get_polarity(), f.get_modality()]
+        feature = np.concatenate((feature, f.get_aspect()))
         feature = np.concatenate((feature, pos_feature))
         feature = np.concatenate((feature, stem_feature))
 

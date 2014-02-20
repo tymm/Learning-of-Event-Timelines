@@ -61,28 +61,28 @@ class Feature:
         elif r == "progressive":
             return 2
 
-    # Returns the combined aspect (9 different values)
-    def get_aspect_combined(self):
+    # Returns the aspect feature (9 different values)
+    def get_aspect(self):
         if self.get_aspect_source() == 0 and self.get_aspect_target() == 0:
-            return 0
+            return [0, 0, 0, 0, 0, 0, 0, 0, 0]
         elif self.get_aspect_source() == 0 and self.get_aspect_target() == 1:
-            return 1
+            return [1, 0, 0, 0, 0, 0, 0, 0, 0]
         elif self.get_aspect_source() == 0 and self.get_aspect_target() == 2:
-            return 2
+            return [0, 1, 0, 0, 0, 0, 0, 0, 0]
         elif self.get_aspect_source() == 1 and self.get_aspect_target() == 0:
-            return 3
+            return [0, 0, 1, 0, 0, 0, 0, 0, 0]
         elif self.get_aspect_source() == 1 and self.get_aspect_target() == 1:
-            return 4
+            return [0, 0, 0, 1, 0, 0, 0, 0, 0]
         elif self.get_aspect_source() == 1 and self.get_aspect_target() == 2:
-            return 5
+            return [0, 0, 0, 0, 1, 0, 0, 0, 0]
         elif self.get_aspect_source() == 2 and self.get_aspect_target() == 0:
-            return 6
+            return [0, 0, 0, 0, 0, 1, 0, 0, 0]
         elif self.get_aspect_source() == 2 and self.get_aspect_target() == 1:
-            return 7
+            return [0, 0, 0, 0, 0, 0, 1, 0, 0]
         elif self.get_aspect_source() == 2 and self.get_aspect_target() == 2:
-            return 8
+            return [0, 0, 0, 0, 0, 0, 0, 1, 0]
         else:
-            return None
+            return [0, 0, 0, 0, 0, 0, 0, 0, 1]
 
     # Returns tense of source event
     def get_tense_source(self):
