@@ -1,10 +1,10 @@
 from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
 import numpy as np
-from extract_features import Feature
+from feature.Feature import Feature
 from parser import parse_XML
-from pos import Pos
-from stem import Stem
+from feature.preprocessing.pos import Pos
+from feature.preprocessing.stem import Stem
 import sys
 import cPickle as pickle
 import os.path
