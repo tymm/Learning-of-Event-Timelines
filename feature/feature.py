@@ -1,4 +1,4 @@
-from helper import get_wordnet_similarity
+from preprocessing.word_similarity import get_wordnet_similarity
 from preprocessing.aspect import get_aspect
 from preprocessing.tense import get_tense
 from nltk.stem.lancaster import LancasterStemmer as Stemmer
