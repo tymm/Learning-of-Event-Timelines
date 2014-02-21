@@ -1,8 +1,8 @@
 from lxml import etree
 from copy import deepcopy
-from helper import get_sentence, get_surrounding
-from polarity import get_polarity
-from modality import get_modality
+from feature.preprocessing.text import get_sentence, get_surrounding
+from feature.preprocessing.polarity import get_polarity
+from feature.preprocessing.modality import get_modality
 from parsexml.event import Event
 from parsexml.text import Text
 from parsexml.relation import Relation
