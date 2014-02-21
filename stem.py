@@ -4,17 +4,15 @@ from extract_features import Feature
 
 class Stem():
     def __init__(self, data):
-        # OneHotEncoder to encode categorical integer features
-        self.encoder = OneHotEncoder()
-
         # All unique stems
         self.stems = self.load_stems(data)
 
         # Number of different stems
         self.count = len(self.stems)
 
-        # Fit the encoder
-        self.encoder_fit()
+        # OneHotEncoder to encode categorical integer features
+        self.encoder = OneHotEncoder(n_values=self.count, categorical_features=[0])
+        self.encoder.fit([self.count-1])
 
     def load_stems(self, data):
         # Get all word stems
@@ -35,14 +33,6 @@ class Stem():
     # Translates stem to integer
     def stem_to_integer(self, stem):
         return np.where(self.stems==stem)[0][0]
-
-    def encoder_fit(self):
-        # Small hack to simulate the input matrix of integers for the encoder
-        different_values = range(self.count)
-        splitted = []
-        for val in different_values:
-            splitted.append([val])
-        self.encoder.fit(splitted)
 
     # Turn stems into binary feature
     def transform(self, stem_source, stem_target):
