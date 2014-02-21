@@ -1,6 +1,6 @@
 import numpy as np
 from sklearn.preprocessing import OneHotEncoder
-from extract_features import Feature
+from feature.feature import Feature
 
 class Pos():
     def __init__(self, data, number_tags_per_feature):
