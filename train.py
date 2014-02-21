@@ -55,6 +55,7 @@ for txt in data.textfiles:
         feature = np.concatenate((feature, f.get_aspect()))
         feature = np.concatenate((feature, pos_feature))
         feature = np.concatenate((feature, stem_feature))
+        feature = np.concatenate((feature, f.get_tense()))
 
         # Append feature to X
         X.append(feature)

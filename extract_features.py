@@ -3,14 +3,18 @@ from aspect import get_aspect
 from tense import get_tense
 from nltk.stem.lancaster import LancasterStemmer as Stemmer
 from nltk import pos_tag, word_tokenize
+from sklearn.preprocessing import OneHotEncoder
 
 TEXTDIR = "McIntyreLapata09Resources/fables"
 
 class Feature:
     stemmer = Stemmer()
+    enc_tense = OneHotEncoder(n_values=10, categorical_features=[0,1])
+    enc_tense.fit([9, 9])
 
     def __init__(self, relation):
         self.relation = relation
+
 
     # Returns the number of characters between two events in a text
     def get_distance(self):
@@ -93,7 +97,9 @@ class Feature:
         r = get_tense(self.relation.target.surrounding)
         return r
 
-    # Returns the combined tense 
+    # Returns the combined tense
+    def get_tense(self):
+        return self.enc_tense.transform([[self.get_tense_source(), self.get_tense_target()]]).toarray()[0]
 
     # Returns a number which represents the polarity in the relation
     def get_polarity(self):
