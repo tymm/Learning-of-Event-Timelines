@@ -1,6 +1,6 @@
 from helper import get_wordnet_similarity
-from feature.preprocessing.aspect import get_aspect
-from feature.preprocessing.tense import get_tense
+from preprocessing.aspect import get_aspect
+from preprocessing.tense import get_tense
 from nltk.stem.lancaster import LancasterStemmer as Stemmer
 from nltk import pos_tag, word_tokenize
 from sklearn.preprocessing import OneHotEncoder
