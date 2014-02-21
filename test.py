@@ -1,10 +1,10 @@
 import unittest
 from cStringIO import StringIO
-from helper import get_surrounding, preprocess_sentence
-from polarity import get_polarity
-from modality import get_modality
-from tense import get_tense
-from aspect import get_aspect
+from feature.preprocessing.text import get_surrounding, preprocess_sentence
+from feature.preprocessing.polarity import get_polarity
+from feature.preprocessing.modality import get_modality
+from feature.preprocessing.tense import get_tense
+from feature.preprocessing.aspect import get_aspect
 
 class TextProcessing(unittest.TestCase):
     @classmethod
