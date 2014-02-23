@@ -9,22 +9,16 @@ import sys
 import cPickle as pickle
 import os.path
 
-# Create numpy array with samples and targets
-data = parse_XML("fables-100-temporal-dependency.xml", "McIntyreLapata09Resources/fables/")
+def parse_Features(data, new=False):
+    # Since running Pos() and Stem() takes time, load it from a file if present
+    # With new=True as an argument a new calculation of Pos() and Stem() can be enforced
+    if new:
+        pos = Pos(data, 6)
+        stem = Stem(data)
+        pickle.dump((pos, stem), open("save.p", "wb"))
+    else:
+        pos, stem = pickle.load(open("save.p", "rb"))
 
-# Since running Pos() and Stem() takes time, load it from a file if present
-# With --reload as an argument a new calculation of Pos() and Stem() can be enforced
-print "Loading Features"
-if (len(sys.argv) >= 2 and sys.argv[1] == "--reload") or not os.path.isfile("save.p"):
-    pos = Pos(data, 6)
-    stem = Stem(data)
-    pickle.dump((pos, stem), open("save.p", "wb"))
-else:
-    pos, stem = pickle.load(open("save.p", "rb"))
-
-print "Done loading Features"
-
-def parse_Features(data):
     X = []
     y = np.array([], dtype=int)
 
@@ -63,20 +57,31 @@ def parse_Features(data):
 
     return (X, y)
 
-X, y = parse_Features(data)
+if __name__ == "__main__":
+    if (len(sys.argv) >= 2 and sys.argv[1] == "--reload") or not os.path.isfile("save.p"):
+        new = True
+    else:
+        new = False
 
-# Split dataset in training set(80%) and test set (20%)
-len_train = len(X)*80/100
-X_train, X_test = X[:len_train], X[len_train:]
-y_train, y_test = y[:len_train], y[len_train:]
+    # Create numpy array with samples and targets
+    data = parse_XML("fables-100-temporal-dependency.xml", "McIntyreLapata09Resources/fables/")
 
-# Train the random forest classifier
-rf = RandomForestClassifier(n_jobs=2, n_estimators=100)
-rf.fit(X_train, y_train)
+    print "Parsing features"
+    X, y = parse_Features(data, new)
+    print "Done loading features"
 
-# Print accuracy
-print rf.score(X_test, y_test)
-print "Predicted:"
-print rf.predict(X_test)
-print "True values:"
-print y_test
+    # Split dataset in training set(80%) and test set (20%)
+    len_train = len(X)*80/100
+    X_train, X_test = X[:len_train], X[len_train:]
+    y_train, y_test = y[:len_train], y[len_train:]
+
+    # Train the random forest classifier
+    rf = RandomForestClassifier(n_jobs=2, n_estimators=100)
+    rf.fit(X_train, y_train)
+
+    # Print accuracy
+    print rf.score(X_test, y_test)
+    print "Predicted:"
+    print rf.predict(X_test)
+    print "True values:"
+    print y_test
