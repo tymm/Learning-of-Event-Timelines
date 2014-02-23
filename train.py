@@ -24,43 +24,46 @@ else:
 
 print "Done loading Features"
 
+def parse_Features(data):
+    X = []
+    y = np.array([], dtype=int)
 
-X = []
-y = np.array([], dtype=int)
+    null = 0
+    for txt in data.textfiles:
+        # Use union relations
+        txt.compute_union_relations()
+        for rel in txt.relations_union:
+            f = Feature(rel)
+            # If the time relation is not in (before, contains, is_contained_in), skip
+            if f.get_category() == -1:
+                continue
+            if f.get_category() == 0:
+                null += 1
+            if null > 450:
+                continue
 
-null = 0
-for txt in data.textfiles:
-    # Use union relations
-    txt.compute_union_relations()
-    for rel in txt.relations_union:
-        f = Feature(rel)
-        # If the time relation is not in (before, contains, is_contained_in), skip
-        if f.get_category() == -1:
-            continue
-        if f.get_category() == 0:
-            null += 1
-        if null > 450:
-            continue
+            # Make POS feature
+            pos_feature = pos.transform(f.get_pos_target(), f.get_pos_source())
+            pos_feature = pos_feature.toarray()[0]
 
-        # Make POS feature
-        pos_feature = pos.transform(f.get_pos_target(), f.get_pos_source())
-        pos_feature = pos_feature.toarray()[0]
+            # Make Stem feature
+            stem_feature = stem.transform(f.get_stem_source(), f.get_stem_target())
+            stem_feature = stem_feature[0]
 
-        # Make Stem feature
-        stem_feature = stem.transform(f.get_stem_source(), f.get_stem_target())
-        stem_feature = stem_feature[0]
+            # Building a row of all feature values
+            feature = [f.get_distance(), f.get_similarity_of_words(), f.get_polarity(), f.get_modality()]
+            feature = np.concatenate((feature, f.get_aspect()))
+            feature = np.concatenate((feature, pos_feature))
+            feature = np.concatenate((feature, stem_feature))
+            feature = np.concatenate((feature, f.get_tense()))
 
-        # Building a row of all feature values
-        feature = [f.get_distance(), f.get_similarity_of_words(), f.get_polarity(), f.get_modality()]
-        feature = np.concatenate((feature, f.get_aspect()))
-        feature = np.concatenate((feature, pos_feature))
-        feature = np.concatenate((feature, stem_feature))
-        feature = np.concatenate((feature, f.get_tense()))
+            # Append feature to X
+            X.append(feature)
+            y = np.append(y, [f.get_category()])
 
-        # Append feature to X
-        X.append(feature)
-        y = np.append(y, [f.get_category()])
+    return (X, y)
 
+X, y = parse_Features(data)
 
 # Split dataset in training set(80%) and test set (20%)
 len_train = len(X)*80/100
