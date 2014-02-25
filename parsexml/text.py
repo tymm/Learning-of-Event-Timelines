@@ -1,30 +1,34 @@
 class Text():
 
-    """Instances of this class are used to describe the fables referenced to by fables-100-temporal-dependency.xml"""
+    """Instances of this class are used to describe the fables referenced to by fables-100-temporal-dependency.xml."""
 
     def __init__(self, id_=None, name=None):
-        """Constructor of the Text class
+        """Constructor of the Text class.
 
         Args:
             id_ (int): Unique id (not needed so far).
-            name (str): Name of the text file the fable is in
+            name (str): Name of the text file the fable is in.
 
         Attributes:
-            relations_union_count (int): Count of the union of all relations of events in a text
-            relations_intersection_count (int): Same as above for intersections
-            annotator (list): Will contain all Annotator objects corresponding to a Text Object
-            relations_union (list): Will contain all Relation objects (unions) corresponding to a Text Object
-            relations_intersection (list): Same as above for intersections
-            events_union (list): Will contain all Event Objects corresponding to a Text Object
+            relations_union_count (int): Count of the union of all relations of events in a text.
+            relations_intersection_count (int): Same as above for intersections.
+            relations_count (int): Will be a reference to either relations_union_count or relations_intersection_count.
+            annotator (list): Will contain all Annotator objects corresponding to a Text Object.
+            relations_union (list): Will contain all Relation objects (unions) corresponding to a Text Object.
+            relations_intersection (list): Same as above for intersections.
+            relations (list): Will be a reference to either relations_intersection or relations_union.
+            events_union (list): Will contain all Event Objects corresponding to a Text Object. Not used so far.
 
         """
         self.id_ = None
         self.name = name
         self.relations_union_count = 0
         self.relations_intersection_count = 0
+        self.relations_count = 0
         self.annotator = []
         self.relations_union = []
         self.relations_intersection = []
+        self.relations = []
         self.events_union = []
 
     def append_annotator(self, annotator):
@@ -35,6 +39,7 @@ class Text():
         """Gets all union events and appends the Event objects to the list of union Event objects.
 
         This could be interesting because different annotators often annotate different events for the same text.
+
         """
         del self.events_union[:]
 
@@ -49,6 +54,7 @@ class Text():
         """Gets all intersecting relations and appends the Relation objects to the list of intersecting Relation objects.
 
         This could be interesting because different annotators often annotate different relations for the same text.
+
         """
         del self.relations_intersection[:]
         self.relations_intersection_count = 0
@@ -69,12 +75,15 @@ class Text():
             relations_tmp = deepcopy(relations)
 
         self.relations_intersection = relations
+        self.relations = self.relations_intersection
         self.relations_intersection_count = len(self.relations_intersection)
+        self.relations_count = self.relations_intersection_count
 
     def compute_union_relations(self):
         """Gets all union relations and appends the Relation objects to the list of union Relation objects.
 
         This could be interesting because different annotators often annotate different relations for the same text.
+
         """
         del self.relations_union[:]
         self.relations_union= 0
@@ -93,4 +102,6 @@ class Text():
                 union.append(r)
 
         self.relations_union = [x.values()[0] for x in union]
+        self.relations = self.relations_union
         self.relations_union_count = len(self.relations_union)
+        self.relations_count = self.relations_union_count
