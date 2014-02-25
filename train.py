@@ -9,7 +9,52 @@ import sys
 import cPickle as pickle
 import os.path
 
-def parse_Features(data, new=False):
+def load_features(new=False):
+    if new == False and os.path.isfile("set.p"):
+        X, y = pickle.load(open("set.p", "rb"))
+    else:
+        data = parse_XML("fables-100-temporal-dependency.xml", "McIntyreLapata09Resources/fables/")
+        X, y = parse_Features(data)
+
+        pickle.dump((X, y), open("set.p", "wb"))
+
+    # Shuffle the set
+    X, y = random_Set(X, y)
+    return (X, y)
+
+
+def split(X, y):
+    # Split into training and test set (80/20)
+    len_train = len(X)*80/100
+    X_train, X_test = X[:len_train], X[len_train:]
+    y_train, y_test = y[:len_train], y[len_train:]
+
+    return (X_train, X_test, y_train, y_test)
+
+
+def random_Set(X, y, new=False):
+    """Takes X and y and returns shuffled X and y.
+
+    If argument new is True, it will shuffle X and y in a new way.
+    Otherwise it will load the order of the last time.
+
+    """
+    if new == False and os.path.isfile("random_set.p"):
+        return pickle.load(open("random_set.p", "rb"))
+    else:
+        indices = np.arange(0, len(y))
+        shuffle(indices)
+
+        X_new = []
+        for idx in indices:
+            X_new.append(X[idx])
+
+        pickle.dump((X_new, y[indices]), open("random_set.p", "wb"))
+
+        return (X_new, y[indices])
+
+
+def parse_Features(data, new=False, annotations="union"):
     # Since running Pos() and Stem() takes time, load it from a file if present
     # With new=True as an argument a new calculation of Pos() and Stem() can be enforced
     if new:
@@ -24,16 +69,16 @@ def parse_Features(data, new=False):
 
     null = 0
     for txt in data.textfiles:
-        # Use union relations
-        txt.compute_union_relations()
+        # Union or intersected relations?
+        if annotations == "union":
+            txt.compute_union_relations()
+        elif annotations == "intersected":
+            txt.compute_intersection_relations()
+
         for rel in txt.relations_union:
             f = Feature(rel)
             # If the time relation is not in (before, contains, is_contained_in), skip
             if f.get_category() == -1:
-                continue
-            if f.get_category() == 0:
-                null += 1
-            if null > 450:
                 continue
 
             # Make POS feature
@@ -63,12 +108,9 @@ if __name__ == "__main__":
     else:
         new = False
 
-    # Create numpy array with samples and targets
-    data = parse_XML("fables-100-temporal-dependency.xml", "McIntyreLapata09Resources/fables/")
-
-    print "Parsing features"
-    X, y = parse_Features(data, new)
-    print "Done loading features"
+    print "Loading"
+    X, y = load_features(new)
+    print "Done loading"
 
     # Split dataset in training set(80%) and test set (20%)
     len_train = len(X)*80/100

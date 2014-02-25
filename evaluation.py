@@ -1,52 +1,11 @@
 from train import parse_Features
+from train import load_features
 from parser import parse_XML
 import os.path
 import cPickle as pickle
 import numpy as np
 from random import shuffle
 from sklearn.ensemble import RandomForestClassifier
-
-def random_Set(X, y, new=False):
-    """Takes X and y and returns shuffled X and y.
-
-    If argument new is True, it will shuffle X and y in a new way.
-    Otherwise it will load the order of the last time.
-
-    """
-    if new == False and os.path.isfile("random_set.p"):
-        return pickle.load(open("random_set.p", "rb"))
-    else:
-        indices = np.arange(0, len(y))
-        shuffle(indices)
-
-        X_new = []
-        for idx in indices:
-            X_new.append(X[idx])
-
-        pickle.dump((X_new, y[indices]), open("random_set.p", "wb"))
-
-        return (X_new, y[indices])
-
-def load_features(new=False):
-    if new == False and os.path.isfile("set.p"):
-        X, y = pickle.load(open("set.p", "rb"))
-    else:
-        data = parse_XML("fables-100-temporal-dependency.xml", "McIntyreLapata09Resources/fables/")
-        X, y = parse_Features(data)
-
-        pickle.dump((X, y), open("set.p", "wb"))
-
-    # Shuffle the set
-    X, y = random_Set(X, y)
-    return (X, y)
-
-def split(X, y):
-    # Split into training and test set (80/20)
-    len_train = len(X)*80/100
-    X_train, X_test = X[:len_train], X[len_train:]
-    y_train, y_test = y[:len_train], y[len_train:]
-
-    return (X_train, X_test, y_train, y_test)
 
 
 def learning_rate(k=20, new=False):
