@@ -27,8 +27,7 @@ def random_Set(X, y, new=False):
 
         return (X_new, y[indices])
 
-
-def learning_rate(k=20, new=False):
+def load_features(new=False):
     if new == False and os.path.isfile("set.p"):
         X, y = pickle.load(open("set.p", "rb"))
     else:
@@ -39,11 +38,21 @@ def learning_rate(k=20, new=False):
 
     # Shuffle the set
     X, y = random_Set(X, y)
+    return (X, y)
 
+def split(X, y):
     # Split into training and test set (80/20)
     len_train = len(X)*80/100
     X_train, X_test = X[:len_train], X[len_train:]
     y_train, y_test = y[:len_train], y[len_train:]
+
+    return (X_train, X_test, y_train, y_test)
+
+
+def learning_rate(k=20, new=False):
+    X, y = load_features(new)
+
+    X_train, X_test, y_train, y_test = split(X, y)
 
     # Splitting the training set up into k pieces
     len_piece = len(X_train)/k
@@ -83,5 +92,33 @@ def learning_rate(k=20, new=False):
 
     return accuracies
 
+
+def different_number_of_trees(start=5, end=1000, steps=20):
+    """How does the accuracy change for different amounts of trees."""
+    X, y = load_features()
+    X_train, X_test, y_train, y_test = split(X, y)
+
+    # Since accuracies for small amounts of trees differ a lot, we take the average over many trys
+    many_accuracies = []
+    for x in range(100):
+        accuracies = []
+        for i in range(start, end, steps):
+            rf = RandomForestClassifier(n_jobs=2, n_estimators=i)
+            rf.fit(X_train, y_train)
+            accuracies.append(rf.score(X_test, y_test))
+
+        many_accuracies.append(accuracies)
+
+    final_accuracies = []
+    # Calculate the mean
+    for i in range(len(many_accuracies[0])):
+        mean = []
+        for j in range(len(many_accuracies)):
+            mean.append(many_accuracies[j][i])
+        final_accuracies.append(np.mean(mean))
+
+    return final_accuracies
+
+
 if __name__ == "__main__":
-    print learning_rate()
+    print different_number_of_trees()
