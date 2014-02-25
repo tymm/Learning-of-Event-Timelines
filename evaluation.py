@@ -1,5 +1,6 @@
 from train import parse_Features
 from train import load_data
+from train import split
 from parser import parse_XML
 import os.path
 import cPickle as pickle
