@@ -9,12 +9,12 @@ import sys
 import cPickle as pickle
 import os.path
 
-def load_features(new=False):
+def load_features(new=False, annotations="union"):
     if new == False and os.path.isfile("set.p"):
         X, y = pickle.load(open("set.p", "rb"))
     else:
         data = parse_XML("fables-100-temporal-dependency.xml", "McIntyreLapata09Resources/fables/")
-        X, y = parse_Features(data)
+        X, y = parse_Features(data, annotations)
 
         pickle.dump((X, y), open("set.p", "wb"))
 
@@ -75,7 +75,7 @@ def parse_Features(data, new=False, annotations="union"):
         elif annotations == "intersected":
             txt.compute_intersection_relations()
 
-        for rel in txt.relations_union:
+        for rel in txt.relations:
             f = Feature(rel)
             # If the time relation is not in (before, contains, is_contained_in), skip
             if f.get_category() == -1:
@@ -109,7 +109,7 @@ if __name__ == "__main__":
         new = False
 
     print "Loading"
-    X, y = load_features(new)
+    X, y = load_features(new, annotations="union")
     print "Done loading"
 
     # Split dataset in training set(80%) and test set (20%)
