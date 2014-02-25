@@ -9,12 +9,14 @@ import sys
 import cPickle as pickle
 import os.path
 
-def load_features(new=False, annotations="union"):
+def load_data(new=False, annotations="union"):
     if new == False and os.path.isfile("set.p"):
+        # Load the data from file
         X, y = pickle.load(open("set.p", "rb"))
     else:
+        # New calculation of the data
         data = parse_XML("fables-100-temporal-dependency.xml", "McIntyreLapata09Resources/fables/")
-        X, y = parse_Features(data, annotations)
+        X, y = parse_Features(data, new, annotations)
 
         pickle.dump((X, y), open("set.p", "wb"))
 
@@ -67,7 +69,6 @@ def parse_Features(data, new=False, annotations="union"):
     X = []
     y = np.array([], dtype=int)
 
-    null = 0
     for txt in data.textfiles:
         # Union or intersected relations?
         if annotations == "union":
@@ -109,7 +110,8 @@ if __name__ == "__main__":
         new = False
 
     print "Loading"
-    X, y = load_features(new, annotations="union")
+    # Load the data which is needed to train the classifier.
+    X, y = load_data(new, "intersected")
     print "Done loading"
 
     # Split dataset in training set(80%) and test set (20%)

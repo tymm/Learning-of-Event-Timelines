@@ -1,5 +1,5 @@
 from train import parse_Features
-from train import load_features
+from train import load_data
 from parser import parse_XML
 import os.path
 import cPickle as pickle
@@ -9,7 +9,7 @@ from sklearn.ensemble import RandomForestClassifier
 
 
 def learning_rate(k=20, new=False):
-    X, y = load_features(new)
+    X, y = load_data(new)
 
     X_train, X_test, y_train, y_test = split(X, y)
 
@@ -54,7 +54,7 @@ def learning_rate(k=20, new=False):
 
 def different_number_of_trees(start=5, end=1000, steps=20):
     """How does the accuracy change for different amounts of trees."""
-    X, y = load_features()
+    X, y = load_data()
     X_train, X_test, y_train, y_test = split(X, y)
 
     # Since accuracies for small amounts of trees differ a lot, we take the average over many trys
