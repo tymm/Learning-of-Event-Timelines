@@ -52,14 +52,14 @@ def learning_rate(k=20, new=False):
     return accuracies
 
 
-def different_number_of_trees(start=5, end=1000, steps=20):
+def different_number_of_trees(start=5, end=1000, steps=20, rerunning=20):
     """How does the accuracy change for different amounts of trees."""
     X, y = load_data()
     X_train, X_test, y_train, y_test = split(X, y)
 
     # Since accuracies for small amounts of trees differ a lot, we take the average over many trys
     many_accuracies = []
-    for x in range(100):
+    for x in range(rerunning):
         accuracies = []
         for i in range(start, end, steps):
             rf = RandomForestClassifier(n_jobs=2, n_estimators=i)
@@ -80,4 +80,4 @@ def different_number_of_trees(start=5, end=1000, steps=20):
 
 
 if __name__ == "__main__":
-    print different_number_of_trees()
+    print different_number_of_trees(5, 10, 1, 10)
