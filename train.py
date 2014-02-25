@@ -115,9 +115,7 @@ if __name__ == "__main__":
     print "Done loading"
 
     # Split dataset in training set(80%) and test set (20%)
-    len_train = len(X)*80/100
-    X_train, X_test = X[:len_train], X[len_train:]
-    y_train, y_test = y[:len_train], y[len_train:]
+    X_train, X_test, y_train, y_test = split(X, y)
 
     # Train the random forest classifier
     rf = RandomForestClassifier(n_jobs=2, n_estimators=100)
