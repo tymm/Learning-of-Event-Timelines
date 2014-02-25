@@ -1,3 +1,5 @@
+from copy import deepcopy
+
 class Text():
 
     """Instances of this class are used to describe the fables referenced to by fables-100-temporal-dependency.xml."""
