@@ -60,8 +60,8 @@ def parse_Features(data, new=False, annotations="union"):
     # Since running Pos() and Stem() takes time, load it from a file if present
     # With new=True as an argument a new calculation of Pos() and Stem() can be enforced
     if new:
-        pos = Pos(data, 6)
-        stem = Stem(data)
+        pos = Pos(data, 6, annotations)
+        stem = Stem(data, annotations)
         pickle.dump((pos, stem), open("save.p", "wb"))
     else:
         pos, stem = pickle.load(open("save.p", "rb"))
@@ -111,7 +111,7 @@ if __name__ == "__main__":
 
     print "Loading"
     # Load the data which is needed to train the classifier.
-    X, y = load_data(new, "intersected")
+    X, y = load_data(new, "union")
     print "Done loading"
 
     # Split dataset in training set(80%) and test set (20%)

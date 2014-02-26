@@ -3,7 +3,10 @@ from sklearn.preprocessing import OneHotEncoder
 from feature.feature import Feature
 
 class Stem():
-    def __init__(self, data):
+    def __init__(self, data, annotations):
+        # Union or intersected relations?
+        self.annotations = annotations
+
         # All unique stems
         self.stems = self.load_stems(data)
 
@@ -18,9 +21,12 @@ class Stem():
         # Get all word stems
         stems = np.array([])
         for txt in data.textfiles:
-            # Use union relations
-            txt.compute_union_relations()
-            for rel in txt.relations_union:
+            if self.annotations == "union":
+                txt.compute_union_relations()
+            elif self.annotations == "intersected":
+                txt.compute_intersection_relations()
+
+            for rel in txt.relations:
                 f = Feature(rel)
                 if f.get_category() == -1:
                     continue

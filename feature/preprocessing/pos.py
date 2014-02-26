@@ -3,12 +3,15 @@ from sklearn.preprocessing import OneHotEncoder
 from feature.feature import Feature
 
 class Pos():
-    def __init__(self, data, number_tags_per_feature):
+    def __init__(self, data, number_tags_per_feature, annotations):
         # OneHotEncoder to encode categorical integer features
         self.encoder = OneHotEncoder()
 
         # At how many POS tags are we looking for one feature (defined in Event class)
         self.number_tags_per_feature = number_tags_per_feature
+
+        # Union or intersected relations?
+        self.annotations = annotations
 
         # All unique tags in text form
         self.pos_tags = self.load_pos_tags(data)
@@ -19,14 +22,18 @@ class Pos():
         # Fit the encoder with the help of all possible features in integer represenation
         self.encoder_fit()
 
+
     # Loads all POS tags used in the pos_surrounding area around an event
     def load_pos_tags(self, data):
         pos_tags = np.array([])
 
         for txt in data.textfiles:
-            # Use union relations
-            txt.compute_union_relations()
-            for rel in txt.relations_union:
+            if self.annotations == "union":
+                txt.compute_union_relations()
+            elif self.annotations == "intersected":
+                txt.compute_intersection_relations()
+
+            for rel in txt.relations:
                 f = Feature(rel)
                 if f.get_category() == -1:
                     continue
@@ -45,9 +52,12 @@ class Pos():
         pos_feature = np.array([])
 
         for txt in data.textfiles:
-            # Use union relations
-            txt.compute_union_relations()
-            for rel in txt.relations_union:
+            if self.annotations == "union":
+                txt.compute_union_relations()
+            elif self.annotations == "intersected":
+                txt.compute_intersection_relations()
+
+            for rel in txt.relations:
                 f = Feature(rel)
                 if f.get_category() == -1:
                     continue
