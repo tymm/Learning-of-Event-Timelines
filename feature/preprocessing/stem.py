@@ -32,7 +32,10 @@ class Stem():
 
     # Translates stem to integer
     def stem_to_integer(self, stem):
-        return np.where(self.stems==stem)[0][0]
+        try:
+            return np.where(self.stems==stem)[0][0]
+        except IndexError:
+            print self.stems
 
     # Turn stems into binary feature
     def transform(self, stem_source, stem_target):
