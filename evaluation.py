@@ -88,7 +88,22 @@ def different_number_of_trees(start=5, end=1000, steps=20, rerunning=20):
 
     return final_accuracies
 
+def union_vs_intersected_relations():
+    X_union, y_union = load_data(new=True, annotations="union")
+    X_intersected, y_intersected = load_data(new=True, annotations="intersected")
+
+    X_u_train, X_u_test, y_u_train, y_u_test = split(X_union, y_union)
+    X_i_train, X_i_test, y_i_train, y_i_test = split(X_intersected, y_intersected)
+
+    rf_u = RandomForestClassifier(n_jobs=2, n_estimators=100)
+    rf_u.fit(X_u_train, y_u_train)
+
+    rf_i = RandomForestClassifier(n_jobs=2, n_estimators=100)
+    rf_i.fit(X_i_train, y_i_train)
+
+    print "Union: " + str(rf_u.score(X_u_test, y_u_test))
+    print "Intersected: " + str(rf_i.score(X_i_test, y_i_test))
+
 
 if __name__ == "__main__":
-    data = learning_rate()
-    plot("learning_rate.jpg", "x", "y", data)
+    union_vs_intersected_relations()
