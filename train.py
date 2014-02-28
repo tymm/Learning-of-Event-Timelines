@@ -56,7 +56,7 @@ def random_Set(X, y, new=False):
         return (X_new, y[indices])
 
 
-def parse_Features(data, new=False, annotations="union"):
+def parse_Features(data, new=False, annotations="union", features=["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"]):
     # Since running Pos() and Stem() takes time, load it from a file if present
     # With new=True as an argument a new calculation of Pos() and Stem() can be enforced
     if new:
@@ -82,20 +82,43 @@ def parse_Features(data, new=False, annotations="union"):
             if f.get_category() == -1:
                 continue
 
+            feature = []
+
             # Make POS feature
-            pos_feature = pos.transform(f.get_pos_target(), f.get_pos_source())
-            pos_feature = pos_feature.toarray()[0]
+            if "pos" in features:
+                pos_feature = pos.transform(f.get_pos_target(), f.get_pos_source())
+                pos_feature = pos_feature.toarray()[0]
+                feature = np.concatenate((feature, pos_feature))
 
             # Make Stem feature
-            stem_feature = stem.transform(f.get_stem_source(), f.get_stem_target())
-            stem_feature = stem_feature[0]
+            if "stem" in features:
+                stem_feature = stem.transform(f.get_stem_source(), f.get_stem_target())
+                stem_feature = stem_feature[0]
+                feature = np.concatenate((feature, stem_feature))
 
-            # Building a row of all feature values
-            feature = [f.get_distance(), f.get_similarity_of_words(), f.get_polarity(), f.get_modality()]
-            feature = np.concatenate((feature, f.get_aspect()))
-            feature = np.concatenate((feature, pos_feature))
-            feature = np.concatenate((feature, stem_feature))
-            feature = np.concatenate((feature, f.get_tense()))
+            # Make distance feature
+            if "distance" in features:
+                feature = np.concatenate((feature, [f.get_distance()]))
+
+            # Make similarity feature
+            if "similarity" in features:
+                feature = np.concatenate((feature, [f.get_similarity_of_words()]))
+
+            # Make polarity feature
+            if "polarity" in features:
+                feature = np.concatenate((feature, [f.get_polarity()]))
+
+            # Make modality feature
+            if "modality" in features:
+                feature = np.concatenate((feature, [f.get_modality()]))
+
+            # Make aspect feature
+            if "aspect" in features:
+                feature = np.concatenate((feature, f.get_aspect()))
+
+            # Make tense feature
+            if "tense" in features:
+                feature = np.concatenate((feature, f.get_tense()))
 
             # Append feature to X
             X.append(feature)
@@ -111,7 +134,7 @@ if __name__ == "__main__":
 
     print "Loading"
     # Load the data which is needed to train the classifier.
-    X, y = load_data(new, "union")
+    X, y = load_data(new, "intersected")
     print "Done loading"
 
     # Split dataset in training set(80%) and test set (20%)
