@@ -7,7 +7,16 @@ import cPickle as pickle
 import numpy as np
 from random import shuffle
 from sklearn.ensemble import RandomForestClassifier
+import matplotlib.pyplot as plt
 
+def plot(filename, xlabel, ylabel, data):
+    x = range(len(data))
+    y = data
+
+    plt.xlabel = xlabel
+    plt.ylabel = ylabel
+    plt.plot(x, y, "ro")
+    plt.savefig(filename)
 
 def learning_rate(k=20, new=False):
     X, y = load_data(new)
@@ -58,7 +67,7 @@ def different_number_of_trees(start=5, end=1000, steps=20, rerunning=20):
     X, y = load_data()
     X_train, X_test, y_train, y_test = split(X, y)
 
-    # Since accuracies for small amounts of trees differ a lot, we take the average over many trys
+    # Since accuracies for small amounts of trees differ a lot, we take the average over many tries
     many_accuracies = []
     for x in range(rerunning):
         accuracies = []
@@ -81,4 +90,5 @@ def different_number_of_trees(start=5, end=1000, steps=20, rerunning=20):
 
 
 if __name__ == "__main__":
-    print different_number_of_trees(5, 10, 1, 10)
+    data = learning_rate()
+    plot("learning_rate.jpg", "x", "y", data)
