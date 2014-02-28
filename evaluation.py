@@ -1,6 +1,7 @@
 from train import parse_Features
 from train import load_data
 from train import split
+from train import random_Set
 from parser import parse_XML
 import os.path
 import cPickle as pickle
@@ -9,9 +10,13 @@ from random import shuffle
 from sklearn.ensemble import RandomForestClassifier
 import matplotlib.pyplot as plt
 
-def plot(filename, xlabel, ylabel, data):
+def plot(filename, xlabel, ylabel, data, xticks=None):
     x = range(len(data))
     y = data
+
+    if xticks:
+        x = np.array(range(len(data)))
+        plt.xticks(x, xticks)
 
     plt.xlabel = xlabel
     plt.ylabel = ylabel
@@ -105,5 +110,27 @@ def union_vs_intersected_relations():
     print "Intersected: " + str(rf_i.score(X_i_test, y_i_test))
 
 
+def best_feature():
+    features = ["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"]
+
+    data = parse_XML("fables-100-temporal-dependency.xml", "McIntyreLapata09Resources/fables/")
+
+    accuracies = []
+
+    for feature in features:
+        X, y = parse_Features(data, new=True, annotations="union", features=[feature])
+
+        X, y = random_Set(X, y)
+
+        X_train, X_test, y_train, y_test = split(X, y)
+
+        rf = RandomForestClassifier(n_jobs=2, n_estimators=100)
+        rf.fit(X_train, y_train)
+        accuracies.append({feature : rf.score(X_test, y_test)})
+
+    data = [x.values()[0] for x in accuracies]
+
+    plot("best_features.jpg", "x", "y", data, features)
+
 if __name__ == "__main__":
-    union_vs_intersected_relations()
+    best_feature()
