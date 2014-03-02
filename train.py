@@ -10,6 +10,12 @@ import cPickle as pickle
 import os.path
 
 def load_data(new=False, annotations="union"):
+    """Loads the data from fables-100-temporal-dependency.xml into the dataset and shuffles the dataset.
+
+    When new=False the dataset and the pos and stem feature will be loaded from a file instead of generating them.
+    new should be set to True when settings were changed or code was altered.
+
+    """
     if new == False and os.path.isfile("set.p"):
         # Load the data from file
         X, y = pickle.load(open("set.p", "rb"))
@@ -26,7 +32,7 @@ def load_data(new=False, annotations="union"):
 
 
 def split(X, y):
-    # Split into training and test set (80/20)
+    """Splits the dataset into a training and test set (80/20)."""
     len_train = len(X)*80/100
     X_train, X_test = X[:len_train], X[len_train:]
     y_train, y_test = y[:len_train], y[len_train:]
@@ -57,8 +63,15 @@ def random_Set(X, y, new=False):
 
 
 def parse_Features(data, new=False, annotations="union", features=["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"]):
-    # Since running Pos() and Stem() takes time, load it from a file if present
-    # With new=True as an argument a new calculation of Pos() and Stem() can be enforced
+    """Extracts the features out of the dataset and returns a list of features with the corresponding classes.
+
+    Args:
+        data (list): The parsed data from fables-100-temporal-dependency.xml.
+        new (bool): With new=True a new calculation of Pos() and Stem() can be enforced. Otherwise it will be loaded from a file.
+        annotations (str): Looking on all relations ("union") or at all relations in common between the annotators ("intersected").
+        features (list): Determines which features should be activated. Possible values: "pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality".
+
+    """
     if new:
         pos = Pos(data, 6, annotations)
         stem = Stem(data, annotations)
@@ -127,6 +140,7 @@ def parse_Features(data, new=False, annotations="union", features=["pos", "stem"
     return (X, y)
 
 if __name__ == "__main__":
+    # With './train --reload' a "fresh parsing" will be enforced
     if (len(sys.argv) >= 2 and sys.argv[1] == "--reload") or not os.path.isfile("save.p"):
         new = True
     else:
@@ -137,14 +151,14 @@ if __name__ == "__main__":
     X, y = load_data(new, "intersected")
     print "Done loading"
 
-    # Split dataset in training set(80%) and test set (20%)
+    # Split dataset into training set (80%) and test set (20%)
     X_train, X_test, y_train, y_test = split(X, y)
 
     # Train the random forest classifier
     rf = RandomForestClassifier(n_jobs=2, n_estimators=100)
     rf.fit(X_train, y_train)
 
-    # Print accuracy
+    # Print accuracy and predicted & true classes
     print rf.score(X_test, y_test)
     print "Predicted:"
     print rf.predict(X_test)
