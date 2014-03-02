@@ -79,10 +79,14 @@ def parse_Features(data, new=False, annotations="union", features=["pos", "stem"
         for rel in txt.relations:
             f = Feature(rel)
             # If the time relation is not in (before, contains, is_contained_in), skip
-            if f.get_category() == -1:
+            if f.get_class() == -1:
                 continue
 
             feature = []
+
+            # Make distance feature
+            if "distance" in features:
+                feature = np.concatenate((feature, [f.get_distance()]))
 
             # Make POS feature
             if "pos" in features:
@@ -95,10 +99,6 @@ def parse_Features(data, new=False, annotations="union", features=["pos", "stem"
                 stem_feature = stem.transform(f.get_stem_source(), f.get_stem_target())
                 stem_feature = stem_feature[0]
                 feature = np.concatenate((feature, stem_feature))
-
-            # Make distance feature
-            if "distance" in features:
-                feature = np.concatenate((feature, [f.get_distance()]))
 
             # Make similarity feature
             if "similarity" in features:
@@ -122,7 +122,7 @@ def parse_Features(data, new=False, annotations="union", features=["pos", "stem"
 
             # Append feature to X
             X.append(feature)
-            y = np.append(y, [f.get_category()])
+            y = np.append(y, [f.get_class()])
 
     return (X, y)
 

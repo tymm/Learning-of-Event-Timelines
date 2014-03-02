@@ -35,7 +35,7 @@ class Pos():
 
             for rel in txt.relations:
                 f = Feature(rel)
-                if f.get_category() == -1:
+                if f.get_class() == -1:
                     continue
                 # Collect all pos tags from the data
                 pos_tags = np.concatenate((pos_tags, f.get_pos_target()))
@@ -59,7 +59,7 @@ class Pos():
 
             for rel in txt.relations:
                 f = Feature(rel)
-                if f.get_category() == -1:
+                if f.get_class() == -1:
                     continue
                 # Build arrays of integers with which we can fit the encoder
                 # Standardize because f.get_pos_$x() doesn't have to be of length self.number_tags_per_feature/2

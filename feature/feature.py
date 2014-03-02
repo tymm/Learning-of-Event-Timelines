@@ -153,7 +153,7 @@ class Feature:
 
         return tags
 
-    def get_category(self):
+    def get_class(self):
         """Returns number which represents the time relation type."""
         # We only want before, contains and is_contained_in
         if self.relation.time_type == "before":
