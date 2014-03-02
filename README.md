@@ -7,7 +7,7 @@ University project about supervised learning of event timelines
 train.py
 --------
 
-Parses the dataseet, divides it into training and test set and executes the classification with the best settings I could figure out.
+Parses the dataset, divides it into training and test set and executes the classification with the best settings I could figure out.
 
 
 evaluation.py
