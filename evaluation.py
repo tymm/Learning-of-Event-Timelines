@@ -16,18 +16,17 @@ def plot(filename, xlabel, ylabel, data, xticks=None):
     If xticks is not None and a list of values, they will be used to label the x-axis.
 
     """
-    fig = plt.figure()
     x = range(len(data))
     y = data
 
     if xticks:
         x = np.array(range(len(data)))
-        plt.xticks(x, xticks)
+        plt.xticks(x, xticks, size="small")
 
-    fig.xlabel = xlabel
-    fig.ylabel = ylabel
-    fig.plot(x, y, "ro")
-    fig.savefig(filename)
+    plt.xlabel = xlabel
+    plt.ylabel = ylabel
+    plt.plot(x, y, "ro")
+    plt.savefig(filename)
 
 def learning_rate(k=20, new=False):
     """Splits the dataset into k pieces and builds a series out of those k pieces. For every partial sum the accuracy will be calculated to obtain the learning rate."""
