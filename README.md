@@ -25,4 +25,4 @@ Runs tests on text processing methods needed for feature extraction and other fe
 parser.py
 ---------
 
-Parses the relations and events from the XML file into the memory and a convenient data structure.
+Parses the relations and events from the XML file into memory and into a convenient data structure.
