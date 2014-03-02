@@ -1,8 +1,11 @@
 from nltk.corpus import wordnet as wn
 
-# Get the similarity of two words
-# We get it by taking the maximal similarity we can get when looking at both synsets
 def get_wordnet_similarity(word1, word2):
+    """Returns the similarity of two words.
+
+    We get it by taking the maximum similarity we can get when looking at both synsets.
+    """
+
     synsets1 = wn.synsets(word1)
     synsets2 = wn.synsets(word2)
     maxSim = None

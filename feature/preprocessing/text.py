@@ -3,33 +3,33 @@ import numpy
 from cStringIO import StringIO
 import re
 
-# Preprocessing of sentence
 def preprocess_sentence(text):
-        def repl(m):
-            return m.group(1) + " " + m.group(2)
-        # Removing newlines
-        text_tmp = re.sub(r"(\w+)\n(\w+)", repl, text)
-        text_tmp = re.sub(r"$\n", "", text_tmp)
+    """Preprocessing of sentences. Removes stuff so word tokenizing gets better. Returns the cleaned up input sentence."""
+    def repl(m):
+        return m.group(1) + " " + m.group(2)
+    # Removing newlines
+    text_tmp = re.sub(r"(\w+)\n(\w+)", repl, text)
+    text_tmp = re.sub(r"$\n", "", text_tmp)
 
-        # Removing everything between two words and replacing it by a space
-        text_tmp = re.sub(r"(\w+)\W*[,\";:]+\W*(\w+)", repl, text_tmp)
-        # Run again because re.sub only matches non overlapping stuff. "you, pray," -> "you pray,"
-        text_tmp = re.sub(r"(\w+)\W*[,\";:]+\W*(\w+)", repl, text_tmp)
+    # Removing everything between two words and replacing it by a space
+    text_tmp = re.sub(r"(\w+)\W*[,\";:]+\W*(\w+)", repl, text_tmp)
+    # Run again because re.sub only matches non overlapping stuff. "you, pray," -> "you pray,"
+    text_tmp = re.sub(r"(\w+)\W*[,\";:]+\W*(\w+)", repl, text_tmp)
 
-        # Removing "--" but not "-" between two words ("to-do")
-        text_tmp = re.sub(r"(\w+)\W*--\W*(\w+)", repl, text_tmp)
+    # Removing "--" but not "-" between two words ("to-do")
+    text_tmp = re.sub(r"(\w+)\W*--\W*(\w+)", repl, text_tmp)
 
-        # Replaceing "'" only when there is a space next to it. Not replacing "don't" by "don t"
-        text_tmp = re.sub(r"(\w+)\W+'+\W*(\w+)", repl, text_tmp)
-        text_tmp = re.sub(r"(\w+)\W*'+\W+(\w+)", repl, text_tmp)
+    # Replaceing "'" only when there is a space next to it. Not replacing "don't" by "don t"
+    text_tmp = re.sub(r"(\w+)\W+'+\W*(\w+)", repl, text_tmp)
+    text_tmp = re.sub(r"(\w+)\W*'+\W+(\w+)", repl, text_tmp)
 
-        # Removing sentences endings (?!.)
-        text_tmp = text_tmp.strip(".").strip("?").strip("!").strip(";").strip(":").strip('"').strip()
-        return text_tmp
+    # Removing sentences endings (?!.)
+    text_tmp = text_tmp.strip(".").strip("?").strip("!").strip(";").strip(":").strip('"').strip()
+    return text_tmp
 
 
-# Returns the sentence the event is in
 def get_sentence(event_text, textfile, dirname, event_begin):
+    """Returns the sentence the event is in."""
     with open(dirname+"/"+textfile, "r") as f:
         # Read the text left of the event
         f.seek(event_begin)
@@ -47,6 +47,7 @@ def get_sentence(event_text, textfile, dirname, event_begin):
         return (f.read(end-begin).strip(".").strip(), same_words_before_event)
 
 def count_words(f, event_text, event_begin, text_begin):
+    """Returns the number of words between the begin of the sentence the event is in and the event."""
     f.seek(text_begin)
 
     tmp = ""
@@ -64,8 +65,8 @@ def count_words(f, event_text, event_begin, text_begin):
 
     return count
 
-# Returns the surrounding text of an event (event included in text)
 def get_surrounding(event_text, textfile, dirname, event_begin, words_left, words_right):
+    """Returns the surrounding text of an event (event included)."""
     sentence, same_words_before_event = get_sentence(event_text, textfile, dirname, event_begin)
 
     # Remove everything which is not a word
@@ -91,6 +92,7 @@ def get_surrounding(event_text, textfile, dirname, event_begin, words_left, word
         return string.join(words[0:(index+words_right+1)], " ")
 
 def go_left_until_point(f):
+    """Returns the position in the text of the first point when going left."""
     c = f.read(1)
     f.seek(f.tell()-1)
     while c != "." and c != "?" and c != "!" and f.tell() != 0:
@@ -102,6 +104,7 @@ def go_left_until_point(f):
     return f.tell()
 
 def go_right_until_point(f):
+    """Returns the position in the text of the first point when going right."""
     c = f.read(1)
     while c != "." and c != "?" and c != "!" and c != "":
         c = f.read(1)

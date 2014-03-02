@@ -1,16 +1,18 @@
 import nltk
 
 def get_tense(text):
-    """
-    SimplePresent: 0
-    PresentProgressive: 1
-    SimplePast: 2
-    PastProgressive: 3
-    SimplePresentPerfect: 4
-    PresentPerfectProgressive: 5
-    SimplePastPerfect: 6
-    PastPerfectProgressive: 7
-    WillFuture: 8
+    """Returns a number which represents the tense.
+
+    Return values:
+        Simple Present: 0
+        Present Progressive: 1
+        Simple Past: 2
+        Past Progressive: 3
+        Simple Present Perfect: 4
+        Present Perfect Progressive: 5
+        Simple Past Perfect: 6
+        Past Perfect Progressive: 7
+        Will Future: 8
     """
 
     # Order matters
@@ -35,13 +37,8 @@ def get_tense(text):
     else:
         return 9
 
-# nltk tags:
-# V Verb (is, has, make, do, see, run)
-# VD Past Tense (said, took, told, made, asked)
-# VG present participle (making, going, playing, working)
-# VN past participle (given, taken, begun, sung)
-
 def get_tags(text):
+    """Takes a text and returns a list of tags for that text."""
     # The default tagger doesn't tag questions in the right way, so lets make him better
     default_tagger = nltk.data.load(nltk.tag._POS_TAGGER)
     model = {'Will': 'MD', 'Had': 'VBD', 'Have': 'VBP'}
@@ -53,6 +50,7 @@ def get_tags(text):
     return tags
 
 def is_SimplePresent(text):
+    """Returns true if text is in the simple present tense. False otherwise."""
     tags = get_tags(text)
 
     # VBZ - he goes
@@ -66,6 +64,7 @@ def is_SimplePresent(text):
         return False
 
 def is_PresentProgressive(text):
+    """Returns true if text is in the present progressive tense. False otherwise."""
     tags = get_tags(text)
 
     # VBZ and VBG - is + ing
@@ -79,6 +78,7 @@ def is_PresentProgressive(text):
         return False
 
 def is_SimplePast(text):
+    """Returns true if text is in the simple past tense. False otherwise."""
     tags = get_tags(text)
 
     # VBD - went, liked
@@ -88,6 +88,7 @@ def is_SimplePast(text):
         return False
 
 def is_PastProgressive(text):
+    """Returns true if text is in the past progressive tense. False otherwise."""
     tags = get_tags(text)
 
     # VBD + VBG - was/were + ing
@@ -97,6 +98,7 @@ def is_PastProgressive(text):
         return False
 
 def is_SimplePresentPerfect(text):
+    """Returns true if text is in the simple present perfect tense. False otherwise."""
     tags = get_tags(text)
 
     # has + past participle
@@ -110,6 +112,7 @@ def is_SimplePresentPerfect(text):
         return False
 
 def is_PresentPerfectProgressive(text):
+    """Returns true if text is in the present perfect progressive tense. False otherwise."""
     tags = get_tags(text)
 
     # have + been + ing
@@ -123,6 +126,7 @@ def is_PresentPerfectProgressive(text):
         return False
 
 def is_SimplePastPerfect(text):
+    """Returns true if text is in the simple past perfect tense. False otherwise."""
     tags = get_tags(text)
 
     # had + past participle
@@ -132,6 +136,7 @@ def is_SimplePastPerfect(text):
         return False
 
 def is_PastPerfectProgressive(text):
+    """Returns true if text is in the past perfect progressive tense. False otherwise."""
     tags = get_tags(text)
 
     # had + been + ing
@@ -141,6 +146,7 @@ def is_PastPerfectProgressive(text):
         return False
 
 def is_WillFuture(text):
+    """Returns true if text is in the will future tense. False otherwise."""
     tags = get_tags(text)
 
     # will + infinitiv

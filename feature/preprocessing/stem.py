@@ -4,6 +4,14 @@ from feature.feature import Feature
 
 class Stem():
     def __init__(self, data, annotations):
+        """Constructor of the Stem class.
+
+        Args:
+            data (list): Parsed xml information from parser.parse_XML().
+            number_tags_per_feature (int): Number of tags per feature.
+            annotations (str): Looking on all relations ("union") or at all relations in common between the annotators ("intersected").
+
+        """
         # Union or intersected relations?
         self.annotations = annotations
 
@@ -18,6 +26,7 @@ class Stem():
         self.encoder.fit([self.count-1])
 
     def load_stems(self, data):
+        """Returns all word stems used in the parsed XML data."""
         # Get all word stems
         stems = np.array([])
         for txt in data.textfiles:
@@ -36,15 +45,15 @@ class Stem():
         stems = np.unique(stems)
         return stems
 
-    # Translates stem to integer
     def stem_to_integer(self, stem):
+        """Translates a stem to an integer value."""
         try:
             return np.where(self.stems==stem)[0][0]
         except IndexError:
             print self.stems
 
-    # Turn stems into binary feature
     def transform(self, stem_source, stem_target):
+        """Turn stems into binary feature."""
         integer_source = self.stem_to_integer(stem_source)
         integer_target = self.stem_to_integer(stem_target)
 

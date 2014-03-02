@@ -1,7 +1,7 @@
 import re
 from tense import get_tags
-# determines whether some text is either in the simple-, progressive- or perfect aspect
 def get_aspect(text):
+    """Determines whether some text is either in the simple-, progressive- or perfect aspect."""
     if re.match(r'.*(was|were|is|are|will be|had been|has been|have been|will have been) \w+ing', text):
         return "progressive"
     elif is_PerfectAspect(text):
@@ -12,6 +12,7 @@ def get_aspect(text):
         return None
 
 def is_PerfectAspect(text):
+    """Determines if some text is in the perfect aspect."""
     tags = get_tags(text)
 
     # has + gone

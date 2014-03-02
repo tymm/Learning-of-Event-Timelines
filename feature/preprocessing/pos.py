@@ -4,6 +4,14 @@ from feature.feature import Feature
 
 class Pos():
     def __init__(self, data, number_tags_per_feature, annotations):
+        """Constructor of the Pos class.
+
+        Args:
+            data (list): Parsed xml information from parser.parse_XML().
+            number_tags_per_feature (int): Number of tags per feature.
+            annotations (str): Looking on all relations ("union") or at all relations in common between the annotators ("intersected").
+
+        """
         # OneHotEncoder to encode categorical integer features
         self.encoder = OneHotEncoder()
 
@@ -23,8 +31,8 @@ class Pos():
         self.encoder_fit()
 
 
-    # Loads all POS tags used in the pos_surrounding area around an event
     def load_pos_tags(self, data):
+        """Loads all POS tags used in the pos_surrounding area around an event."""
         pos_tags = np.array([])
 
         for txt in data.textfiles:
@@ -48,6 +56,7 @@ class Pos():
         return pos_tags
 
     def load_integer_features(self, data):
+        """Gives each POS tag in data a number."""
         integer_features = []
         pos_feature = np.array([])
 
@@ -75,6 +84,7 @@ class Pos():
         return integer_features
 
     def standardize_sub_pos_feature(self, sub_pos_feature):
+        """Standardizes a part of the feature. If it is too long or too short, the length will be adjusted."""
         if len(sub_pos_feature) > (self.number_tags_per_feature/2):
             # Remove something if we have to many POS tags
             diff = len(sub_pos_feature) - (self.number_tags_per_feature/2)
@@ -93,24 +103,24 @@ class Pos():
 
         return sub_pos_feature
 
-    # Translates POS tag to number
     def pos_to_integer(self, pos_tag):
+        """Translates POS tag to number."""
         return np.where(self.pos_tags==pos_tag)[0][0]
 
-    # Translates array of POS tags to array of numbers
     def pos_tags_to_integers(self, pos_tags):
+        """Translates array of POS tags to array of numbers."""
         numbers = []
         for tag in pos_tags:
             numbers.append(self.pos_to_integer(tag))
 
         return numbers
 
-    # Fit the encoder to all possible pos tags and the dimension of tags to encode
     def encoder_fit(self):
+        """Fit the encoder to all possible pos tags and the dimension of tags to encode."""
         self.encoder.fit(self.integer_features)
 
-    # Turn pos tags into binary feature
     def transform(self, pos_tags_target, pos_tags_source):
+        """Turn pos tags into binary feature."""
         # Standardize input features
         standardized_pos_target = self.standardize_sub_pos_feature(pos_tags_target)
         standardized_pos_source = self.standardize_sub_pos_feature(pos_tags_source)
