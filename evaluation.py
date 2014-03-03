@@ -21,15 +21,16 @@ def plot(filename, xlabel, ylabel, data, xticks=None):
 
     if xticks:
         x = np.array(range(len(data)))
-        plt.xticks(x, xticks, size="small")
+        plt.xticks(x, xticks, size="xx-small", rotation="vertical")
 
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
+    plt.tight_layout()
     plt.plot(x, y, "ro")
     plt.savefig(filename)
 
 def learning_rate(k=20, new=False):
-    """Splits the dataset into k pieces and builds a series out of those k pieces. For every partial sum the accuracy will be calculated to obtain the learning rate."""
+    """Splits the dataset into k pieces and builds a series out of those k pieces. For every partial sum the accuracy will be calculated to obtain the learning rate. Plots the data to learning_rate.jpg"""
     X, y = load_data(new)
 
     X_train, X_test, y_train, y_test = split(X, y)
@@ -70,7 +71,7 @@ def learning_rate(k=20, new=False):
         rf.fit(partial_X, partial_y)
         accuracies.append(rf.score(X_test, y_test))
 
-    return accuracies
+    plot("learning_rate.jpg", "k", "accuracy", accuracies)
 
 
 def different_number_of_trees(start=5, end=1000, steps=20, rerunning=15):
@@ -97,7 +98,10 @@ def different_number_of_trees(start=5, end=1000, steps=20, rerunning=15):
             mean.append(many_accuracies[j][i])
         final_accuracies.append(np.mean(mean))
 
-    plot("different_number_of_trees.jpg", "accuracy", "trees", final_accuracies)
+    # xticks
+    xticks = range(start, end, steps)
+
+    plot("different_number_of_trees.jpg", "number of trees", "accuracy", final_accuracies, xticks)
 
 def union_vs_intersected_relations():
     """Looking at the difference in accuracy when all relations (union) are used vs. all events are used which the annotators have in common (intersected)."""
@@ -136,9 +140,22 @@ def best_feature():
         rf.fit(X_train, y_train)
         accuracies.append({feature : rf.score(X_test, y_test)})
 
+    # Add all features
+    X, y = parse_Features(data, new=True, annotations="union")
+
+    X, y = random_Set(X, y)
+
+    X_train, X_test, y_train, y_test = split(X, y)
+
+    rf = RandomForestClassifier(n_jobs=2, n_estimators=100)
+    rf.fit(X_train, y_train)
+    accuracies.append({"all": rf.score(X_test, y_test)})
+    features.append("all")
+
+
     data = [x.values()[0] for x in accuracies]
 
-    plot("best_features.jpg", "x", "y", data, features)
+    plot("best_features.jpg", "feature", "accuracy", data, features)
 
 def get_distance_data(data):
     """Extracts the distance feature into the following data structure which will be returned: [{distance : classified_right?}, ...]"""
