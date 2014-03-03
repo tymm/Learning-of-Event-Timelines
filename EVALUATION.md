@@ -42,6 +42,6 @@ This raises the question whether the distance is an important factor for the cor
 
 The following graph shows the ratio between true positives and false positives for changing distances.
 
-![alt text](https://raw.github.com/tymm/Learning-of-Event-Timelines/master/plots/distance_importance.jpg?token=28924__eyJzY29wZSI6IlJhd0Jsb2I6dHltbS9MZWFybmluZy1vZi1FdmVudC1UaW1lbGluZXMvbWFzdGVyL3Bsb3RzL2Rpc3RhbmNlX2ltcG9ydGFuY2UuanBnIiwiZXhwaXJlcyI6MTM5NDQ1M "Distance importance")
+![](plots/distance_importance.jpg?raw=true "Distance importance")
 
 ### Comparing the different features in isolation
