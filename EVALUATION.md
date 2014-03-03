@@ -45,6 +45,8 @@ The following graph shows the ratio between true positives and false positives f
 
 ![](plots/distance_importance.jpg?raw=true "Distance importance")
 
+The best ratio by far was archieved for events which have a distance of 61 to 80 characters. This translates to a distance of ~13-15 words.
+
 ### Comparing different features in isolation
 
 ![](plots/best_features.jpg?raw=true "Features in isolation")
