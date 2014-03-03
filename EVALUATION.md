@@ -50,3 +50,6 @@ The best ratio by far was archieved for events which have a distance of 61 to 80
 ### Comparing different features in isolation
 
 ![](plots/best_features.jpg?raw=true "Features in isolation")
+
+This is just one possible plot and not the averaged accuracy over many tries.
+But it shows that all features on their own archieve good results and that they do not have a synergistic effect.
