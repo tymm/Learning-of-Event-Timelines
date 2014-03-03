@@ -23,8 +23,8 @@ def plot(filename, xlabel, ylabel, data, xticks=None):
         x = np.array(range(len(data)))
         plt.xticks(x, xticks, size="small")
 
-    plt.xlabel = xlabel
-    plt.ylabel = ylabel
+    plt.xlabel(xlabel)
+    plt.ylabel(ylabel)
     plt.plot(x, y, "ro")
     plt.savefig(filename)
 
@@ -73,8 +73,8 @@ def learning_rate(k=20, new=False):
     return accuracies
 
 
-def different_number_of_trees(start=5, end=1000, steps=20, rerunning=20):
-    """How does the accuracy change for different amounts of trees."""
+def different_number_of_trees(start=5, end=1000, steps=20, rerunning=15):
+    """How does the accuracy change for different amounts of trees. Plots that to different_number_of_trees.jpg"""
     X, y = load_data()
     X_train, X_test, y_train, y_test = split(X, y)
 
@@ -97,7 +97,7 @@ def different_number_of_trees(start=5, end=1000, steps=20, rerunning=20):
             mean.append(many_accuracies[j][i])
         final_accuracies.append(np.mean(mean))
 
-    return final_accuracies
+    plot("different_number_of_trees.jpg", "accuracy", "trees", final_accuracies)
 
 def union_vs_intersected_relations():
     """Looking at the difference in accuracy when all relations (union) are used vs. all events are used which the annotators have in common (intersected)."""
@@ -207,4 +207,4 @@ def distance_importance():
     plot("distance_importance.jpg", "distance in characters", "ratio: true_positives/false_postives", ratios, ["0-20", "21-40", "41-60", "61-80", "81-100", "101-120", "121-140", "141-160", "161-180", "181-200", "201-220", "221-240", "241-260", "261-280", "281-300"])
 
 if __name__ == "__main__":
-    distance_importance()
+    different_number_of_trees()
