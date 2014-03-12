@@ -1,7 +1,7 @@
 Learning-of-Event-Timelines
 ===========================
 
-This was a university project about supervised learning of event timelines.
+This is a university project about supervised learning of event timelines.
 
 The goal of this project was to build a system capable of identifying temporal links between given events.
 
