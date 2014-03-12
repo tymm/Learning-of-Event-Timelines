@@ -1,7 +1,16 @@
 Learning-of-Event-Timelines
 ===========================
 
-University project about supervised learning of event timelines
+This was a university project about supervised learning of event timelines.
+
+The goal of this project was to build a system capable of identifying temporal links between given events.
+
+The data set given for this project contained annotated events and temporal links between those events.
+The data set can be found in this reposity under fables-100-temporal-dependency.xml or here: http://www.cis.uab.edu/bethard/data/fables-100-temporal-dependency.xml
+
+The task included the extraction of events and temporal links from the given data, deriving useful features from those events and temporal links to then train and test a random forest classifier on the extracted data.
+
+There are several different annotated time relations between events in the data set. The task however was to only train the classifier on three specific temporal links: BEFORE, IS_INCLUDED and INCLUDES.
 
 
 train.py
