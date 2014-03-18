@@ -27,7 +27,7 @@ def load_data(new=False, annotations="union"):
         pickle.dump((X, y), open("set.p", "wb"))
 
     # Shuffle the set
-    X, y = random_Set(X, y)
+    X, y = random_Set(X, y, new)
     return (X, y)
 
 
