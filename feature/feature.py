@@ -13,8 +13,8 @@ class Feature:
     """Instances of this class are used to extract feature values."""
 
     stemmer = Stemmer()
-    enc_tense = OneHotEncoder(n_values=10, categorical_features=[0,1])
-    enc_tense.fit([9, 9])
+    enc_tense = OneHotEncoder(n_values=4, categorical_features=[0,1])
+    enc_tense.fit([3, 3])
 
     def __init__(self, relation):
         """Constructor of the Feature class.

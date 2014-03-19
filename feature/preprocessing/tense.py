@@ -1,44 +1,32 @@
 import nltk
 
+class Tenses:
+    none = 0
+    present = 1
+    past = 2
+    future = 3
+
 def get_tense(text):
     """Returns a number which represents the tense.
 
     Return values:
-        Simple Present: 0
-        Present Progressive: 1
-        Simple Past: 2
-        Past Progressive: 3
-        Simple Present Perfect: 4
-        Present Perfect Progressive: 5
-        Simple Past Perfect: 6
-        Past Perfect Progressive: 7
-        Will Future: 8
+        None: 0
+        Present: 1
+        Past: 2
+        Future: 3
     """
-
-    # Order matters
-    if is_WillFuture(text):
-        return 8
-    elif is_PresentPerfectProgressive(text):
-        return 5
-    elif is_PastPerfectProgressive(text):
-        return 7
-    elif is_SimplePastPerfect(text):
-        return 6
-    elif is_PresentProgressive(text):
-        return 1
-    elif is_PastProgressive(text):
-        return 3
-    elif is_SimplePresentPerfect(text):
-        return 4
-    elif is_SimplePresent(text):
-        return 0
-    elif is_SimplePast(text):
-        return 2
+    if is_Future(text):
+        return Tenses.future
+    elif is_Past(text):
+        return Tenses.past
+    elif is_Present(text):
+        return Tenses.present
     else:
-        return 9
+        return Tenses.none
 
 def get_tags(text):
     """Takes a text and returns a list of tags for that text."""
+
     # The default tagger doesn't tag questions in the right way, so lets make him better
     default_tagger = nltk.data.load(nltk.tag._POS_TAGGER)
     model = {'Will': 'MD', 'Had': 'VBD', 'Have': 'VBP'}
@@ -48,6 +36,30 @@ def get_tags(text):
     tags = tagger.tag(tokens)
     tags = [tag[1] for tag in tags]
     return tags
+
+def is_Present(text):
+    """Returns true if the text is in a present tense. False otherwise."""
+
+    if is_SimplePresent(text) or is_PresentProgressive(text) or is_SimplePresentPerfect(text) or is_PresentPerfectProgressive(text):
+        return True
+    else:
+        return False
+
+def is_Past(text):
+    """Returns true if the text is in a past tense. False otherwise."""
+
+    if is_SimplePast(text) or is_PastProgressive(text) or is_SimplePastPerfect(text) or is_PastPerfectProgressive(text):
+        return True
+    else:
+        return False
+
+def is_Future(text):
+    """Returns true if the text is in a future tense. False otherwise."""
+
+    if is_WillFuture(text):
+        return True
+    else:
+        return False
 
 def is_SimplePresent(text):
     """Returns true if text is in the simple present tense. False otherwise."""

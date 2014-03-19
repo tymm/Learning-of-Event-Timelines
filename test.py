@@ -3,7 +3,7 @@ from cStringIO import StringIO
 from feature.preprocessing.text import get_surrounding, preprocess_sentence
 from feature.preprocessing.polarity import get_polarity
 from feature.preprocessing.modality import get_modality
-from feature.preprocessing.tense import get_tense
+from feature.preprocessing.tense import get_tense, Tenses
 from feature.preprocessing.aspect import get_aspect
 
 class TextProcessing(unittest.TestCase):
@@ -101,131 +101,131 @@ class ModalityGuessing(unittest.TestCase):
 class TenseGuessing(unittest.TestCase):
     def test_SimplePresent(self):
         text = "I work long hours in front of the computer every day"
-        self.assertEqual(get_tense(text), 0)
+        self.assertEqual(get_tense(text), Tenses.present)
 
     def test_SimplePresent_2(self):
         text = "He doesn't work at night usually"
-        self.assertEqual(get_tense(text), 0)
+        self.assertEqual(get_tense(text), Tenses.present)
 
     def test_SimplePresent_3(self):
         text = "He never goes home to his family"
-        self.assertEqual(get_tense(text), 0)
+        self.assertEqual(get_tense(text), Tenses.present)
 
     def test_PresentProgressive(self):
         text = "I'm working at the moment"
-        self.assertEqual(get_tense(text), 1)
+        self.assertEqual(get_tense(text), Tenses.present)
 
     def test_PresentProgressive_2(self):
         text = "He isn't working now at all"
-        self.assertEqual(get_tense(text), 1)
+        self.assertEqual(get_tense(text), Tenses.present)
 
     def test_PresentProgressive_3(self):
         text = "I'm not going"
-        self.assertEqual(get_tense(text), 1)
+        self.assertEqual(get_tense(text), Tenses.present)
 
     def test_SimplePast(self):
         text = "He went to America in 1990"
-        self.assertEqual(get_tense(text), 2)
+        self.assertEqual(get_tense(text), Tenses.past)
 
     def test_SimplePast_2(self):
         text = "He didn't work yesterday"
-        self.assertEqual(get_tense(text), 2)
+        self.assertEqual(get_tense(text), Tenses.past)
 
     def test_SimplePast_3(self):
         text = "Last wednesday I didn't work at the cinema"
-        self.assertEqual(get_tense(text), 2)
+        self.assertEqual(get_tense(text), Tenses.past)
 
     def test_PastProgressive(self):
         text = "While I was doing my homework"
-        self.assertEqual(get_tense(text), 3)
+        self.assertEqual(get_tense(text), Tenses.past)
 
     def test_PastProgressive_2(self):
         text = "He wasn't working"
-        self.assertEqual(get_tense(text), 3)
+        self.assertEqual(get_tense(text), Tenses.past)
 
     def test_PastProgressive_3(self):
         text = "He wasn't going"
-        self.assertEqual(get_tense(text), 3)
+        self.assertEqual(get_tense(text), Tenses.past)
 
     def test_SimplePresentPerfect(self):
         text = "I have gone already"
-        self.assertEqual(get_tense(text), 4)
+        self.assertEqual(get_tense(text), Tenses.present)
 
     def test_SimplePresentPerfect_2(self):
         text = "He hasn't gone so far"
-        self.assertEqual(get_tense(text), 4)
+        self.assertEqual(get_tense(text), Tenses.present)
 
     def test_SimplePresentPerfect_3(self):
         text = "I haven't worked ever"
-        self.assertEqual(get_tense(text), 4)
+        self.assertEqual(get_tense(text), Tenses.present)
 
     def test_SimplePresentPerfect_4(self):
         text = "I haven't seen him for a while now"
-        self.assertEqual(get_tense(text), 4)
+        self.assertEqual(get_tense(text), Tenses.present)
 
     def test_PresentPerfectProgressive(self):
         text = "I have been working all day"
-        self.assertEqual(get_tense(text), 5)
+        self.assertEqual(get_tense(text), Tenses.present)
 
     def test_PresentPerfectProgressive_2(self):
         text = "Since when has he been going?"
-        self.assertEqual(get_tense(text), 5)
+        self.assertEqual(get_tense(text), Tenses.present)
 
     def test_PresentPerfectProgressive_3(self):
         text = "I haven't been working for a long time"
-        self.assertEqual(get_tense(text), 5)
+        self.assertEqual(get_tense(text), Tenses.present)
 
     def test_PresentPerfectProgressive_4(self):
         text = "He has been working since yesterday"
-        self.assertEqual(get_tense(text), 5)
+        self.assertEqual(get_tense(text), Tenses.present)
 
     def test_PresentPerfectProgressive_5(self):
         text = "Has he been going?"
-        self.assertEqual(get_tense(text), 5)
+        self.assertEqual(get_tense(text), Tenses.present)
 
     def test_PresentPerfectProgressive_6(self):
         text = "Have I been going?"
-        self.assertEqual(get_tense(text), 5)
+        self.assertEqual(get_tense(text), Tenses.present)
 
     def test_SimplePastPerfect(self):
         text = "She never had gone there"
-        self.assertEqual(get_tense(text), 6)
+        self.assertEqual(get_tense(text), Tenses.past)
 
     def test_SimplePastPerfect_2(self):
         text = "I hadn't worked already"
-        self.assertEqual(get_tense(text), 6)
+        self.assertEqual(get_tense(text), Tenses.past)
 
     def test_SimplePastPerfect_3(self):
         text = "He just had gone"
-        self.assertEqual(get_tense(text), 6)
+        self.assertEqual(get_tense(text), Tenses.past)
 
     def test_SimplePastPerfect_4(self):
         text = "Had he gone already?"
-        self.assertEqual(get_tense(text), 6)
+        self.assertEqual(get_tense(text), Tenses.past)
 
     def test_PastPerfectProgressive(self):
         text = "I had been working"
-        self.assertEqual(get_tense(text), 7)
+        self.assertEqual(get_tense(text), Tenses.past)
 
     def test_PastPerfectProgressive_2(self):
         text = "Had I been going?"
-        self.assertEqual(get_tense(text), 7)
+        self.assertEqual(get_tense(text), Tenses.past)
 
     def test_PastPerfectProgressive_3(self):
         text = "He had been going for 2 hours"
-        self.assertEqual(get_tense(text), 7)
+        self.assertEqual(get_tense(text), Tenses.past)
 
     def test_WillFuture(self):
         text = "He won't work"
-        self.assertEqual(get_tense(text), 8)
+        self.assertEqual(get_tense(text), Tenses.future)
 
     def test_WillFuture_2(self):
         text = "He'll go"
-        self.assertEqual(get_tense(text), 8)
+        self.assertEqual(get_tense(text), Tenses.future)
 
     def test_WillFuture_3(self):
         text = "Will he go?"
-        self.assertEqual(get_tense(text), 8)
+        self.assertEqual(get_tense(text), Tenses.future)
 
 class AspectGuessing(unittest.TestCase):
     def test_SimpleAspect(self):
