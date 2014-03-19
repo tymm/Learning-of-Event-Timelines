@@ -4,7 +4,7 @@ from feature.preprocessing.text import get_surrounding, preprocess_sentence
 from feature.preprocessing.polarity import get_polarity
 from feature.preprocessing.modality import get_modality
 from feature.preprocessing.tense import get_tense, Tenses
-from feature.preprocessing.aspect import get_aspect
+from feature.preprocessing.aspect import get_aspect, Aspects
 
 class TextProcessing(unittest.TestCase):
     @classmethod
@@ -228,62 +228,57 @@ class TenseGuessing(unittest.TestCase):
         self.assertEqual(get_tense(text), Tenses.future)
 
 class AspectGuessing(unittest.TestCase):
-    def test_SimpleAspect(self):
-        text = "I went"
-        self.assertEqual(get_aspect(text), "simple")
-
-    def test_SimpleAspect_2(self):
-        text = "I will go"
-        self.assertEqual(get_aspect(text), "simple")
-
-    def test_SimpleAspect_3(self):
-        text = "They clean the window"
-        self.assertEqual(get_aspect(text), "simple")
-
-    def test_SimpleAspect_4(self):
-        text = "Shall we go?"
-        self.assertEqual(get_aspect(text), "simple")
-
-    def test_SimpleAspect_5(self):
-        text = "Will we go there?"
-        self.assertEqual(get_aspect(text), "simple")
-
     def test_PerfectAspect(self):
         text = "I had cleaned the whole kitchen"
-        self.assertEqual(get_aspect(text), "perfect")
+        self.assertEqual(get_aspect(text), Aspects.perfect)
 
     def test_PerfectAspect_2(self):
         text = "They will have eaten"
-        self.assertEqual(get_aspect(text), "perfect")
+        self.assertEqual(get_aspect(text), Aspects.perfect)
 
     def test_PerfectAspect_3(self):
         text = "Yesterday it has found"
-        self.assertEqual(get_aspect(text), "perfect")
+        self.assertEqual(get_aspect(text), Aspects.perfect)
 
     def test_PerfectAspect_4(self):
         text = "She has taken all her belongings"
-        self.assertEqual(get_aspect(text), "perfect")
+        self.assertEqual(get_aspect(text), Aspects.perfect)
 
     def test_PerfectAspect_5(self):
         text = "Will they have eaten?"
-        self.assertEqual(get_aspect(text), "perfect")
+        self.assertEqual(get_aspect(text), Aspects.perfect)
+
+    def test_Perfect_ProgressiveAspect(self):
+        text = "She will have been singing"
+        self.assertEqual(get_aspect(text), Aspects.perfect_progressive)
+
+    def test_Perfect_ProgressiveAspect_2(self):
+        text = "They have been fighting for the whole day."
+        self.assertEqual(get_aspect(text), Aspects.perfect_progressive)
+
+    def test_Perfect_ProgressiveAspect_3(self):
+        text = "She had been flying to Vancouver"
+        self.assertEqual(get_aspect(text), Aspects.perfect_progressive)
+
+    def test_Perfect_ProgressiveAspect_4(self):
+        text = "Will she have been singing?"
+        self.assertEqual(get_aspect(text), Aspects.perfect_progressive)
 
     def test_ProgressiveAspect(self):
-        text = "She will have been singing"
-        self.assertEqual(get_aspect(text), "progressive")
+        text = "I am eating so much everyday!"
+        self.assertEqual(get_aspect(text), Aspects.progressive)
 
     def test_ProgressiveAspect_2(self):
-        text = "They have been fighting for the whole day."
-        self.assertEqual(get_aspect(text), "progressive")
+        text = "I was eating so much everyday!"
+        self.assertEqual(get_aspect(text), Aspects.progressive)
 
     def test_ProgressiveAspect_3(self):
-        text = "She had been flying to Vancouver"
-        self.assertEqual(get_aspect(text), "progressive")
+        text = "I will be eating so much everyday!"
+        self.assertEqual(get_aspect(text), Aspects.progressive)
 
-    def test_ProgressiveAspect_4(self):
-        text = "Will she have been singing?"
-        self.assertEqual(get_aspect(text), "progressive")
-
+    def test_ProgressiveAspect_3(self):
+        text = "I would be eating so much everyday!"
+        self.assertEqual(get_aspect(text), Aspects.progressive)
 
 if __name__ == '__main__':
     unittest.main()

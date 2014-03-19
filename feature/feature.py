@@ -16,6 +16,9 @@ class Feature:
     enc_tense = OneHotEncoder(n_values=4, categorical_features=[0,1])
     enc_tense.fit([3, 3])
 
+    enc_aspect = OneHotEncoder(n_values=4, categorical_features=[0,1])
+    enc_aspect.fit([3, 3])
+
     def __init__(self, relation):
         """Constructor of the Feature class.
 
@@ -57,45 +60,16 @@ class Feature:
     def get_aspect_target(self):
         """Returns the aspect (simple, progressive, perfect) of the target event."""
         r = get_aspect(self.relation.target.surrounding)
-        if r == "simple":
-            return 0
-        elif r == "perfect":
-            return 1
-        elif r == "progressive":
-            return 2
+        return r
 
     def get_aspect_source(self):
         """Returns the aspect (simple, progressive, perfect) of the source event."""
         r = get_aspect(self.relation.source.surrounding)
-        if r == "simple":
-            return 0
-        elif r == "perfect":
-            return 1
-        elif r == "progressive":
-            return 2
+        return r
 
     def get_aspect(self):
-        """Returns the aspect feature (9 different values)."""
-        if self.get_aspect_source() == 0 and self.get_aspect_target() == 0:
-            return [0, 0, 0, 0, 0, 0, 0, 0, 0]
-        elif self.get_aspect_source() == 0 and self.get_aspect_target() == 1:
-            return [1, 0, 0, 0, 0, 0, 0, 0, 0]
-        elif self.get_aspect_source() == 0 and self.get_aspect_target() == 2:
-            return [0, 1, 0, 0, 0, 0, 0, 0, 0]
-        elif self.get_aspect_source() == 1 and self.get_aspect_target() == 0:
-            return [0, 0, 1, 0, 0, 0, 0, 0, 0]
-        elif self.get_aspect_source() == 1 and self.get_aspect_target() == 1:
-            return [0, 0, 0, 1, 0, 0, 0, 0, 0]
-        elif self.get_aspect_source() == 1 and self.get_aspect_target() == 2:
-            return [0, 0, 0, 0, 1, 0, 0, 0, 0]
-        elif self.get_aspect_source() == 2 and self.get_aspect_target() == 0:
-            return [0, 0, 0, 0, 0, 1, 0, 0, 0]
-        elif self.get_aspect_source() == 2 and self.get_aspect_target() == 1:
-            return [0, 0, 0, 0, 0, 0, 1, 0, 0]
-        elif self.get_aspect_source() == 2 and self.get_aspect_target() == 2:
-            return [0, 0, 0, 0, 0, 0, 0, 1, 0]
-        else:
-            return [0, 0, 0, 0, 0, 0, 0, 0, 1]
+        """Returns the aspect feature."""
+        return self.enc_aspect.transform([[self.get_aspect_source(), self.get_aspect_target()]]).toarray()[0]
 
     def get_tense_source(self):
         """Returns tense of source event."""
