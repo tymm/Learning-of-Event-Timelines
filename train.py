@@ -8,6 +8,7 @@ from feature.preprocessing.stem import Stem
 import sys
 import cPickle as pickle
 import os.path
+from random import shuffle
 
 def load_data(new=False, annotations="union", features=["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"]):
     """Loads the data from fables-100-temporal-dependency.xml into the dataset and shuffles the dataset.
