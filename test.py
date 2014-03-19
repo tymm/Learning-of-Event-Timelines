@@ -111,6 +111,10 @@ class TenseGuessing(unittest.TestCase):
         text = "He never goes home to his family"
         self.assertEqual(get_tense(text), Tenses.present)
 
+    def test_SimplePresent_4(self):
+        text = "to come and settle in the"
+        self.assertEqual(get_tense(text), Tenses.present)
+
     def test_PresentProgressive(self):
         text = "I'm working at the moment"
         self.assertEqual(get_tense(text), Tenses.present)
@@ -123,6 +127,10 @@ class TenseGuessing(unittest.TestCase):
         text = "I'm not going"
         self.assertEqual(get_tense(text), Tenses.present)
 
+    def test_Present(self):
+        text = "Coming and standing under the"
+        self.assertEqual(get_tense(text), Tenses.present)
+
     def test_SimplePast(self):
         text = "He went to America in 1990"
         self.assertEqual(get_tense(text), Tenses.past)
@@ -133,6 +141,18 @@ class TenseGuessing(unittest.TestCase):
 
     def test_SimplePast_3(self):
         text = "Last wednesday I didn't work at the cinema"
+        self.assertEqual(get_tense(text), Tenses.past)
+
+    def test_SimplePast_4(self):
+        text = "A cat heard of this"
+        self.assertEqual(get_tense(text), Tenses.past)
+
+    def test_SimplePast_5(self):
+        text = "all the Mice met together in"
+        self.assertEqual(get_tense(text), Tenses.past)
+
+    def test_SimplePast_6(self):
+        text = "but who daily stole a portion"
         self.assertEqual(get_tense(text), Tenses.past)
 
     def test_PastProgressive(self):
