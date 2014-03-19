@@ -163,7 +163,7 @@ class Feature:
         elif self.relation.time_type == "is_included":
             return 2
         else:
-            return -1
+            return 3
 
     def get_result(self, category):
         """Returns 1 if the feature is in the category we want and 0 otherwise."""
