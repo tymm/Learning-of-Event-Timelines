@@ -9,7 +9,7 @@ import sys
 import cPickle as pickle
 import os.path
 
-def load_data(new=False, annotations="union"):
+def load_data(new=False, annotations="union", features=["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"]):
     """Loads the data from fables-100-temporal-dependency.xml into the dataset and shuffles the dataset.
 
     When new=False the dataset and the pos and stem feature will be loaded from a file instead of generating them.
@@ -135,29 +135,3 @@ def parse_Features(data, new=False, annotations="union", features=["pos", "stem"
             y = np.append(y, [f.get_class()])
 
     return (X, y)
-
-if __name__ == "__main__":
-    # With './train --reload' a "fresh parsing" will be enforced
-    if (len(sys.argv) >= 2 and sys.argv[1] == "--reload") or not os.path.isfile("save.p"):
-        new = True
-    else:
-        new = False
-
-    print "Loading"
-    # Load the data which is needed to train the classifier.
-    X, y = load_data(new, "intersected")
-    print "Done loading"
-
-    # Split dataset into training set (80%) and test set (20%)
-    X_train, X_test, y_train, y_test = split(X, y)
-
-    # Train the random forest classifier
-    rf = RandomForestClassifier(n_jobs=2, n_estimators=100)
-    rf.fit(X_train, y_train)
-
-    # Print accuracy and predicted & true classes
-    print rf.score(X_test, y_test)
-    print "Predicted:"
-    print rf.predict(X_test)
-    print "True values:"
-    print y_test
