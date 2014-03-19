@@ -29,17 +29,25 @@ def get_sentences(number, class_id, annotations="union"):
                     break
                 i += 1
 
-                print "---------------"
-                print "Source event: " +rel.source.content
-                print rel.source.sentence
-                print
-                print "Target event: " +rel.target.content
-                print rel.target.sentence
-                print "---------------"
-                print
+                if rel.target.sentence == rel.source.sentence:
+                    print "---------------"
+                    print "Source event: " +rel.source.content
+                    print "Target event: " +rel.target.content
+                    print rel.target.sentence
+                    print "---------------"
+                    print
+                else:
+                    print "---------------"
+                    print "Source event: " +rel.source.content
+                    print rel.source.sentence
+                    print
+                    print "Target event: " +rel.target.content
+                    print rel.target.sentence
+                    print "---------------"
+                    print
 
                 # Get next sentence from the next text
                 go_to_next_textfile = True
 
 if __name__ == "__main__":
-    get_sentences(3, 1)
+    get_sentences(5, 1)
