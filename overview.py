@@ -1,7 +1,7 @@
 from parser import parse_XML
 from feature.feature import Feature
 
-def get_sentences(number, class_id, annotations="union"):
+def get_sentences(number, class_id, annotations="intersected"):
     """Returns number sentences which have the relation type class_id.
 
     Useful if you need to get an overview over sentences with a certain temporal relation.
@@ -34,20 +34,67 @@ def get_sentences(number, class_id, annotations="union"):
                     print "Source event: " +rel.source.content
                     print "Target event: " +rel.target.content
                     print rel.target.sentence
-                    print "---------------"
                     print
+                    print "Target Surrounding: " + rel.target.surrounding
+                    print "Source Surrounding: " + rel.source.surrounding
                 else:
                     print "---------------"
                     print "Source event: " +rel.source.content
-                    print rel.source.sentence
+                    print "Whole sentence " +rel.source.sentence
+                    print "Surrounding" + rel.source.surrounding
                     print
                     print "Target event: " +rel.target.content
-                    print rel.target.sentence
-                    print "---------------"
-                    print
+                    print "Whole sentence: " + rel.target.sentence
+                    print "Surrounding: " + rel.target.surrounding
+
+                tense_source = f.get_tense_source()
+                tense_target = f.get_tense_target()
+                if tense_source == 0:
+                    print "Estimated tense for source event: None"
+                elif tense_source == 1:
+                    print "Estimated tense for source event: Present"
+                elif tense_source == 2:
+                    print "Estimated tense for source event: Past"
+                elif tense_source == 3:
+                    print "Estimated tense for source event: Future"
+
+                if tense_target == 0:
+                    print "Estimated tense for target event: None"
+                elif tense_target == 1:
+                    print "Estimated tense for target event: Present"
+                elif tense_target == 2:
+                    print "Estimated tense for target event: Past"
+                elif tense_target == 3:
+                    print "Estimated tense for target event: Future"
+
+                aspect_source = f.get_aspect_source()
+                aspect_target = f.get_aspect_target()
+                if aspect_source == 0:
+                    print "Estimated aspect for source event: None"
+                elif aspect_source == 1:
+                    print "Estimated aspect for source event: Progressive"
+                elif aspect_source == 2:
+                    print "Estimated aspect for source event: Perfect"
+                elif aspect_source == 3:
+                    print "Estimated aspect for source event: Perfect Progressive"
+
+                if aspect_target == 0:
+                    print "Estimated aspect for source event: None"
+                elif aspect_target == 1:
+                    print "Estimated aspect for source event: Progressive"
+                elif aspect_target == 2:
+                    print "Estimated aspect for source event: Perfect"
+                elif aspect_target == 3:
+                    print "Estimated aspect for source event: Perfect Progressive"
+
+                print "Distance between events: " + str(f.get_distance())
+
+
+                print "---------------"
+                print
 
                 # Get next sentence from the next text
                 go_to_next_textfile = True
 
 if __name__ == "__main__":
-    get_sentences(5, 1)
+    get_sentences(20, 0)
