@@ -91,9 +91,6 @@ def parse_Features(data, new=False, annotations="union", features=["pos", "stem"
 
         for rel in txt.relations:
             f = Feature(rel)
-            # If the time relation is not in (before, contains, is_contained_in), skip
-            if f.get_class() == -1:
-                continue
 
             feature = []
 
