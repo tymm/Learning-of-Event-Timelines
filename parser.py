@@ -35,8 +35,8 @@ def parse_XML(filename, dirname):
                 event_text = ev.get("text")
 
                 # Get the surrounding text and sentence for this event
-                sentence = get_sentence(event_text, text.name, dirname, int(ev.get("begin")))[0]
-                surrounding, num_words_as_event_before_event = get_surrounding(event_text, text.name, dirname, int(ev.get("begin")), Event.surrounding_words_left, Event.surrounding_words_right)
+                sentence, num_words_as_event_before_event = get_sentence(event_text, text.name, dirname, int(ev.get("begin")))
+                surrounding = get_surrounding(event_text, text.name, dirname, int(ev.get("begin")), Event.surrounding_words_left, Event.surrounding_words_right)
 
                 pos_surrounding = get_surrounding(event_text, text.name, dirname, int(ev.get("begin")), Event.pos_surrounding_words_left, Event.pos_surrounding_words_right)
                 # Get the polarity of the event

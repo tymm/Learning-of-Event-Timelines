@@ -7,6 +7,10 @@ def preprocess_sentence(text):
     """Preprocessing of sentences. Removes stuff so word tokenizing gets better. Returns the cleaned up input sentence."""
     def repl(m):
         return m.group(1) + " " + m.group(2)
+
+    # lower everything
+    text_tmp = text.lower()
+
     # Removing newlines
     text_tmp = re.sub(r"(\w+)\n(\w+)", repl, text)
     text_tmp = re.sub(r"$\n", "", text_tmp)
@@ -19,9 +23,23 @@ def preprocess_sentence(text):
     # Removing "--" but not "-" between two words ("to-do")
     text_tmp = re.sub(r"(\w+)\W*--\W*(\w+)", repl, text_tmp)
 
-    # Replaceing "'" only when there is a space next to it. Not replacing "don't" by "don t"
+    # Replaceing "'" only when there is a space next to it. Not replacing "don't" with "don t"
     text_tmp = re.sub(r"(\w+)\W+'+\W*(\w+)", repl, text_tmp)
     text_tmp = re.sub(r"(\w+)\W*'+\W+(\w+)", repl, text_tmp)
+
+    # Replace stuff with apostrophs with the long version for easier chunking and tagging
+    text_tmp = text_tmp.replace("doesn't", "does not")
+    text_tmp = text_tmp.replace("don't", "do not")
+    text_tmp = text_tmp.replace("won't", "will not")
+    text_tmp = text_tmp.replace("i'm", "i am")
+    text_tmp = text_tmp.replace("isn't", "is not")
+    text_tmp = text_tmp.replace("aren't", "are not")
+    text_tmp = text_tmp.replace("wasn't", "was not")
+    text_tmp = text_tmp.replace("weren't", "were not")
+    text_tmp = text_tmp.replace("haven't", "have not")
+    text_tmp = text_tmp.replace("hasn't", "has not")
+    text_tmp = text_tmp.replace("hadn't", "had not")
+    text_tmp = text_tmp.replace("'ll", " will")
 
     # Removing sentences endings (?!.)
     text_tmp = text_tmp.strip(".").strip("?").strip("!").strip(";").strip(":").strip('"').strip()
@@ -44,7 +62,14 @@ def get_sentence(event_text, textfile, dirname, event_begin):
 
         # Return the sentence
         f.seek(begin)
-        return (f.read(end-begin).strip(".").strip(), same_words_before_event)
+
+        # Read sentence
+        sentence = f.read(end-begin).strip(".").strip()
+
+        # Remove everything which is not a word
+        sentence = preprocess_sentence(sentence)
+
+        return sentence, same_words_before_event
 
 
 def count_words(f, event_text, event_begin, text_begin):

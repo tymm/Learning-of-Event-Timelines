@@ -65,12 +65,12 @@ if __name__ == "__main__":
 
     print "Loading"
     # Load the data which is needed to train the classifier.
-    X, y = load_data(new, "union", features=["tense"])
+    X, y = load_data(new, "union", features=["tense", "aspect"])
     print "Done loading"
 
     # Information on class 0
     print "Information for class 2"
-    estimate(X, y, 3)
+    estimate(X, y, 2)
 
     """
     print

@@ -97,4 +97,4 @@ def get_sentences(number, class_id, annotations="intersected"):
                 go_to_next_textfile = True
 
 if __name__ == "__main__":
-    get_sentences(20, 2)
+    get_sentences(20, 0)

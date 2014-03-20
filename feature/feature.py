@@ -73,12 +73,12 @@ class Feature:
 
     def get_tense_source(self):
         """Returns tense of source event."""
-        r = get_tense(self.relation.source.surrounding)
+        r = get_tense(self.relation.source.sentence, self.relation.source.content, self.relation.source.num_words_as_event_before_event)
         return r
 
     def get_tense_target(self):
         """Returns tense of target event."""
-        r = get_tense(self.relation.target.surrounding)
+        r = get_tense(self.relation.target.sentence, self.relation.target.content, self.relation.target.num_words_as_event_before_event)
         return r
 
     def get_tense(self):
