@@ -35,8 +35,8 @@ def get_sentences(number, class_id, annotations="intersected"):
                     print "Target event: " +rel.target.content
                     print rel.target.sentence
                     print
-                    print "Target Surrounding: " + rel.target.surrounding
                     print "Source Surrounding: " + rel.source.surrounding
+                    print "Target Surrounding: " + rel.target.surrounding
                 else:
                     print "---------------"
                     print "Source event: " +rel.source.content
@@ -97,4 +97,4 @@ def get_sentences(number, class_id, annotations="intersected"):
                 go_to_next_textfile = True
 
 if __name__ == "__main__":
-    get_sentences(20, 0)
+    get_sentences(20, 2)
