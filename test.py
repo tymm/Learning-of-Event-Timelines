@@ -115,6 +115,26 @@ class TenseGuessing(unittest.TestCase):
         text = "to come and settle in the"
         self.assertEqual(get_tense(text), Tenses.present)
 
+    def test_SimplePresent_5(self):
+        text = "eyes and after consulting a Doctor"
+        self.assertEqual(get_tense(text), Tenses.present)
+
+    def test_SimplePresent_6(self):
+        text = "catching sight of some"
+        self.assertEqual(get_tense(text), Tenses.present)
+
+    def test_SimplePresent_7(self):
+        text = "A dispute arose between"
+        self.assertEqual(get_tense(text), Tenses.present)
+
+    def test_SimplePresent_8(self):
+        text = "the Sun each claiming that he"
+        self.assertEqual(get_tense(text), Tenses.present)
+
+    def test_SimplePresent_9(self):
+        text = "a neighbouring pool intending to drown"
+        self.assertEqual(get_tense(text), Tenses.present)
+
     def test_PresentProgressive(self):
         text = "I'm working at the moment"
         self.assertEqual(get_tense(text), Tenses.present)
@@ -129,6 +149,14 @@ class TenseGuessing(unittest.TestCase):
 
     def test_Present(self):
         text = "Coming and standing under the"
+        self.assertEqual(get_tense(text), Tenses.present)
+
+    def test_Present_2(self):
+        text = "Observing it to"
+        self.assertEqual(get_tense(text), Tenses.present)
+
+    def test_Present_2(self):
+        text = "among some Reeds growing by the"
         self.assertEqual(get_tense(text), Tenses.present)
 
     def test_SimplePast(self):
