@@ -39,12 +39,13 @@ def get_sentence(event_text, textfile, dirname, event_begin):
         f.seek(event_begin)
         end = go_right_until_point(f)
 
-        # Look how many words with the same text of the event are in front of the event we are interested in
+        # Look how many words with the same text as the event are in front of the event we are interested in
         same_words_before_event = count_words(f, event_text, event_begin, begin)
 
         # Return the sentence
         f.seek(begin)
         return (f.read(end-begin).strip(".").strip(), same_words_before_event)
+
 
 def count_words(f, event_text, event_begin, text_begin):
     """Returns the number of words between the begin of the sentence the event is in and the event."""

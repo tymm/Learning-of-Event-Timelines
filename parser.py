@@ -36,7 +36,7 @@ def parse_XML(filename, dirname):
 
                 # Get the surrounding text and sentence for this event
                 sentence = get_sentence(event_text, text.name, dirname, int(ev.get("begin")))[0]
-                surrounding = get_surrounding(event_text, text.name, dirname, int(ev.get("begin")), Event.surrounding_words_left, Event.surrounding_words_right)
+                surrounding, num_words_as_event_before_event = get_surrounding(event_text, text.name, dirname, int(ev.get("begin")), Event.surrounding_words_left, Event.surrounding_words_right)
 
                 pos_surrounding = get_surrounding(event_text, text.name, dirname, int(ev.get("begin")), Event.pos_surrounding_words_left, Event.pos_surrounding_words_right)
                 # Get the polarity of the event
@@ -46,7 +46,7 @@ def parse_XML(filename, dirname):
                 modality = get_modality(surrounding)
 
                 # Create an Event object
-                event = Event(annotator, k, event_text, sentence, surrounding, pos_surrounding, polarity, modality, ev.get("begin"), ev.get("end"))
+                event = Event(annotator, k, event_text, sentence, num_words_as_event_before_event, surrounding, pos_surrounding, polarity, modality, ev.get("begin"), ev.get("end"))
                 # Create link from Annotator object
                 annotator.events.append(event)
 
