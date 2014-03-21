@@ -10,6 +10,8 @@ import cPickle as pickle
 import os.path
 from random import shuffle
 
+TEXTDIR = "McIntyreLapata09Resources/fables/"
+
 def load_data(new=False, annotations="union", features=["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"]):
     """Loads the data from fables-100-temporal-dependency.xml into the dataset and shuffles the dataset.
 
@@ -17,18 +19,14 @@ def load_data(new=False, annotations="union", features=["pos", "stem", "aspect",
     new should be set to True when settings were changed or code was altered.
 
     """
-    if new == False and os.path.isfile("set.p"):
-        # Load the data from file
-        X, y = pickle.load(open("set.p", "rb"))
-    else:
-        # New calculation of the data
-        data = parse_XML("fables-100-temporal-dependency.xml", "McIntyreLapata09Resources/fables/")
-        X, y = parse_Features(data, new, annotations)
+    # Load data
+    data = parse_XML("fables-100-temporal-dependency.xml", TEXTDIR)
 
-        pickle.dump((X, y), open("set.p", "wb"))
+    # Extract features
+    X, y = parse_Features(data, new, annotations, features)
 
     # Shuffle the set
-    X, y = random_Set(X, y, new)
+    X, y = random_Set(X, y)
     return (X, y)
 
 
@@ -41,26 +39,21 @@ def split(X, y):
     return (X_train, X_test, y_train, y_test)
 
 
-def random_Set(X, y, new=False):
+def random_Set(X, y):
     """Takes X and y and returns shuffled X and y.
 
     If argument new is True, it will shuffle X and y in a new way.
     Otherwise it will load the order of the last time.
 
     """
-    if new == False and os.path.isfile("random_set.p"):
-        return pickle.load(open("random_set.p", "rb"))
-    else:
-        indices = np.arange(0, len(y))
-        shuffle(indices)
+    indices = np.arange(0, len(y))
+    shuffle(indices)
 
-        X_new = []
-        for idx in indices:
-            X_new.append(X[idx])
+    X_new = []
+    for idx in indices:
+        X_new.append(X[idx])
 
-        pickle.dump((X_new, y[indices]), open("random_set.p", "wb"))
-
-        return (X_new, y[indices])
+    return (X_new, y[indices])
 
 
 def parse_Features(data, new=False, annotations="union", features=["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"]):
@@ -73,12 +66,14 @@ def parse_Features(data, new=False, annotations="union", features=["pos", "stem"
         features (list): Determines which features should be activated. Possible values: "pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality".
 
     """
-    if new:
-        pos = Pos(data, 6, annotations)
-        stem = Stem(data, annotations)
-        pickle.dump((pos, stem), open("save.p", "wb"))
-    else:
-        pos, stem = pickle.load(open("save.p", "rb"))
+    # Only compute pos and stem if new flag is set
+    if "pos" in features and "stem" in features:
+        if new or not os.path.isfile("set.p"):
+                pos = Pos(data, 6, annotations)
+                stem = Stem(data, annotations)
+                pickle.dump((pos, stem), open("save.p", "wb"))
+        else:
+            pos, stem = pickle.load(open("save.p", "rb"))
 
     X = []
     y = np.array([], dtype=int)
@@ -95,9 +90,13 @@ def parse_Features(data, new=False, annotations="union", features=["pos", "stem"
 
             feature = []
 
+            # Make polarity feature
+            if "polarity" in features:
+                feature = np.concatenate((feature, [f.get_polarity()]))
+
             # Make distance feature
             if "distance" in features:
-                feature = np.concatenate((feature, [f.get_distance()]))
+                feature = np.concatenate((feature, f.get_distance()))
 
             # Make POS feature
             if "pos" in features:
@@ -114,10 +113,6 @@ def parse_Features(data, new=False, annotations="union", features=["pos", "stem"
             # Make similarity feature
             if "similarity" in features:
                 feature = np.concatenate((feature, [f.get_similarity_of_words()]))
-
-            # Make polarity feature
-            if "polarity" in features:
-                feature = np.concatenate((feature, [f.get_polarity()]))
 
             # Make modality feature
             if "modality" in features:

@@ -1,6 +1,7 @@
 from preprocessing.word_similarity import get_wordnet_similarity
 from preprocessing.aspect import get_aspect
 from preprocessing.tense import get_tense
+from preprocessing.distance import get_distance as distance
 from nltk.stem.lancaster import LancasterStemmer as Stemmer
 from nltk import pos_tag, word_tokenize
 from sklearn.preprocessing import OneHotEncoder
@@ -19,6 +20,9 @@ class Feature:
     enc_aspect = OneHotEncoder(n_values=4, categorical_features=[0,1])
     enc_aspect.fit([3, 3])
 
+    enc_distance = OneHotEncoder(n_values=5, categorical_features=[0])
+    enc_distance.fit([4])
+
     def __init__(self, relation):
         """Constructor of the Feature class.
 
@@ -30,7 +34,7 @@ class Feature:
 
 
     def get_distance(self):
-        """Returns the number of characters between two events in a text."""
+        """Returns the number of words between two events in a text."""
         # We want to compare different objects
         if self.relation.source == self.relation.target:
             return False
@@ -38,11 +42,18 @@ class Feature:
         if self.relation.source.parent.parent != self.relation.target.parent.parent:
             return False
 
-        # Distance is measured in characters between the end of the first word and the beginning of the second word
-        if self.relation.source.begin > self.relation.target.begin:
-            return (self.relation.source.begin - self.relation.target.end)
-        elif self.relation.source.begin < self.relation.target.begin:
-            return (self.relation.target.begin - self.relation.source.end)
+        event_distance = distance(self.relation.source.begin, self.relation.target.begin, self.relation.parent.parent.name, TEXTDIR)
+
+        if event_distance < 5:
+            return self.enc_distance.transform([[0]]).toarray()[0]
+        elif event_distance < 10:
+            return self.enc_distance.transform([[1]]).toarray()[0]
+        elif event_distance < 15:
+            return self.enc_distance.transform([[2]]).toarray()[0]
+        elif event_distance < 25:
+            return self.enc_distance.transform([[3]]).toarray()[0]
+        else:
+            return self.enc_distance.transform([[4]]).toarray()[0]
 
     def get_similarity_of_words(self):
         """Returns the similarity of two words."""
