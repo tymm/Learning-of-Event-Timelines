@@ -79,13 +79,13 @@ def get_sentences(number, class_id, annotations="intersected"):
                     print "Estimated aspect for source event: Perfect Progressive"
 
                 if aspect_target == 0:
-                    print "Estimated aspect for source event: None"
+                    print "Estimated aspect for target event: None"
                 elif aspect_target == 1:
-                    print "Estimated aspect for source event: Progressive"
+                    print "Estimated aspect for target event: Progressive"
                 elif aspect_target == 2:
-                    print "Estimated aspect for source event: Perfect"
+                    print "Estimated aspect for target event: Perfect"
                 elif aspect_target == 3:
-                    print "Estimated aspect for source event: Perfect Progressive"
+                    print "Estimated aspect for target event: Perfect Progressive"
 
                 print "Distance between events: " + str(f.get_distance())
 
@@ -97,4 +97,4 @@ def get_sentences(number, class_id, annotations="intersected"):
                 go_to_next_textfile = True
 
 if __name__ == "__main__":
-    get_sentences(20, 0)
+    get_sentences(20, 1)

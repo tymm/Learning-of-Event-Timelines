@@ -70,12 +70,12 @@ class Feature:
 
     def get_aspect_target(self):
         """Returns the aspect (simple, progressive, perfect) of the target event."""
-        r = get_aspect(self.relation.target.surrounding)
+        r = get_aspect(self.relation.target.sentence, self.relation.target.content, self.relation.target.num_words_as_event_before_event)
         return r
 
     def get_aspect_source(self):
         """Returns the aspect (simple, progressive, perfect) of the source event."""
-        r = get_aspect(self.relation.source.surrounding)
+        r = get_aspect(self.relation.source.sentence, self.relation.source.content, self.relation.source.num_words_as_event_before_event)
         return r
 
     def get_aspect(self):
