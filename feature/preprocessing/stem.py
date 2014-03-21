@@ -37,8 +37,6 @@ class Stem():
 
             for rel in txt.relations:
                 f = Feature(rel)
-                if f.get_class() == -1:
-                    continue
                 stems = np.append(stems, [f.get_stem_target()])
                 stems = np.append(stems, [f.get_stem_source()])
 
