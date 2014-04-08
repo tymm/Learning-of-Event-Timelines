@@ -42,7 +42,7 @@ if __name__ == "__main__":
         new = False
 
     print "Information for class 0"
-    get_prediction(0)
+    get_prediction(0, features=["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"])
     print
 
     """
