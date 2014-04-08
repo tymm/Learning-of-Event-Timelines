@@ -1,4 +1,5 @@
 from train import *
+from temporalrelation import TemporalRelation
 
 def get_prediction(temporal_rel, new=True, annotations="union", features=["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"]):
     """This function is suited to test the different options and get a result for them
@@ -41,20 +42,22 @@ if __name__ == "__main__":
     else:
         new = False
 
-    print "Information for class 0"
-    get_prediction(0, features=["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"])
+    """
+    print "Information for class BEFORE"
+    get_prediction(TemporalRelation.BEFORE, features=["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"])
+    print
+    """
+
+    print "Information for class INCLUDES"
+    get_prediction(TemporalRelation.INCLUDES, features=["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"])
     print
 
     """
-    print "Information for class 1"
-    get_prediction(1)
+    print "Information for class IS_INCLUDED"
+    get_prediction(TemporalRelation.IS_INCLUDED, features=["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"])
     print
 
-    print "Information for class 2"
-    get_prediction(2)
-    print
-
-    print "Information for class 3"
-    get_prediction(3)
+    print "Information for class NONE"
+    get_prediction(TemporalRelation.NONE, features=["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"])
     print
     """
