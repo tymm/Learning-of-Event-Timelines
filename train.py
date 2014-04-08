@@ -13,11 +13,14 @@ from sklearn.metrics import f1_score
 
 TEXTDIR = "McIntyreLapata09Resources/fables/"
 
-def load_data(new=False, annotations="union", features=["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"]):
+def load_data(new=False, temporal_rel=None, annotations="union", features=["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"]):
     """Loads the data from fables-100-temporal-dependency.xml into the dataset and shuffles the dataset.
 
     When new=False the pos and stem feature will be loaded from a file instead of generating them.
     new should be set to True when settings were changed or code was altered.
+
+    If temporal_rel=None the y values will be in [0,1,2,3] which represent the temporal relation classes.
+    If temporal_rel in [0,1,2,3] the y values will be 0 or 1 and represent whether a relation has the temporal relation or not.
 
     """
     # Load data
@@ -25,6 +28,15 @@ def load_data(new=False, annotations="union", features=["pos", "stem", "aspect",
 
     # Extract features
     X, y = parse_Features(data, new, annotations, features)
+
+    # Are we interested in all y values or do we just want one class?
+    if temporal_rel:
+        # Set same class to 1 and not the same class to 0
+        for i, cat in enumerate(y):
+            if cat == temporal_rel:
+                y[i] = 1
+            else:
+                y[i] = 0
 
     # Shuffle the set
     X, y = random_Set(X, y)
@@ -49,9 +61,6 @@ def get_f1_score(X_, y_, class_id):
     rf.fit(X_train, y_train)
 
     return f1_score(y_test, rf.predict(X_test))
-
-
-
 
 def split(X, y):
     """Splits the dataset into a training and test set (80/20)."""
