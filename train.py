@@ -9,13 +9,14 @@ import sys
 import cPickle as pickle
 import os.path
 from random import shuffle
+from sklearn.metrics import f1_score
 
 TEXTDIR = "McIntyreLapata09Resources/fables/"
 
 def load_data(new=False, annotations="union", features=["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"]):
     """Loads the data from fables-100-temporal-dependency.xml into the dataset and shuffles the dataset.
 
-    When new=False the dataset and the pos and stem feature will be loaded from a file instead of generating them.
+    When new=False the pos and stem feature will be loaded from a file instead of generating them.
     new should be set to True when settings were changed or code was altered.
 
     """
@@ -28,6 +29,28 @@ def load_data(new=False, annotations="union", features=["pos", "stem", "aspect",
     # Shuffle the set
     X, y = random_Set(X, y)
     return (X, y)
+
+def get_f1_score(X_, y_, class_id):
+    X = list(X_)
+    y = list(y_)
+
+    # Adjust y for classification
+    for i, cat in enumerate(y):
+        if cat == class_id:
+            y[i] = 1
+        else:
+            y[i] = 0
+
+    # Split dataset into training set (80%) and test set (20%)
+    X_train, X_test, y_train, y_test = split(X, y)
+
+    # Train the random forest classifier
+    rf = RandomForestClassifier(n_jobs=2, n_estimators=100)
+    rf.fit(X_train, y_train)
+
+    return f1_score(y_test, rf.predict(X_test))
+
+
 
 
 def split(X, y):

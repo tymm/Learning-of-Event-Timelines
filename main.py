@@ -1,37 +1,18 @@
 from train import *
-from sklearn.metrics import f1_score
-
-def get_f1_score(X_, y_, class_id):
-    X = list(X_)
-    y = list(y_)
-
-    # Adjust y for classification
-    for i, cat in enumerate(y):
-        if cat == class_id:
-            y[i] = 1
-        else:
-            y[i] = 0
-
-    # Split dataset into training set (80%) and test set (20%)
-    X_train, X_test, y_train, y_test = split(X, y)
-
-    # Train the random forest classifier
-    rf = RandomForestClassifier(n_jobs=2, n_estimators=100)
-    rf.fit(X_train, y_train)
-
-    return f1_score(y_test, rf.predict(X_test))
-
 
 def estimate(X_, y_, class_id):
     X = list(X_)
     y = list(y_)
 
     # Adjust y for classification
+    n = 0
     for i, cat in enumerate(y):
         if cat == class_id:
             y[i] = 1
+            n += 1
         else:
             y[i] = 0
+    print n
 
     # Split dataset into training set (80%) and test set (20%)
     X_train, X_test, y_train, y_test = split(X, y)
@@ -57,7 +38,7 @@ def estimate(X_, y_, class_id):
         print rf.predict(X_test)
 
 if __name__ == "__main__":
-# With 'python main.py --reload' a "fresh parsing" will be enforced
+    # With 'python main.py --reload' a "fresh parsing" will be enforced
     if (len(sys.argv) >= 2 and sys.argv[1] == "--reload") or not os.path.isfile("save.p"):
         new = True
     else:
