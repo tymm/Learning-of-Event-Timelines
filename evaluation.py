@@ -10,6 +10,7 @@ from random import shuffle
 from sklearn.ensemble import RandomForestClassifier
 import matplotlib.pyplot as plt
 from sklearn.metrics import f1_score
+from temporalrelation import TemporalRelation
 
 def plot(filename, xlabel, ylabel, data, xticks=None):
     """Ploting data to file.
@@ -228,4 +229,4 @@ def distance_importance():
 
 if __name__ == "__main__":
     # Generate learning rate plot for temporal relation class 0 (before)
-    learning_rate(0, new=True)
+    learning_rate(TemporalRelation.BEFORE, new=True)
