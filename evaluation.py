@@ -9,6 +9,7 @@ import numpy as np
 from random import shuffle
 from sklearn.ensemble import RandomForestClassifier
 import matplotlib.pyplot as plt
+from sklearn.metrics import f1_score
 
 def plot(filename, xlabel, ylabel, data, xticks=None):
     """Ploting data to file.
@@ -29,9 +30,9 @@ def plot(filename, xlabel, ylabel, data, xticks=None):
     plt.plot(x, y, "ro")
     plt.savefig(filename)
 
-def learning_rate(k=20, new=False):
+def learning_rate(temporal_rel, k=20, new=False):
     """Splits the dataset into k pieces and builds a series out of those k pieces. For every partial sum the accuracy will be calculated to obtain the learning rate. Plots the data to learning_rate.jpg"""
-    X, y = load_data(new)
+    X, y = load_data(new, temporal_rel)
 
     X_train, X_test, y_train, y_test = split(X, y)
 
@@ -39,8 +40,10 @@ def learning_rate(k=20, new=False):
     len_piece = len(X_train)/k
     X_pieces = []
     y_pieces = []
+    data_count = []
 
     for i in range(k):
+        data_count.append((i+1)*len_piece)
         offset = i*len_piece
 
         X_piece = X[offset:][:len_piece]
@@ -69,9 +72,9 @@ def learning_rate(k=20, new=False):
 
     for partial_X, partial_y in zip(X_series, y_series):
         rf.fit(partial_X, partial_y)
-        accuracies.append(rf.score(X_test, y_test))
+        accuracies.append(f1_score(y_test, rf.predict(X_test)))
 
-    plot("learning_rate.jpg", "k", "accuracy", accuracies)
+    plot("learning_rate_"+str(temporal_rel)+".jpg", "data_count", "f1_score", accuracies, data_count)
 
 
 def different_number_of_trees(start=5, end=1000, steps=20, rerunning=15):
@@ -224,4 +227,5 @@ def distance_importance():
     plot("distance_importance.jpg", "distance in characters", "ratio: true_positives/false_postives", ratios, ["0-20", "21-40", "41-60", "61-80", "81-100", "101-120", "121-140", "141-160", "161-180", "181-200", "201-220", "221-240", "241-260", "261-280", "281-300"])
 
 if __name__ == "__main__":
-    different_number_of_trees()
+    # Generate learning rate plot for temporal relation class 0 (before)
+    learning_rate(0, new=True)
