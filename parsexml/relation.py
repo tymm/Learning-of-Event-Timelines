@@ -28,10 +28,15 @@ class Relation():
         self.determine_temporal_rel(temporal_rel)
 
     def determine_temporal_rel(self, temporal_rel):
-        if temporal_rel in ["same_as", "overlap", "after", "is_contained_in", "contains", "no relations"]:
+        if temporal_rel in ["same_as", "overlap", "is_contained_in", "contains", "no relations"]:
             self.temporal_rel = TemporalRelation.NONE
         elif temporal_rel == "before":
             self.temporal_rel = TemporalRelation.BEFORE
+        elif temporal_rel == "after":
+            self.temporal_rel = TemporalRelation.BEFORE
+            tmp = self.source
+            self.source = self.target
+            self.target = tmp
         elif temporal_rel == "includes":
             self.temporal_rel = TemporalRelation.INCLUDES
         elif temporal_rel == "is_included":
