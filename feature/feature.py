@@ -141,14 +141,7 @@ class Feature:
     def get_class(self):
         """Returns number which represents the time relation type."""
         # We only want before, contains and is_contained_in
-        if self.relation.time_type == "before":
-            return 0
-        elif self.relation.time_type == "includes":
-            return 1
-        elif self.relation.time_type == "is_included":
-            return 2
-        else:
-            return 3
+        return self.relation.temporal_rel
 
     def get_result(self, category):
         """Returns 1 if the feature is in the category we want and 0 otherwise."""

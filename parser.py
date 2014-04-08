@@ -55,7 +55,7 @@ def parse_XML(filename, dirname):
                 relation = Relation()
                 relation.parent = annotator
                 relation.id = k
-                relation.set_time_type(tlink[0].get("type"))
+                relation.set_temporal_rel(tlink[0].get("type"))
 
                 # Create link from Annotator object
                 annotator.relations.append(relation)
