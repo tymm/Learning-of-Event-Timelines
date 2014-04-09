@@ -100,7 +100,7 @@ def parse_Features(data, new=False, annotations="union", features=["pos", "stem"
 
     """
     # Only compute pos and stem if new flag is set
-    if "pos" in features and "stem" in features:
+    if "pos" in features or "stem" in features:
         if new or not os.path.isfile("set.p"):
                 pos = Pos(data, 6, annotations)
                 stem = Stem(data, annotations)
