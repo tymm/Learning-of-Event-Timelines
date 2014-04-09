@@ -10,6 +10,7 @@ import cPickle as pickle
 import os.path
 from random import shuffle
 from sklearn.metrics import f1_score
+from temporalrelation import TemporalRelation
 
 TEXTDIR = "McIntyreLapata09Resources/fables/"
 
@@ -30,7 +31,7 @@ def load_data(new=False, temporal_rel=None, annotations="union", features=["pos"
     X, y = parse_Features(data, new, annotations, features)
 
     # Are we interested in all y values or do we just want one class?
-    if temporal_rel:
+    if temporal_rel in [TemporalRelation.BEFORE, TemporalRelation.INCLUDES, TemporalRelation.IS_INCLUDED, TemporalRelation.NONE]:
         # Set same class to 1 and not the same class to 0
         for i, cat in enumerate(y):
             if cat == temporal_rel:
