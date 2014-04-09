@@ -1,5 +1,6 @@
 from train import *
 from temporalrelation import TemporalRelation
+from sklearn.metrics import classification_report
 
 def get_prediction(temporal_rel, new=True, annotations="union", features=["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"]):
     """This function is suited to test the different options and get a result for them
@@ -20,20 +21,26 @@ def get_prediction(temporal_rel, new=True, annotations="union", features=["pos",
     rf = RandomForestClassifier(n_jobs=2, n_estimators=100)
     rf.fit(X_train, y_train)
 
+    y_predicted = rf.predict(X_test)
+
     # Print accuracy
     print "Accuracy"
     print rf.score(X_test, y_test)
     print
 
     print "F1-Score"
-    print f1_score(y_test, rf.predict(X_test))
+    print f1_score(y_test, y_predicted)
     print
 
     print "Ground truth"
     print y_test
     print
     print "Predicted"
-    print rf.predict(X_test)
+    print y_predicted
+
+    print
+    print "Classification report:"
+    print classification_report(y_test, y_predicted)
 
 if __name__ == "__main__":
     # With 'python main.py --reload' a "fresh parsing" will be enforced
@@ -42,7 +49,6 @@ if __name__ == "__main__":
     else:
         new = False
 
-    """
     print "Information for class BEFORE"
     get_prediction(TemporalRelation.BEFORE, features=["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"])
     print
@@ -52,9 +58,8 @@ if __name__ == "__main__":
     get_prediction(TemporalRelation.INCLUDES, features=["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"])
     print
 
-    """
     print "Information for class IS_INCLUDED"
-    get_prediction(TemporalRelation.IS_INCLUDED, features=["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"])
+    get_prediction(TemporalRelation.IS_INCLUDED, features=["aspect", "tense", "distance", "similarity", "polarity", "modality"])
     print
 
     print "Information for class NONE"
