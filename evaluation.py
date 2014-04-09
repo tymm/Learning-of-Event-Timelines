@@ -9,7 +9,7 @@ import numpy as np
 from random import shuffle
 from sklearn.ensemble import RandomForestClassifier
 import matplotlib.pyplot as plt
-from sklearn.metrics import f1_score
+from sklearn.metrics import f1_score, recall_score, precision_score
 from temporalrelation import TemporalRelation
 
 def plot(filename, xlabel, ylabel, data, xticks=None):
@@ -42,6 +42,8 @@ def learning_rate(temporal_rel, k=20, new=False):
     X_pieces = []
     y_pieces = []
     data_count = []
+    recall = []
+    precision = []
 
     for i in range(k):
         data_count.append((i+1)*len_piece)
@@ -73,9 +75,14 @@ def learning_rate(temporal_rel, k=20, new=False):
 
     for partial_X, partial_y in zip(X_series, y_series):
         rf.fit(partial_X, partial_y)
-        accuracies.append(f1_score(y_test, rf.predict(X_test)))
+        y_pred = rf.predict(X_test)
+        accuracies.append(f1_score(y_test, y_pred))
+        recall.append(recall_score(y_test, y_pred))
+        precision.append(precision_score(y_test, y_pred))
 
     plot("learning_rate_"+str(temporal_rel)+".jpg", "data_count", "f1_score", accuracies, data_count)
+    print recall
+    print precision
 
 
 def different_number_of_trees(start=5, end=1000, steps=20, rerunning=15):
