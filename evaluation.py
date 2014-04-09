@@ -80,7 +80,10 @@ def learning_rate(temporal_rel, k=20, new=False):
         recall.append(recall_score(y_test, y_pred))
         precision.append(precision_score(y_test, y_pred))
 
-    plot("learning_rate_"+str(temporal_rel)+".jpg", "data_count", "f1_score", accuracies, data_count)
+    if temporal_rel == None:
+        plot("learning_rate_weighted.jpg", "data_count", "f1_score", accuracies, data_count)
+    else:
+        plot("learning_rate_"+str(temporal_rel)+".jpg", "data_count", "f1_score", accuracies, data_count)
     print recall
     print precision
 
@@ -236,4 +239,4 @@ def distance_importance():
 
 if __name__ == "__main__":
     # Generate learning rate plot for temporal relation class 0 (before)
-    learning_rate(TemporalRelation.BEFORE, new=True)
+    learning_rate(None, new=True)
