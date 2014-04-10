@@ -88,34 +88,58 @@ def learning_rate(temporal_rel, k=20, new=False):
     print precision
 
 
-def different_number_of_trees(start=5, end=1000, steps=20, rerunning=15):
+def different_number_of_trees(temporal_rel, start=5, end=800, steps=20, rerunning=5):
     """How does the accuracy change for different amounts of trees. Plots to different_number_of_trees.jpg"""
-    X, y = load_data()
+    X, y = load_data(True, temporal_rel)
     X_train, X_test, y_train, y_test = split(X, y)
 
     # Since accuracies for small amounts of trees differ a lot, we take the average over many tries
     many_accuracies = []
+    many_recall = []
+    many_precision = []
     for x in range(rerunning):
         accuracies = []
+        recall = []
+        precision = []
         for i in range(start, end, steps):
             rf = RandomForestClassifier(n_jobs=2, n_estimators=i)
             rf.fit(X_train, y_train)
-            accuracies.append(rf.score(X_test, y_test))
+
+            y_pred = rf.predict(X_test)
+
+            accuracies.append(f1_score(y_test, y_pred))
+            recall.append(recall_score(y_test, y_pred))
+            precision.append(precision_score(y_test, y_pred))
 
         many_accuracies.append(accuracies)
+        many_recall.append(recall)
+        many_precision.append(precision)
 
     final_accuracies = []
+    final_recall = []
+    final_precision = []
     # Calculate the mean
     for i in range(len(many_accuracies[0])):
         mean = []
+        mean_recall = []
+        mean_precision = []
         for j in range(len(many_accuracies)):
             mean.append(many_accuracies[j][i])
+            mean_recall.append(many_recall[j][i])
+            mean_precision.append(many_precision[j][i])
         final_accuracies.append(np.mean(mean))
+        final_recall.append(np.mean(mean_recall))
+        final_precision.append(np.mean(mean_precision))
 
     # xticks
     xticks = range(start, end, steps)
 
-    plot("different_number_of_trees.jpg", "number of trees", "accuracy", final_accuracies, xticks)
+    if temporal_rel == None:
+        plot("different_number_of_trees_weighted.jpg", "number_of_trees", "f1_score", final_accuracies, xticks)
+    else:
+        plot("different_number_of_trees_"+str(temporal_rel)+".jpg", "number_of_trees", "f1_score", final_accuracies, xticks)
+    print final_recall
+    print final_precision
 
 def union_vs_intersected_relations():
     """Looking at the difference in accuracy when all relations (union) are used vs. all events are used which the annotators have in common (intersected)."""
@@ -248,8 +272,11 @@ def distance_importance():
     plot("distance_importance.jpg", "distance in characters", "ratio: true_positives/false_postives", ratios, ["0-20", "21-40", "41-60", "61-80", "81-100", "101-120", "121-140", "141-160", "161-180", "181-200", "201-220", "221-240", "241-260", "261-280", "281-300"])
 
 if __name__ == "__main__":
-    # Generate learning rate plot for NONE
+    # Generate learning rate plot
     #learning_rate(None, new=True)
 
-    # Generate best feature plot for BEFORE
-    best_feature(TemporalRelation.NONE)
+    # Generate best feature plot
+    # best_feature(TemporalRelation.NONE)
+
+    # Generate different number of trees plot
+    different_number_of_trees(TemporalRelation.NONE)
