@@ -89,7 +89,7 @@ def learning_rate(temporal_rel, k=20, new=False):
 
 
 def different_number_of_trees(start=5, end=1000, steps=20, rerunning=15):
-    """How does the accuracy change for different amounts of trees. Plots that to different_number_of_trees.jpg"""
+    """How does the accuracy change for different amounts of trees. Plots to different_number_of_trees.jpg"""
     X, y = load_data()
     X_train, X_test, y_train, y_test = split(X, y)
 
@@ -135,41 +135,51 @@ def union_vs_intersected_relations():
     print "Intersected: " + str(rf_i.score(X_i_test, y_i_test))
 
 
-def best_feature():
+def best_feature(temporal_rel):
     """Look at the accuracies for all features in isolation."""
     features = ["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"]
 
-    data = parse_XML("fables-100-temporal-dependency.xml", "McIntyreLapata09Resources/fables/")
-
     accuracies = []
+    recall = []
+    precision = []
 
     for feature in features:
-        X, y = parse_Features(data, new=True, annotations="union", features=[feature])
-
-        X, y = random_Set(X, y)
-
+        X, y = load_data(True, temporal_rel, features=[feature])
         X_train, X_test, y_train, y_test = split(X, y)
 
         rf = RandomForestClassifier(n_jobs=2, n_estimators=100)
         rf.fit(X_train, y_train)
-        accuracies.append({feature : rf.score(X_test, y_test)})
+
+        y_pred = rf.predict(X_test)
+
+        accuracies.append({feature : f1_score(y_test, y_pred)})
+        recall.append({feature : recall_score(y_test, y_pred)})
+        precision.append({feature : precision_score(y_test, y_pred)})
+        print "Done with feature"
 
     # Add all features
-    X, y = parse_Features(data, new=True, annotations="union")
-
-    X, y = random_Set(X, y)
-
+    """
+    X, y = load_data(True, temporal_rel)
     X_train, X_test, y_train, y_test = split(X, y)
 
     rf = RandomForestClassifier(n_jobs=2, n_estimators=100)
     rf.fit(X_train, y_train)
-    accuracies.append({"all": rf.score(X_test, y_test)})
+
+    accuracies.append({"all": f1_score(X_test, y_test)})
+    recall.append({"all": recall_score(X_test, y_test)})
+    precision.append({"all": precision_score(X_test, y_test)})
     features.append("all")
+    """
 
 
     data = [x.values()[0] for x in accuracies]
 
-    plot("best_features.jpg", "feature", "accuracy", data, features)
+    if temporal_rel == None:
+        plot("best_feature_weighted.jpg", "feature", "f1_score", data, features)
+    else:
+        plot("best_feature_"+str(temporal_rel)+".jpg", "feature", "f1_score", data, features)
+    print recall
+    print precision
 
 def get_distance_data(data):
     """Extracts the distance feature into the following data structure which will be returned: [{distance : classified_right?}, ...]"""
@@ -238,5 +248,8 @@ def distance_importance():
     plot("distance_importance.jpg", "distance in characters", "ratio: true_positives/false_postives", ratios, ["0-20", "21-40", "41-60", "61-80", "81-100", "101-120", "121-140", "141-160", "161-180", "181-200", "201-220", "221-240", "241-260", "261-280", "281-300"])
 
 if __name__ == "__main__":
-    # Generate learning rate plot for temporal relation class 0 (before)
-    learning_rate(None, new=True)
+    # Generate learning rate plot for NONE
+    #learning_rate(None, new=True)
+
+    # Generate best feature plot for BEFORE
+    best_feature(TemporalRelation.NONE)
