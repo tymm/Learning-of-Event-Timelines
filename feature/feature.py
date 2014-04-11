@@ -34,7 +34,7 @@ class Feature:
 
 
     def get_distance(self):
-        """Returns the number of words between two events in a text."""
+        """Returns the number of words between two events in a text as a feature."""
         # We want to compare different objects
         if self.relation.source == self.relation.target:
             return False
@@ -54,6 +54,18 @@ class Feature:
             return self.enc_distance.transform([[3]]).toarray()[0]
         else:
             return self.enc_distance.transform([[4]]).toarray()[0]
+
+    def get_distance_diff(self):
+        """Returns the number of words between two events in a text."""
+        # We want to compare different objects
+        if self.relation.source == self.relation.target:
+            return 0
+        # The two events have to be in the same file
+        if self.relation.source.parent.parent != self.relation.target.parent.parent:
+            return 0
+
+        event_distance = distance(self.relation.source.begin, self.relation.target.begin, self.relation.parent.parent.name, TEXTDIR)
+        return event_distance
 
     def get_similarity_of_words(self):
         """Returns the similarity of two words."""

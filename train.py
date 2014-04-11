@@ -14,7 +14,7 @@ from temporalrelation import TemporalRelation
 
 TEXTDIR = "McIntyreLapata09Resources/fables/"
 
-def load_data(new=False, temporal_rel=None, annotations="union", features=["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"]):
+def load_data(new=False, temporal_rel=None, annotations="union", features=["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"], distance=False):
     """Loads the data from fables-100-temporal-dependency.xml into the dataset and shuffles the dataset.
 
     When new=False the pos and stem feature will be loaded from a file instead of generating them.
@@ -23,12 +23,17 @@ def load_data(new=False, temporal_rel=None, annotations="union", features=["pos"
     If temporal_rel=None the y values will be in [0,1,2,3] which represent the temporal relation classes.
     If temporal_rel in [0,1,2,3] the y values will be 0 or 1 and represent whether a relation has the temporal relation or not.
 
+    If distance is set to True parse_Features() will also return distance information for the data (needed for evaluation)
+
     """
     # Load data
     data = parse_XML("fables-100-temporal-dependency.xml", TEXTDIR)
 
     # Extract features
-    X, y = parse_Features(data, new, annotations, features)
+    if distance:
+        X, y, distance_diff = parse_Features(data, new, annotations, features, distance)
+    else:
+        X, y = parse_Features(data, new, annotations, features, distance)
 
     # Are we interested in all y values or do we just want one class?
     if temporal_rel in [TemporalRelation.BEFORE, TemporalRelation.INCLUDES, TemporalRelation.IS_INCLUDED, TemporalRelation.NONE]:
@@ -40,8 +45,12 @@ def load_data(new=False, temporal_rel=None, annotations="union", features=["pos"
                 y[i] = 0
 
     # Shuffle the set
-    X, y = random_Set(X, y)
-    return (X, y)
+    if distance:
+        X, y, distance_diff = random_Set(X, y, distance_diff)
+        return (X, y, distance_diff)
+    else:
+        X, y = random_Set(X, y, None)
+        return (X, y)
 
 def get_f1_score(X_, y_, class_id):
     X = list(X_)
@@ -63,22 +72,21 @@ def get_f1_score(X_, y_, class_id):
 
     return f1_score(y_test, rf.predict(X_test))
 
-def split(X, y):
+def split(X, y, distance=None):
     """Splits the dataset into a training and test set (80/20)."""
     len_train = len(X)*80/100
     X_train, X_test = X[:len_train], X[len_train:]
     y_train, y_test = y[:len_train], y[len_train:]
 
-    return (X_train, X_test, y_train, y_test)
+    if distance:
+        distance_train, distance_test = distance[:len_train], distance[len_train:]
+        return (X_train, X_test, y_train, y_test, distance_train, distance_test)
+    else:
+        return (X_train, X_test, y_train, y_test)
 
 
-def random_Set(X, y):
-    """Takes X and y and returns shuffled X and y.
-
-    If argument new is True, it will shuffle X and y in a new way.
-    Otherwise it will load the order of the last time.
-
-    """
+def random_Set(X, y, distance_diff):
+    """Takes X and y and returns shuffled X and y. If distance differences are available they will be shuffled in the same way"""
     indices = np.arange(0, len(y))
     shuffle(indices)
 
@@ -86,10 +94,18 @@ def random_Set(X, y):
     for idx in indices:
         X_new.append(X[idx])
 
-    return (X_new, y[indices])
+    if distance_diff:
+        distance_diff_new = []
+        for idx in indices:
+            distance_diff_new.append(distance_diff[idx])
+
+    if distance_diff:
+        return (X_new, y[indices], distance_diff_new)
+    else:
+        return (X_new, y[indices])
 
 
-def parse_Features(data, new=False, annotations="union", features=["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"]):
+def parse_Features(data, new=False, annotations="union", features=["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"], distance=False):
     """Extracts the features out of the dataset and returns a list of features with the corresponding classes.
 
     Args:
@@ -97,6 +113,7 @@ def parse_Features(data, new=False, annotations="union", features=["pos", "stem"
         new (bool): With new=True a new calculation of Pos() and Stem() can be enforced. Otherwise it will be loaded from a file.
         annotations (str): Looking on all relations ("union") or at all relations in common between the annotators ("intersected").
         features (list): Determines which features should be activated. Possible values: "pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality".
+        distance (bool): If set to True parse_Features() will return distance information for the data (needed for evaluation)
 
     """
     # Only compute pos and stem if new flag is set
@@ -107,6 +124,9 @@ def parse_Features(data, new=False, annotations="union", features=["pos", "stem"
                 pickle.dump((pos, stem), open("save.p", "wb"))
         else:
             pos, stem = pickle.load(open("save.p", "rb"))
+
+    if distance:
+        distance_diff = []
 
     X = []
     y = np.array([], dtype=int)
@@ -163,4 +183,11 @@ def parse_Features(data, new=False, annotations="union", features=["pos", "stem"
             X.append(feature)
             y = np.append(y, [f.get_class()])
 
-    return (X, y)
+            # Append distance information if needed
+            if distance:
+                distance_diff.append(f.get_distance_diff())
+
+    if distance:
+        return (X, y, distance_diff)
+    else:
+        return (X, y)
