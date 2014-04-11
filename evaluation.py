@@ -155,8 +155,8 @@ def union_vs_intersected_relations():
     rf_i = RandomForestClassifier(n_jobs=2, n_estimators=100)
     rf_i.fit(X_i_train, y_i_train)
 
-    y_u_pred = rf.predict(X_u_test)
-    y_i_pred = rf.predict(X_i_test)
+    y_u_pred = rf_u.predict(X_u_test)
+    y_i_pred = rf_i.predict(X_i_test)
     print "Union: " + str(f1_score(y_u_test, y_u_pred))
     print "Intersected: " + str(f1_score(y_i_test, y_i_test))
 
