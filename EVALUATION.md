@@ -53,11 +53,16 @@ Weighted learning rate over all classes:
 Events in a temporal relation have different distances to each other.
 This raises the question whether the distance is an important factor for the correctness of the classifierer.
 
-The following graph shows the ratio between true positives and false positives for changing distances.
+The following graph shows the f1-score for changing distances.
 
-![](plots/distance_importance.jpg?raw=true "Distance importance")
-
-The best ratio by far was archieved for events which have a distance of 61 to 80 characters. This translates to a distance of ~13-15 words.
+Importance of distance for the _BEFORE_ class:
+![](plots/distance_importance_0.jpg?raw=true "Distance importance")
+Importance of distance for the _INCLUDES_ class:
+![](plots/distance_importance_1.jpg?raw=true "Distance importance")
+Importance of distance for the _IS_INCLUDED_ class:
+![](plots/distance_importance_2.jpg?raw=true "Distance importance")
+Importance of distance for the _NONE_ class:
+![](plots/distance_importance_3.jpg?raw=true "Distance importance")
 
 ### Comparing different features in isolation
 
