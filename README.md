@@ -8,7 +8,7 @@ The goal of this project was to build a system capable of identifying temporal l
 
 The task included the extraction of events and temporal links from a given data, deriving useful features from those events and temporal links to then train and test a random forest classifier on the extracted data.
 
-I worked on this project between mid-november 2013 until the 11th of april 2014 with interrupts.
+I worked on this project between mid-november 2013 and the 11th of april 2014 with interrupts.
 
 ## Papers
 There are a lot of scientific papers on the topic of temporal relation identification in texts.
