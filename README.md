@@ -53,6 +53,16 @@ I used the AFTER relation as an inversed BEFORE, the CONTAINS relation as an inv
 This resulted in more data  and a better result for the BEFORE and INCLUDES classes.  
 The performance of the IS_INCLUDED class stayed about the same. The results for the NONE class became worse which makes sense since IS_CONTAINED_IN, CONTAINS and AFTER were not named as NONE anymore which resulted in less NONE data.
 
+### Used features
+- Aspect (None, Progressive, Perfect, Perfect Progressive)
+- Tense (None, Present, Past, Future)
+- Distance between events (in words)
+- Wordnet similarity of events (NLTK's WordNet)
+- Grammatical polarity
+- Grammatical modality
+- Word stem
+- Part of Speech (event and one word before and after event)
+
 ### Problems I encountered
 - There was not enough data to get good results for all four temporal relations
 - It was not feasible for me to produce plots with averaged results since it just would take too much time to produce these results on my computer. Also the whole evaluation was quite time consuming in general because of that.
