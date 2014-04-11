@@ -155,8 +155,10 @@ def union_vs_intersected_relations():
     rf_i = RandomForestClassifier(n_jobs=2, n_estimators=100)
     rf_i.fit(X_i_train, y_i_train)
 
-    print "Union: " + str(rf_u.score(X_u_test, y_u_test))
-    print "Intersected: " + str(rf_i.score(X_i_test, y_i_test))
+    y_u_pred = rf.predict(X_u_test)
+    y_i_pred = rf.predict(X_i_test)
+    print "Union: " + str(f1_score(y_u_test, y_u_pred))
+    print "Intersected: " + str(f1_score(y_i_test, y_i_test))
 
 
 def best_feature(temporal_rel):
@@ -182,18 +184,17 @@ def best_feature(temporal_rel):
         print "Done with feature"
 
     # Add all features
-    """
     X, y = load_data(True, temporal_rel)
     X_train, X_test, y_train, y_test = split(X, y)
 
     rf = RandomForestClassifier(n_jobs=2, n_estimators=100)
     rf.fit(X_train, y_train)
+    y_pred = rf.predict(X_test)
 
-    accuracies.append({"all": f1_score(X_test, y_test)})
-    recall.append({"all": recall_score(X_test, y_test)})
-    precision.append({"all": precision_score(X_test, y_test)})
+    accuracies.append({"all": f1_score(y_test, y_pred)})
+    recall.append({"all": recall_score(y_test, y_pred)})
+    precision.append({"all": precision_score(y_test, y_pred)})
     features.append("all")
-    """
 
 
     data = [x.values()[0] for x in accuracies]
@@ -205,71 +206,90 @@ def best_feature(temporal_rel):
     print recall
     print precision
 
-def get_distance_data(data):
+def get_distance_data(data, temporal_rel):
     """Extracts the distance feature into the following data structure which will be returned: [{distance : classified_right?}, ...]"""
-    X, y = load_data(new=True)
-    X_train, X_test, y_train, y_test = split(X, y)
+    X, y, distance = load_data(True, temporal_rel, distance=True)
+    X_train, X_test, y_train, y_test, distance_train, distance_test = split(X, y, distance)
 
     rf = RandomForestClassifier(n_jobs=2, n_estimators=100)
     rf.fit(X_train, y_train)
 
-    # The distance value is at postition 0 if it is enabled
-    distance = [x[0] for x in X_test]
+    y_pred  = rf.predict(X_test)
 
-    predicted_y = rf.predict(X_test)
-
-    # Make array with elements like this {distance : predicted_right?}
+    # Make array with elements like this {distance : [TruePositive?, TrueNegative?, FalsePositive?, FalseNegative?]}
     for i in range(len(X_test)):
-        if y_test[i] == predicted_y[i]:
-            data.append({X_test[i][0] : True})
-        else:
-            data.append({X_test[i][0] : False})
+        if y_test[i] == y_pred[i] and y_test[i] == 1:
+            # True positive
+            data.append({distance_test[i] : [True, False, False, False]})
+        elif y_test[i] == y_pred[i] and y_test[i] == 0:
+            # True negative
+            data.append({distance_test[i] : [False, True, False, False]})
+        elif y_test[i] != y_pred[i] and y_pred[i] == 1:
+            # False positive
+            data.append({distance_test[i] : [False, False, True, False]})
+        elif y_test[i] != y_pred[i] and y_pred[i] == 0:
+            # False negative
+            data.append({distance_test[i] : [False, False, False, True]})
 
-    return data
 
-def distance_importance():
+def distance_importance(temporal_rel):
     """Returns distance_importance.jpg which describes how the accuracy changes when looking at the distance between events which are related."""
     # Get enough data on the distance
     data = []
     for i in range(3):
-        get_distance_data(data)
+        get_distance_data(data, temporal_rel)
 
     # Divide space of possible distances into parts of same size
-    # datastructure: [{part: [start_distance, end_distance, num_true_positive, num_false_positive]}, ...]
-    parts = [{1: [0, 20, 0, 0]}, {2: [21, 40, 0, 0]}, {3: [41, 60, 0, 0]}, {4: [61, 80, 0, 0]}, {5: [81, 100, 0, 0]}, {6: [101, 120, 0, 0]}, {7: [121, 140, 0, 0]}, {8: [141, 160, 0, 0]}, {9: [161, 180, 0, 0]}, {10: [181, 200, 0, 0]}, {11: [201, 220, 0, 0]}, {12: [221, 240, 0, 0]}, {13: [241, 260, 0, 0]}, {14: [261, 280, 0, 0]}, {15: [281, 300, 0, 0]}]
+    # datastructure: [{part: [start_distance, end_distance, num_true_positive, num_true_negatives, num_false_positives, num_false_negatives]}, ...]
+    parts = [{1: [0, 3, 0, 0, 0, 0]}, {2: [4, 7, 0, 0, 0, 0]}, {3: [8, 11, 0, 0, 0, 0]}, {4: [12, 15, 0, 0, 0, 0]}, {5: [16, 19, 0, 0, 0, 0]}, {6: [20, 23, 0, 0, 0, 0]}, {7: [24, 27, 0, 0, 0, 0]}, {8: [28, 31, 0, 0, 0, 0]}]
 
-    # Put distribution of false positives and true positives into parts
+    # Put distribution of TP, TN, FP, FN into parts
     for d in data:
         for p in parts:
             distance = d.keys()[0]
             start_distance = p.values()[0][0]
             end_distance = p.values()[0][1]
             if distance >= start_distance and distance <= end_distance:
-                predicted = d.values()[0]
+                true_pos = d.values()[0][0]
+                true_neg = d.values()[0][1]
+                false_pos = d.values()[0][2]
+                false_neg = d.values()[0][3]
+
                 key = p.keys()[0]
                 value = p.values()[0]
+
                 # True positive
-                if predicted:
+                if true_pos:
                     value[2] += 1
                     p.update({key: value})
-                # False positive
-                else:
+                # True negative
+                elif true_neg:
                     value[3] += 1
+                    p.update({key: value})
+                # False positiv
+                elif false_pos:
+                    value[4] += 1
+                    p.update({key: value})
+                # False negative
+                elif false_neg:
+                    value[5] += 1
                     p.update({key: value})
 
     # Calculating the ratio between true and false positives
-    ratios = []
+    f1_scores = []
     for p in parts:
-        true_positives = p.values()[0][2]
-        false_positives = p.values()[0][3]
+        true_pos = p.values()[0][2]
+        true_neg = p.values()[0][3]
+        false_pos = p.values()[0][4]
+        false_neg = p.values()[0][5]
         try:
-            ratio = true_positives/float(false_positives)
-            ratios.append(ratio)
+            f1_score = (2*true_pos)/float(2*true_pos + false_pos + false_neg)
+            f1_scores.append(f1_score)
         except ZeroDivisionError:
-            ratios.append(true_positives)
+            f1_scores.append(0)
 
 
-    plot("distance_importance.jpg", "distance in characters", "ratio: true_positives/false_postives", ratios, ["0-20", "21-40", "41-60", "61-80", "81-100", "101-120", "121-140", "141-160", "161-180", "181-200", "201-220", "221-240", "241-260", "261-280", "281-300"])
+    plot("distance_importance_"+str(temporal_rel)+".jpg", "distance in words", "f1-score", f1_scores, ["0-3", "4-7", "8-11", "12-15", "16-19", "20-23", "24-27", "28-31"])
 
 if __name__ == "__main__":
     # Generate learning rate plot
@@ -279,4 +299,7 @@ if __name__ == "__main__":
     # best_feature(TemporalRelation.NONE)
 
     # Generate different number of trees plot
-    different_number_of_trees(TemporalRelation.NONE)
+    # different_number_of_trees(TemporalRelation.NONE)
+
+    # Generate distance importance plot
+    distance_importance(TemporalRelation.NONE)
