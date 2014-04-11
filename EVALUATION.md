@@ -74,7 +74,15 @@ Importance of distance for the _NONE_ class:
 
 ### Comparing different features in isolation
 
-![](plots/best_features.jpg?raw=true "Features in isolation")
+This is just one possible plot and not the averaged f1-score over many tries.
+Therefore it is not too meaningful.  
+One can see though that the Stem feature seems to be quite important for the classification.
 
-This is just one possible plot and not the averaged accuracy over many tries.
-But it shows that all features on their own archieve good results and that they do not have a synergistic effect.
+Features in isolation for _BEFORE_ class:
+![](plots/best_features_0.jpg?raw=true "Features in isolation")
+Features in isolation for _INCLUDES_ class:
+![](plots/best_features_1.jpg?raw=true "Features in isolation")
+Features in isolation for _IS_INCLUDED_ class:
+![](plots/best_features_2.jpg?raw=true "Features in isolation")
+Features in isolation for _NONE_ class:
+![](plots/best_features_3.jpg?raw=true "Features in isolation")
