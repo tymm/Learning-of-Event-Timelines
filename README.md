@@ -8,6 +8,8 @@ The goal of this project was to build a system capable of identifying temporal l
 
 The task included the extraction of events and temporal links from a given data, deriving useful features from those events and temporal links to then train and test a random forest classifier on the extracted data.
 
+I worked on this project between mid-november 2013 until the 11th of april 2014 with interrupts.
+
 ## Papers
 There are a lot of scientific papers on the topic of temporal relation identification in texts.
 I mainly used the following papers to learn about the topic:
@@ -50,6 +52,10 @@ The task however was to only train the classifier on three specific temporal lin
 I used the AFTER relation as an inversed BEFORE, the CONTAINS relation as an inversed INCLUDES and the IS_CONTAINED_IN as a reversed IS_INCLUDED relation.
 This resulted in more data  and a better result for the BEFORE and INCLUDES classes.  
 The performance of the IS_INCLUDED class stayed about the same. The results for the NONE class became worse which makes sense since IS_CONTAINED_IN, CONTAINS and AFTER were not named as NONE anymore which resulted in less NONE data.
+
+### Problems I encountered
+- There was not enough data to get good results for all four temporal relations
+- It was not feasible for me to produce plots with averaged results since it just would take too much time to produce these results on my computer. Also the whole evaluation was quite time consuming in general because of that.
 
 ## Basic overview of code
 ### main.py
