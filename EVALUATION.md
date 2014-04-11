@@ -64,6 +64,8 @@ This raises the question whether the distance is an important factor for the cor
 
 The following graph shows the f1-score for changing distances.
 
+There seems not to be a correlation between distance and performance.
+
 Importance of distance for the _BEFORE_ class:
 ![](plots/distance_importance_0.jpg?raw=true "Distance importance")
 Importance of distance for the _INCLUDES_ class:
