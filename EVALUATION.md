@@ -28,12 +28,24 @@ Evaluation
 ==========
 
 ### Learning rate
+The following graphs show the learning rate of the random forest classifier for the individual temporal relations.  
+Since it was not feasible for me to calculate the learning rate several times for each temporal relation the following plots are not averaged.
+Therefore there are some data points which have a better f1-score than data points with less data.
 
-The following graph shows how much training data the random forest classifierer needs to produce good results.
+The bad performance for _IS_INCLUDED_ and _NONE_ is explainable by looking at the distribution of the temporal relations.  
+_BEFORE_ and _INCLUDES_ did better since there was enough data for them.  
+There are only 129 _IS_INCLUDED_ and 66 _NONE_ temporal relations (when looking at all annotations and not at the intersection of relations by different annotators).
 
-![](plots/learning_rate.jpg?raw=true "Learning rate")
-
-With few training data the classifier already got good results. The difference between few training data and all training data was small.
+Learning rate for the _BEFORE_ class:
+![](plots/learning_rate_0.jpg?raw=true "Learning rate for BEFORE")
+Learning rate for the _INCLUDES_ class:
+![](plots/learning_rate_1.jpg?raw=true "Learning rate for INCLUDES")
+Learning rate for the _IS_INCLUDED_ class:
+![](plots/learning_rate_2.jpg?raw=true "Learning rate for IS_INCLUDED")
+Learning rate for the _NONE_ class:
+![](plots/learning_rate_3.jpg?raw=true "Learning rate for NONE")
+Weighted learning rate over all classes:
+![](plots/learning_rate_weighted.jpg?raw=true "Weighted learning rate over all classes")
 
 
 ### Importance of distance between events
