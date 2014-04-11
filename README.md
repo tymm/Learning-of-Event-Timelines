@@ -23,7 +23,8 @@ The dataset given for this project contained annotated events and temporal links
 The dataset can be found in this repository under fables-100-temporal-dependency.xml or here: http://www.cis.uab.edu/bethard/data/fables-100-temporal-dependency.xml
 
 There are several different annotated temporal relations between events in the dataset nameley SAME_AS, OVERLAP, BEFORE, AFTER, INCLUDES, CONTAINS, IS_INCLUDED, IS_CONTAINED_IN, NO_RELATIONS.  
-The task however was to only train the classifier on three specific temporal links: BEFORE, IS_INCLUDED and INCLUDES.  
+The task however was to only train the classifier on three specific temporal relations: BEFORE, IS_INCLUDED and INCLUDES.  
+The classifier was also trained on the case when there was none (NONE) of the three (BEFORE, IS_INCLUDED, INCLUDES) temporal relations present.
 
 ### Distribution of temporal relations in dataset (looking only at relations annotators had in common)
 - All: 720
