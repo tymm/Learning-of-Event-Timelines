@@ -8,6 +8,14 @@ The goal of this project was to build a system capable of identifying temporal l
 
 The task included the extraction of events and temporal links from a given data, deriving useful features from those events and temporal links to then train and test a random forest classifier on the extracted data.
 
+## Papers
+There are a lot of scientific papers on the topic of temporal relation identification in texts.
+I mainly used the following papers to learn about the topic:
+- Bethard, Steven. 2013. Cleartk-timeml: A minimalist approach to tempeval 2013
+- Bethard, Steven, Kolomiyets, Oleksandr, Moens, Marie-Francine. 2012. Annotating story timelines as temporal dependency structures.
+- Chambers, Naathanael. 2013. Navytime: Event and time ordering from raw text.
+- UzZaman, Naushad, Llorens, Hector, Allen, James, Derczynski, Leon, Verhagen, Marc, Pustejovsky, James. 2013. Tempeval-3: Evaluating events, time expressions, and temporal relations.
+
 ## Dataset
 The dataset given for this project contained annotated events and temporal links between those events.  
 The dataset can be found in this repository under fables-100-temporal-dependency.xml or here: http://www.cis.uab.edu/bethard/data/fables-100-temporal-dependency.xml
@@ -62,7 +70,7 @@ This was used to do the evaluation and error analysis.
 All plots were generated directly from evaluation.py.
 
 
-## overview.py
+### overview.py
 
 I used overview.py to get an overview of the sentences and their temporal relations as well as the resulting features.  
 This was useful to check if the feature extraction was working the way it should work.
