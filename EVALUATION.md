@@ -17,9 +17,13 @@ This obviously results in quite different accuracies when running the program se
 The following graph illustrates that the difference for small amounts of trees can be quite big whereas for bigger amounts the accuracy converges to a certain value.
 The bigger the amount of trees, the more reproducible the performance gets.
 
+Different number of trees for the _BEFORE_ class
 ![](plots/different_number_of_trees_0.jpg?raw=true "Different number of trees")
+Different number of trees for the _INCLUDES_ class
 ![](plots/different_number_of_trees_1.jpg?raw=true "Different number of trees")
+Different number of trees for the _INCLUDES_ class (not enough data and therefore no meaningful difference)
 ![](plots/different_number_of_trees_2.jpg?raw=true "Different number of trees")
+Different number of trees for the _NONE_ class (not enough data and therefore no meaningful difference)
 ![](plots/different_number_of_trees_3.jpg?raw=true "Different number of trees")
 
 ### Best combination of features
