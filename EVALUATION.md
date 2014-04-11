@@ -21,7 +21,7 @@ The following graph illustrates that the difference for small amounts of trees c
 ### Best combination of features
 
 Since it was not feasible for me to test all 255 different combinations, I just tried out different promising combinations.
-This did not provide better results than using all features together or features in isolation.
+This however did not provide better results than just using all features together.
 
 
 Evaluation
