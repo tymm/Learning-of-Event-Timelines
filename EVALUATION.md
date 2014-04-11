@@ -15,8 +15,12 @@ It turned out that there is no noticeable difference in accuracy.
 When using the default value of the RandomForestClassifierer from scikit-learn only 10 trees will be used.
 This obviously results in quite different accuracies when running the program several times.
 The following graph illustrates that the difference for small amounts of trees can be quite big whereas for bigger amounts the accuracy converges to a certain value.
+The bigger the amount of trees, the more reproducible the performance gets.
 
-![](plots/different_number_of_trees.jpg?raw=true "Different number of trees")
+![](plots/different_number_of_trees_0.jpg?raw=true "Different number of trees")
+![](plots/different_number_of_trees_1.jpg?raw=true "Different number of trees")
+![](plots/different_number_of_trees_2.jpg?raw=true "Different number of trees")
+![](plots/different_number_of_trees_3.jpg?raw=true "Different number of trees")
 
 ### Best combination of features
 
