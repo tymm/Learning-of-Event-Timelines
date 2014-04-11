@@ -1,15 +1,6 @@
 Error analysis
 ==============
 
-### All relations vs. all relations in common
-
-The provided XML file consists of annotated events and relations of events.
-Those events and relations got annotated by more than one person and different people annotated different events and relations.
-
-Therefore it was reasonable to check for which case the accuracy of the classification on the test set was higher.
-It turned out that there is no noticeable difference in accuracy.
-
-
 ### Different number of trees in the random forest
 
 When using the default value of the RandomForestClassifierer from scikit-learn only 10 trees will be used.
@@ -25,6 +16,16 @@ Different number of trees for the _INCLUDES_ class (not enough data and therefor
 ![](plots/different_number_of_trees_2.jpg?raw=true "Different number of trees")
 Different number of trees for the _NONE_ class (not enough data and therefore no meaningful difference)
 ![](plots/different_number_of_trees_3.jpg?raw=true "Different number of trees")
+
+
+### All relations vs. all relations in common
+
+The provided XML file consists of annotated events and relations of events.
+Those events and relations got annotated by more than one person and different people annotated different events and relations.
+
+Therefore it was reasonable to check for which case the performance of the classification on the test set was higher.
+It turned out that there is no noticeable difference in performance.
+
 
 ### Best combination of features
 
