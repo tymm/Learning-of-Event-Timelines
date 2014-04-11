@@ -79,10 +79,10 @@ Therefore it is not too meaningful.
 One can see though that the Stem feature seems to be quite important for the classification.
 
 Features in isolation for _BEFORE_ class:
-![](plots/best_features_0.jpg?raw=true "Features in isolation")
+![](plots/best_feature_0.jpg?raw=true "Features in isolation")
 Features in isolation for _INCLUDES_ class:
-![](plots/best_features_1.jpg?raw=true "Features in isolation")
+![](plots/best_feature_1.jpg?raw=true "Features in isolation")
 Features in isolation for _IS_INCLUDED_ class:
-![](plots/best_features_2.jpg?raw=true "Features in isolation")
+![](plots/best_feature_2.jpg?raw=true "Features in isolation")
 Features in isolation for _NONE_ class:
-![](plots/best_features_3.jpg?raw=true "Features in isolation")
+![](plots/best_feature_3.jpg?raw=true "Features in isolation")
