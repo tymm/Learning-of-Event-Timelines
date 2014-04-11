@@ -66,7 +66,7 @@ The performance of the IS_INCLUDED class stayed about the same. The results for 
 
 ### Problems I encountered
 - There was not enough data to get good results for all four temporal relations
-- It was not feasible for me to produce plots with averaged results since it just would take too much time to produce these results on my computer. Also the whole evaluation was quite time consuming in general because of that.
+- It was not feasible for me to produce plots with averaged results since it just would take too much time to produce these multiple results on my computer. Also the whole evaluation was quite time consuming in general because of that.
 - Due to a bug which resulted in loading the same results over and over regardless of the configuration, the first version of the evaluation was useless.
 
 ## Basic overview of code
