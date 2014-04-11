@@ -32,9 +32,9 @@ The following graphs show the learning rate of the random forest classifier for 
 Since it was not feasible for me to calculate the learning rate several times for each temporal relation the following plots are not averaged.
 Therefore there are some data points which have a better f1-score than data points with less data.
 
-The bad performance for _IS_INCLUDED_ and _NONE_ is explainable by looking at the distribution of the temporal relations.  
-_BEFORE_ and _INCLUDES_ did better since there was enough data for them.  
-There are only 129 _IS_INCLUDED_ and 66 _NONE_ temporal relations (when looking at all annotations and not at the intersection of relations by different annotators).
+The bad performance for _IS_INCLUDED_ and _NONE_ is explainable by looking at the distribution of the temporal relations.
+There are only 129 _IS_INCLUDED_ and 66 _NONE_ temporal relations (when looking at all annotations and not at the intersection of relations by different annotators).  
+_BEFORE_ and _INCLUDES_ did better since there was enough data for them.
 
 Learning rate for the _BEFORE_ class:
 ![](plots/learning_rate_0.jpg?raw=true "Learning rate for BEFORE")
