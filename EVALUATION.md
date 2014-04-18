@@ -12,7 +12,7 @@ Different number of trees for the _BEFORE_ class
 ![](plots/different_number_of_trees_0.jpg?raw=true "Different number of trees")
 Different number of trees for the _INCLUDES_ class
 ![](plots/different_number_of_trees_1.jpg?raw=true "Different number of trees")
-Different number of trees for the _INCLUDES_ class (not enough data and therefore no meaningful difference)
+Different number of trees for the _IS_INCLUDED_ class (not enough data and therefore no meaningful difference)
 ![](plots/different_number_of_trees_2.jpg?raw=true "Different number of trees")
 Different number of trees for the _NONE_ class (not enough data and therefore no meaningful difference)
 ![](plots/different_number_of_trees_3.jpg?raw=true "Different number of trees")
