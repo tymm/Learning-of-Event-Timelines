@@ -10,12 +10,16 @@ The bigger the amount of trees, the more reproducible the accuracy gets.
 
 Different number of trees for the _BEFORE_ class
 ![](plots/different_number_of_trees_0.jpg?raw=true "Different number of trees")
+![](plots/number_of_trees_before_precision-recall.jpg?raw=true "Different number of trees")
 Different number of trees for the _INCLUDES_ class
 ![](plots/different_number_of_trees_1.jpg?raw=true "Different number of trees")
+![](plots/number_of_trees_includes_precision-recall.jpg=true "Different number of trees")
 Different number of trees for the _IS_INCLUDED_ class (not enough data and therefore no meaningful difference)
 ![](plots/different_number_of_trees_2.jpg?raw=true "Different number of trees")
+![](plots/number_of_trees_is_included_precision-recall.jpg?raw=true "Different number of trees")
 Different number of trees for the _NONE_ class (not enough data and therefore no meaningful difference)
 ![](plots/different_number_of_trees_3.jpg?raw=true "Different number of trees")
+![](plots/number_of_trees_none_precision-recall.jpg?raw=true "Different number of trees")
 
 
 ### All relations vs. all relations in common
@@ -47,14 +51,17 @@ _BEFORE_ and _INCLUDES_ did better since there was enough data for them.
 
 Learning rate for the _BEFORE_ class:
 ![](plots/learning_rate_0.jpg?raw=true "Learning rate for BEFORE")
+![](plots/learning_rate_before_precision-recall.jpg?raw=true "Learning rate for BEFORE")
 Learning rate for the _INCLUDES_ class:
 ![](plots/learning_rate_1.jpg?raw=true "Learning rate for INCLUDES")
+![](plots/learning_rate_includes_precision-recall.jpg?raw=true "Learning rate for INCLUDES")
 Learning rate for the _IS_INCLUDED_ class:
 ![](plots/learning_rate_2.jpg?raw=true "Learning rate for IS_INCLUDED")
 Learning rate for the _NONE_ class:
 ![](plots/learning_rate_3.jpg?raw=true "Learning rate for NONE")
 Weighted learning rate over all classes:
 ![](plots/learning_rate_weighted.jpg?raw=true "Weighted learning rate over all classes")
+![](plots/learning_rate_all_precision-recall.jpg?raw=true "Weighted learning rate over all classes")
 
 
 ### Importance of distance between events
@@ -83,9 +90,13 @@ One can see though that the Stem feature seems to be quite important for the cla
 
 Features in isolation for _BEFORE_ class:
 ![](plots/best_feature_0.jpg?raw=true "Features in isolation")
+![](plots/best_feature_before_precision-recall.jpg?raw=true "Features in isolation")
 Features in isolation for _INCLUDES_ class:
 ![](plots/best_feature_1.jpg?raw=true "Features in isolation")
+![](plots/best_feature_includes_precision-recall.jpg?raw=true "Features in isolation")
 Features in isolation for _IS_INCLUDED_ class:
 ![](plots/best_feature_2.jpg?raw=true "Features in isolation")
+![](plots/best_feature_is_included_precision-recall.jpg?raw=true "Features in isolation")
 Features in isolation for _NONE_ class:
 ![](plots/best_feature_3.jpg?raw=true "Features in isolation")
+![](plots/best_feature_none_precision-recall.jpg?raw=true "Features in isolation")
