@@ -13,7 +13,7 @@ Different number of trees for the _BEFORE_ class
 ![](plots/number_of_trees_before_precision-recall.jpg?raw=true "Different number of trees")
 Different number of trees for the _INCLUDES_ class
 ![](plots/different_number_of_trees_1.jpg?raw=true "Different number of trees")
-![](plots/number_of_trees_includes_precision-recall.jpg=true "Different number of trees")
+![](plots/number_of_trees_includes_precision-recall.jpg?raw=true "Different number of trees")
 Different number of trees for the _IS_INCLUDED_ class (not enough data and therefore no meaningful difference)
 ![](plots/different_number_of_trees_2.jpg?raw=true "Different number of trees")
 ![](plots/number_of_trees_is_included_precision-recall.jpg?raw=true "Different number of trees")
