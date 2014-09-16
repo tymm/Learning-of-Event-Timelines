@@ -29,6 +29,9 @@ def load_data(new=False, temporal_rel=None, annotations="union", features=["pos"
     # Load data
     data = parse_XML("fables-100-temporal-dependency.xml", TEXTDIR)
 
+    # Create inverse relations
+    create_inverse_relation(data)
+
     # Extract features
     if distance:
         X, y, distance_diff = parse_Features(data, new, annotations, features, distance)
@@ -51,6 +54,25 @@ def load_data(new=False, temporal_rel=None, annotations="union", features=["pos"
     else:
         X, y = random_Set(X, y, None)
         return (X, y)
+
+def create_inverse_relation(data):
+    """Creates new relations. IS_INCLUDED will become a reversed INCLUDES and the other way around."""
+    new_relations = []
+
+    for text in data.textfiles:
+        for ann in text.annotator:
+            for relation in ann.relations:
+                if relation.temporal_rel == TemporalRelation.INCLUDES:
+                    # Create IS_INCLUDED Relation
+                    r = Relation(relation.parent, relation.target, relation.source, "is_included")
+                    new_relations.append(r)
+                if relation.temporal_rel == TemporalRelation.IS_INCLUDED:
+                    # Create INCLUDES Relation
+                    r = Relation(relation.parent, relation.target, relation.source, "includes")
+                    new_relations.append(r)
+
+            # Append the new created Relation objects to Annotator object
+            ann.relations = ann.relations + new_relations
 
 def get_f1_score(X_, y_, class_id):
     X = list(X_)
