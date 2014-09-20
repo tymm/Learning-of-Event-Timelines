@@ -20,30 +20,25 @@ class Relation():
         self.parent = parent
         self.source = source
         self.target = target
-        self.identifier = None
-
-        self.determine_temporal_rel(temporal_rel)
-
-    def set_temporal_rel(self, temporal_rel):
-        self.determine_temporal_rel(temporal_rel)
+        self.temporal_rel = self.determine_temporal_rel(temporal_rel)
 
     def determine_temporal_rel(self, temporal_rel):
-        if temporal_rel in ["same_as", "overlap", "no relations"]:
-            self.temporal_rel = TemporalRelation.NONE
+        if temporal_rel == "none":
+            return TemporalRelation.NONE
         elif temporal_rel == "before":
-            self.temporal_rel = TemporalRelation.BEFORE
+            return TemporalRelation.BEFORE
         # "after" is just a reversed "before" relation
         elif temporal_rel == "after":
-            self.temporal_rel = TemporalRelation.BEFORE
             tmp = self.source
             self.source = self.target
             self.target = tmp
+            return TemporalRelation.BEFORE
         elif temporal_rel == "includes":
-            self.temporal_rel = TemporalRelation.INCLUDES
+            return TemporalRelation.INCLUDES
         elif temporal_rel == "is_included":
-            self.temporal_rel = TemporalRelation.IS_INCLUDED
+            return TemporalRelation.IS_INCLUDED
         else:
-            self.temporal_rel = None
+            return None
 
     def set_source(self, source):
         self.source = source
@@ -51,5 +46,8 @@ class Relation():
     def set_target(self, target):
         self.target = target
 
-    def set_identifier(self):
-        self.identifier = str(self.source.begin)+str(self.source.end)+str(self.target.begin)+str(self.target.end)
+    def __eq__(self, other):
+        return self.__hash__() == other.__hash__()
+
+    def __hash__(self):
+        return hash(self.parent.parent.name+str(self.source.begin)+str(self.source.end)+str(self.target.begin)+str(self.target.end)+str(self.temporal_rel))

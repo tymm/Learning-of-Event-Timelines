@@ -6,6 +6,8 @@ from feature.preprocessing.modality import get_modality
 from feature.preprocessing.tense import get_tense, Tenses
 from feature.preprocessing.aspect import get_aspect, Aspects
 from feature.preprocessing.text import preprocess_sentence
+from parsexml.text_structure import Text_structure
+from parser import parse_XML
 
 class TextProcessing(unittest.TestCase):
     @classmethod
@@ -374,6 +376,114 @@ class AspectGuessing(unittest.TestCase):
     def test_ProgressiveAspect_3(self):
         text = "I would be eating so much everyday!"
         self.assertEqual(get_aspect(text), Aspects.progressive)
+
+class TextStructure(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        # Load data
+        data = parse_XML("fables-100-temporal-dependency.xml", Text_structure.TEXTDIR)
+
+        # Find 1.txt
+        text_obj = None
+        for text in data.textfiles:
+            if text.name == "1.txt":
+                text_obj = text
+                break
+
+        # Find 7.txt
+        text_obj_two = None
+        for text in data.textfiles:
+            if text.name == "7.txt":
+                text_obj_two = text
+                break
+
+        # Find 3.txt
+        text_obj_three = None
+        for text in data.textfiles:
+            if text.name == "3.txt":
+                text_obj_three = text
+                break
+
+        cls.structure = text_obj.annotator[0].text_structure.structure
+        cls.sentences = [s for s in cls.structure]
+        cls.events = text_obj.annotator[0].events
+
+        cls.structure_two = text_obj_two.annotator[0].text_structure.structure
+        cls.sentences_two = [s for s in cls.structure_two]
+        cls.events_two = text_obj_two.annotator[0].events
+
+        cls.structure_three = text_obj_three.annotator[0].text_structure.structure
+        cls.sentences_three = [s for s in cls.structure_three]
+        cls.events_three = text_obj_three.annotator[0].events
+
+    def test_IsOrderOfSentenceRight(self):
+        self.assertEqual(self.sentences[0].text, "A hungry Fox saw some fine bunches of Grapes hanging from a vine that \r\nwas trained along a high trellis, and did his best to reach them by \r\njumping as high as he could into the air.")
+        self.assertEqual(self.sentences[1].text, "But it was all in vain, for \r\nthey were just out of reach: so he gave up trying, and walked away \r\nwith an air of dignity and unconcern, remarking, \"I thought those \r\nGrapes were ripe, but I see now they are quite sour.\"")
+
+        self.assertEqual(self.sentences_two[0].text, "A Bat fell to the ground and was caught by a Weasel, and was just \r\ngoing to be killed and eaten when it begged to be let go.")
+        self.assertEqual(self.sentences_two[1].text, "The Weasel \r\nsaid he couldn't do that because he was an enemy of all birds on \r\nprinciple.")
+        self.assertEqual(self.sentences_two[2].text, "\"Oh, but,\" said the Bat, \"I'm not a bird at all: I'm a \r\nmouse.\"")
+        self.assertEqual(self.sentences_two[3].text, "\"So you are,\" said the Weasel, \"now I come to look at you\"; \r\nand he let it go.")
+        self.assertEqual(self.sentences_two[4].text, "Some time after this the Bat was caught in just the \r\nsame way by another Weasel, and, as before, begged for its life.")
+        self.assertEqual(self.sentences_two[5].text, "\"No,\" \r\nsaid the Weasel, \"I never let a mouse go by any chance.\"")
+        self.assertEqual(self.sentences_two[6].text, "\"But I'm not \r\na mouse,\" said the Bat; \"I'm a bird.\"")
+        self.assertEqual(self.sentences_two[7].text, "\"Why, so you are,\" said the \r\nWeasel; and he too let the Bat go. \r\n")
+
+        self.assertEqual(self.sentences_three[0].text, "There was once a house that was overrun with Mice.")
+        self.assertEqual(self.sentences_three[1].text, "A Cat heard of \r\nthis, and said to herself, \"That's the place for me,\" and off she went \r\nand took up her quarters in the house, and caught the Mice one by one \r\nand ate them.")
+        self.assertEqual(self.sentences_three[2].text, "At last the Mice could stand it no longer, and they \r\ndetermined to take to their holes and stay there.")
+        self.assertEqual(self.sentences_three[3].text, "\"That's awkward,\" \r\nsaid the Cat to herself: \"the only thing to do is to coax them out by \r\na trick.\"")
+        self.assertEqual(self.sentences_three[4].text, "So she considered a while, and then climbed up the wall and \r\nlet herself hang down by her hind legs from a peg, and pretended to \r\nbe dead.")
+        self.assertEqual(self.sentences_three[5].text, "By and by a Mouse peeped out and saw the Cat hanging there.")
+        self.assertEqual(self.sentences_three[6].text, "\"Aha!\"")
+        self.assertEqual(self.sentences_three[7].text, "it cried, \"you're very clever, madam, no doubt: but you may \r\nturn yourself into a bag of meal hanging there, if you like, yet you \r\nwon't catch us coming anywhere near you.\"")
+
+    def test_IsBeginAndEndOfSentencesRight(self):
+        self.assertEqual(self.sentences[0].begin, 0)
+        self.assertEqual(self.sentences[0].end, 183)
+        self.assertEqual(self.sentences[1].begin, 184)
+        self.assertEqual(self.sentences[1].end, 404)
+        self.assertEqual(self.sentences_two[0].begin, 0)
+        self.assertEqual(self.sentences_two[0].end, 125)
+
+    def test_AreEventsInRightSentence(self):
+        # "saw" in first sentence
+        self.assertIn(self.events[0], self.structure[self.sentences[0]])
+        # "hanging" in first sentence
+        self.assertIn(self.events[1], self.structure[self.sentences[0]])
+        self.assertIn(self.events[2], self.structure[self.sentences[0]])
+        self.assertIn(self.events[3], self.structure[self.sentences[0]])
+        self.assertIn(self.events[4], self.structure[self.sentences[1]])
+        self.assertIn(self.events[5], self.structure[self.sentences[1]])
+        self.assertIn(self.events[6], self.structure[self.sentences[1]])
+        self.assertIn(self.events[7], self.structure[self.sentences[1]])
+        self.assertIn(self.events[8], self.structure[self.sentences[1]])
+
+        self.assertIn(self.events_two[0], self.structure_two[self.sentences_two[0]])
+        self.assertIn(self.events_two[1], self.structure_two[self.sentences_two[0]])
+        self.assertIn(self.events_two[2], self.structure_two[self.sentences_two[0]])
+        self.assertIn(self.events_two[3], self.structure_two[self.sentences_two[0]])
+        self.assertIn(self.events_two[4], self.structure_two[self.sentences_two[1]])
+        self.assertIn(self.events_two[5], self.structure_two[self.sentences_two[1]])
+        self.assertIn(self.events_two[6], self.structure_two[self.sentences_two[2]])
+
+        self.assertIn(self.events_three[0], self.structure_three[self.sentences_three[0]])
+        self.assertIn(self.events_three[1], self.structure_three[self.sentences_three[1]])
+        self.assertIn(self.events_three[2], self.structure_three[self.sentences_three[1]])
+        self.assertIn(self.events_three[3], self.structure_three[self.sentences_three[1]])
+        self.assertIn(self.events_three[4], self.structure_three[self.sentences_three[1]])
+        self.assertIn(self.events_three[5], self.structure_three[self.sentences_three[1]])
+        self.assertIn(self.events_three[6], self.structure_three[self.sentences_three[1]])
+        self.assertIn(self.events_three[7], self.structure_three[self.sentences_three[2]])
+        self.assertIn(self.events_three[8], self.structure_three[self.sentences_three[3]])
+        self.assertIn(self.events_three[9], self.structure_three[self.sentences_three[4]])
+        self.assertIn(self.events_three[10], self.structure_three[self.sentences_three[4]])
+        self.assertIn(self.events_three[11], self.structure_three[self.sentences_three[4]])
+        self.assertIn(self.events_three[12], self.structure_three[self.sentences_three[4]])
+        self.assertIn(self.events_three[13], self.structure_three[self.sentences_three[5]])
+        self.assertIn(self.events_three[14], self.structure_three[self.sentences_three[5]])
+        self.assertIn(self.events_three[15], self.structure_three[self.sentences_three[5]])
+        self.assertIn(self.events_three[16], self.structure_three[self.sentences_three[7]])
 
 if __name__ == '__main__':
     unittest.main()

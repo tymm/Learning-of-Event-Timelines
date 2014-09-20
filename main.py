@@ -14,6 +14,8 @@ def get_prediction(temporal_rel, new=True, annotations="union", features=["pos",
     """
     X, y = load_data(new, temporal_rel, annotations, features)
 
+    print "Len data in main after: " + str(len(y))
+
     # Split dataset into training set (80%) and test set (20%)
     X_train, X_test, y_train, y_test = split(X, y)
 
@@ -23,10 +25,11 @@ def get_prediction(temporal_rel, new=True, annotations="union", features=["pos",
 
     y_predicted = rf.predict(X_test)
 
-    # Print accuracy
-    print "Accuracy"
-    print rf.score(X_test, y_test)
-    print
+    # Transform to list
+    y_predicted = y_predicted.tolist()
+    y_test = y_test.tolist()
+    print y_test
+    print y_predicted
 
     print "F1-Score"
     print f1_score(y_test, y_predicted)
@@ -59,7 +62,8 @@ if __name__ == "__main__":
     print
 
     print "Information for class IS_INCLUDED"
-    get_prediction(TemporalRelation.IS_INCLUDED, features=["aspect", "tense", "distance", "similarity", "polarity", "modality"])
+    get_prediction(None, features=["modality"])
+    #get_prediction(None, features=["pos", "stem", "aspect", "tense", "distance", "similarity", "polarity", "modality"])
     print
 
     print "Information for class NONE"

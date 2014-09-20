@@ -20,8 +20,8 @@ class Feature:
     enc_aspect = OneHotEncoder(n_values=4, categorical_features=[0,1])
     enc_aspect.fit([3, 3])
 
-    enc_distance = OneHotEncoder(n_values=5, categorical_features=[0])
-    enc_distance.fit([4])
+    enc_distance = OneHotEncoder(n_values=6, categorical_features=[0])
+    enc_distance.fit([5])
 
     def __init__(self, relation):
         """Constructor of the Feature class.
@@ -37,10 +37,10 @@ class Feature:
         """Returns the number of words between two events in a text as a feature."""
         # We want to compare different objects
         if self.relation.source == self.relation.target:
-            return False
+            return self.enc_distance.transform([[5]]).toarray()[0]
         # The two events have to be in the same file
         if self.relation.source.parent.parent != self.relation.target.parent.parent:
-            return False
+            return self.enc_distance.transform([[5]]).toarray()[0]
 
         event_distance = distance(self.relation.source.begin, self.relation.target.begin, self.relation.parent.parent.name, TEXTDIR)
 

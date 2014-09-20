@@ -51,15 +51,6 @@ def parse_XML(filename, dirname):
                 annotator.events.append(event)
 
             for k, tlink in enumerate(ann.iterdescendants("tlink")):
-                # Create a Relation object
-                relation = Relation()
-                relation.parent = annotator
-                relation.id = k
-                relation.set_temporal_rel(tlink[0].get("type"))
-
-                # Create link from Annotator object
-                annotator.relations.append(relation)
-
                 # Connect corresponding event objects to this relation object
                 # Doing this by going through all possible events
                 source = tlink[1]
@@ -67,24 +58,38 @@ def parse_XML(filename, dirname):
                 end = source.get("end")
 
                 # Search through the events of this annotator
+                source_event = None
                 for event in annotator.events:
                     if event.begin == int(begin) and event.end == int(end):
-                        relation.set_source(event)
+                        source_event = event
                         break
 
                 target = tlink[2]
                 begin = target.get("begin")
                 end = target.get("end")
 
+                target_event = None
                 for event in annotator.events:
                     if event.begin == int(begin) and event.end == int(end):
-                        relation.set_target(event)
+                        target_event = event
                         break
 
-                # Identifier, so we can identify two relations which are the same
-                relation.set_identifier()
+                # Create a Relation object
+                temporal_relation = tlink[0].get("type")
+
+                relation = Relation(annotator, source_event, target_event, temporal_relation)
+
+                # Create link from Annotator object
+                annotator.relations.append(relation)
 
         # Include text to data structure
         data.textfiles.append(text)
+
+    # Create Text_structure objects, remove not needed relations and then all other possible relations
+    for text in data.textfiles:
+        for ann in text.annotator:
+            ann.create_text_structure()
+            ann.remove_none_relations()
+            ann.create_other_relations()
 
     return data

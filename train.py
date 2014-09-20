@@ -11,6 +11,7 @@ import os.path
 from random import shuffle
 from sklearn.metrics import f1_score
 from temporalrelation import TemporalRelation
+from parsexml.relation import Relation
 
 TEXTDIR = "McIntyreLapata09Resources/fables/"
 
@@ -73,6 +74,7 @@ def create_inverse_relation(data):
 
             # Append the new created Relation objects to Annotator object
             ann.relations = ann.relations + new_relations
+            new_relations = []
 
 def get_f1_score(X_, y_, class_id):
     X = list(X_)

@@ -70,7 +70,7 @@ class Text():
         for ann in self.annotator[1:]:
             # Add rel to list if we have rel already in relations_tmp[]
             for rel in ann.relations:
-                if rel.identifier in [x.identifier for x in relations_tmp]:
+                if rel in relations_tmp:
                     relations.append(rel)
 
             del relations_tmp[:]
@@ -94,16 +94,16 @@ class Text():
         relations = []
         for ann in self.annotator:
             for rel in ann.relations:
-                relations.append({rel.identifier : rel})
+                relations.append(rel)
 
         # Go through all relations and add a relation to a list if
-        # the identifier of the relation is not already in the list
+        # the relation is not already in the list
         union = []
         for r in relations:
-            if r.keys()[0] not in [x.keys()[0] for x in union]:
+            if r not in union:
                 union.append(r)
 
-        self.relations_union = [x.values()[0] for x in union]
+        self.relations_union = union
         self.relations = self.relations_union
         self.relations_union_count = len(self.relations_union)
         self.relations_count = self.relations_union_count

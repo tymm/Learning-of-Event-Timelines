@@ -42,3 +42,11 @@ class Event():
         self.modality = modality
         self.begin = int(begin)
         self.end = int(end)
+
+    def __eq__(self, other):
+        return self.__hash__() == other.__hash__()
+
+    def __hash__(self):
+        return hash(self.parent.parent.name+str(self.begin)+str(self.end))
+
+
